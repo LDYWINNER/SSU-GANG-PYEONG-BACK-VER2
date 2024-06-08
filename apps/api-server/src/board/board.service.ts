@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { CreateBoardDto } from './dto/create-board.dto';
+import { UpdateBoardDto } from './dto/update-board.dto';
 
 @Injectable()
 export class BoardService {
@@ -10,11 +12,11 @@ export class BoardService {
     return `This action returns a #${id} board`;
   }
 
-  create(data) {
+  create(data: CreateBoardDto) {
     return data;
   }
 
-  update(id: number, data) {
+  update(id: number, data: UpdateBoardDto) {
     return data;
   }
 
