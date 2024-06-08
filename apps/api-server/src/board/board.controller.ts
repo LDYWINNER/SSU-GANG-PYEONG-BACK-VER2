@@ -8,8 +8,10 @@ import {
   Delete,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('board')
+@ApiTags('Board')
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
