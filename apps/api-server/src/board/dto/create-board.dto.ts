@@ -1,20 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateBoardDto {
+  @IsNumber()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'The name of a post',
+    description: '작성자 아이디',
     required: true,
-    example: 'Title',
+    example: '1',
   })
-  name: string;
+  userId: number;
 
   @IsNotEmpty()
   @ApiProperty({
-    description: 'The content of a post',
+    description: '내용',
     required: true,
-    example: 'Contents',
+    example: '안녕하세요',
   })
   contents: string;
 }
