@@ -39,11 +39,11 @@ export class BoardController {
     @Param('id', ParseIntPipe) id: number,
     @Body(new ValidationPipe()) data: UpdateBoardDto,
   ) {
-    return data;
+    return this.boardService.update(id, data);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
-    return `This action removes a #${id} board`;
+    return this.boardService.delete(id);
   }
 }
