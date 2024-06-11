@@ -5,6 +5,7 @@ import { BoardModule } from './board/board.module';
 import { LoggingMiddleware } from './middleware/logging.middleware';
 import ConfigModule from './config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
     }),
     BoardModule,
+    UserModule,
   ],
   controllers: [ApiServerController],
   providers: [ApiServerService],
