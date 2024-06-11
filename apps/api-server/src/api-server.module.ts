@@ -19,6 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
       logging: true,
+      autoLoadEntities: true,
     }),
     BoardModule,
   ],
