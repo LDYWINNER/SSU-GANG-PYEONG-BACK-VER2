@@ -7,12 +7,14 @@ import { User } from '../../entity/user.entity';
 import { Repository } from 'typeorm';
 import { LoginUserDto } from './dto/login-user.dto';
 import * as jwt from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private readonly configService: ConfigService,
   ) {}
 
   async createUser(data: CreateUserDto) {
@@ -75,7 +77,6 @@ export class UserService {
   }
 
   async encryptPassword(password: string) {
-    const DEFAULT_SALT = 11;
-    return hash(password, DEFAULT_SALT);
+    return hash(password, Number(this.configService.get('DEFAULT_SALT')));
   }
 }
