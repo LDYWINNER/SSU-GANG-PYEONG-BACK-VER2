@@ -61,7 +61,7 @@ export class UserService {
     };
   }
 
-  async getUser() {
+  async getUsers() {
     const qb = this.userRepository.createQueryBuilder();
 
     qb.addSelect((subQuery) => {
