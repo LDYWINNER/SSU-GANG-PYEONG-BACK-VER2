@@ -7,7 +7,7 @@ export class CreateBoardDto {
   @ApiProperty({
     description: '작성자 아이디',
     required: true,
-    example: '1',
+    example: 'b45b4438-23cb-4e90-85df-b41abfe1aa98',
   })
   userId: string;
 

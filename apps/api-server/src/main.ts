@@ -10,6 +10,7 @@ async function bootstrap() {
     .setDescription('API description for SSU-GANG-PYEONG-BACKEND-VER.2.0')
     .setVersion('1.0')
     .addTag('Board')
+    .addTag('User')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
