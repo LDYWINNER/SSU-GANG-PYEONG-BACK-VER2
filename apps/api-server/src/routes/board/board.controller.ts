@@ -6,7 +6,6 @@ import {
   Body,
   Put,
   Delete,
-  ParseIntPipe,
   UseGuards,
   UnauthorizedException,
   ValidationPipe,
@@ -28,7 +27,7 @@ export class BoardController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: string) {
     return this.boardService.findOne(id);
   }
 
@@ -47,7 +46,7 @@ export class BoardController {
   @UseGuards(JwtAuthGuard)
   update(
     @UserInfo() userInfo,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body(new ValidationPipe()) data: UpdateBoardDto,
   ) {
     return this.boardService.update(userInfo.id, id, data);
@@ -55,7 +54,7 @@ export class BoardController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  remove(@UserInfo() userInfo, @Param('id', ParseIntPipe) id: number) {
+  remove(@UserInfo() userInfo, @Param('id') id: string) {
     return this.boardService.delete(userInfo.id, id);
   }
 }

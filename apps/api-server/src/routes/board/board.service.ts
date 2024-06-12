@@ -21,7 +21,7 @@ export class BoardService {
     return this.boardRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const board = await this.boardRepository.findOne({
       where: {
         id,
@@ -40,7 +40,7 @@ export class BoardService {
     return this.boardRepository.save(data);
   }
 
-  async update(userId: number, id: number, data: UpdateBoardDto) {
+  async update(userId: string, id: string, data: UpdateBoardDto) {
     const board = await this.getBoardById(id);
 
     if (!board) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -54,7 +54,7 @@ export class BoardService {
     });
   }
 
-  async delete(userId: number, id: number) {
+  async delete(userId: string, id: string) {
     const board = await this.getBoardById(id);
 
     if (!board) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -66,7 +66,7 @@ export class BoardService {
     return this.boardRepository.remove(board);
   }
 
-  async getBoardById(id: number) {
+  async getBoardById(id: string) {
     return this.boardRepository.findOneBy({
       id,
     });

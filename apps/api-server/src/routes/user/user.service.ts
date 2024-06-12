@@ -51,7 +51,7 @@ export class UserService {
 
     const payload = {
       username,
-      name: user.name,
+      email: user.email,
     };
 
     const accessToken = jwt.sign(

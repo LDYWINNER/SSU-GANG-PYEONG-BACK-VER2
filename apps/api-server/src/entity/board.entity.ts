@@ -12,12 +12,12 @@ import { User } from './user.entity';
 
 @Entity()
 export class Board {
-  @PrimaryGeneratedColumn({ name: 'id' })
-  id: number;
+  @PrimaryGeneratedColumn('uuid', { name: 'id' })
+  id: string;
 
   @ApiProperty({ description: 'user_id' })
-  @Column()
-  userId: number;
+  @Column('uuid')
+  userId: string;
 
   @ApiProperty({ description: '내용' })
   @Column()

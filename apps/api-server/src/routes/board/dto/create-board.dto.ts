@@ -9,7 +9,7 @@ export class CreateBoardDto {
     required: true,
     example: '1',
   })
-  userId: number;
+  userId: string;
 
   @IsNotEmpty()
   @ApiProperty({
