@@ -54,7 +54,7 @@ POST http://localhost:3000/user
 content-type: application/json
 
 {
-    "username": "seederUser3",
+    "username": "seederUser2",
     "name": "gildong",
     "password": "hong123456"
 }
