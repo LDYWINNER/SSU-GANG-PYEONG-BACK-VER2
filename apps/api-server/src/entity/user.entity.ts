@@ -7,15 +7,19 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ description: '유저아이디', example: 'admin' })
+  @ApiProperty({ required: true, description: '유저아이디', example: 'admin' })
   @Column({ unique: true })
   username: string;
 
-  @ApiProperty({ description: '유저 이메일', example: 'admin@stonybrook.edu' })
+  @ApiProperty({
+    required: true,
+    description: '유저 이메일',
+    example: 'admin@stonybrook.edu',
+  })
   @Column({ unique: true })
   email: string;
 
-  @ApiProperty({ description: '비밀번호' })
+  @ApiProperty({ required: true, description: '비밀번호' })
   @Column({ select: false })
   password: string;
 

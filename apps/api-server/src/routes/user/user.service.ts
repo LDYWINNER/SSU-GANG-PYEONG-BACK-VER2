@@ -18,7 +18,7 @@ export class UserService {
   ) {}
 
   async createUser(data: CreateUserDto) {
-    const { username, name, password } = data;
+    const { username, password } = data;
 
     const encryptedPassword = await this.encryptPassword(password);
 
