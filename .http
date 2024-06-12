@@ -1,0 +1,91 @@
+
+# 게시글 전체 가져오기
+GET http://localhost:3000/board
+
+###
+
+# 게시글 하나 가져오기
+GET http://localhost:3000/board/16
+
+###
+
+# 게시글 생성
+POST http://localhost:3000/board
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzZWVkZXJVc2VyMyIsIm5hbWUiOiJnaWxkb25nIiwiaWF0IjoxNzEyNzkwMzg2LCJleHAiOjE3MTM5OTk5ODZ9.RkEQeTxhITDgwxNoTU2unKPW3YiK_gXaO0pUM0JF664
+
+{
+    "contents": "새로운 게시글"
+}
+
+###
+
+# 게시글 수정
+PUT http://localhost:3000/board/1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzZWVkZXJVc2VyMyIsIm5hbWUiOiJnaWxkb25nIiwiaWF0IjoxNzEyNzkwMzg2LCJleHAiOjE3MTM5OTk5ODZ9.RkEQeTxhITDgwxNoTU2unKPW3YiK_gXaO0pUM0JF664
+
+{
+    "contents": "New world"
+}
+
+###
+
+# 게시글 삭제
+
+DELETE http://localhost:3000/board/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzZWVkZXJVc2VyMyIsIm5hbWUiOiJnaWxkb25nIiwiaWF0IjoxNzEyNzkwMzg2LCJleHAiOjE3MTM5OTk5ODZ9.RkEQeTxhITDgwxNoTU2unKPW3YiK_gXaO0pUM0JF664
+
+###
+GET http://localhost:3000
+
+
+###
+
+# 유저 리스트 가져오기
+
+GET http://localhost:3000/user
+
+###
+
+# 유저 회원가입
+
+POST http://localhost:3000/user
+content-type: application/json
+
+{
+    "username": "seederUser3",
+    "name": "gildong",
+    "password": "hong123456"
+}
+
+###
+
+# 유저 로그인
+
+POST http://localhost:3000/user/login
+content-type: application/json
+
+{
+    "username": "seederUser3",
+    "password": "hong123456"
+}
+
+###
+
+# 유저 로그인 (passport)
+
+POST http://localhost:3000/login
+content-type: application/json
+
+{
+    "username": "fastcampus2022",
+  "password": "fastcampusgood"
+}
+
+###
+
+# 유저 ME
+GET http://localhost:3000/me
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJmYXN0Y2FtcHVzMjAyMiIsIm5hbWUiOiJmYXN0Y2FtcHVzbmFtZSIsImlhdCI6MTcxODE3NjQ0NiwiZXhwIjoxNzIwNzY4NDQ2fQ.nUIYe4rFe9X2GxpRsZJd_AVG7qqwmqtPgXij8r0Sy_Q
