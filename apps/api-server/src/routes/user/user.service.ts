@@ -54,9 +54,13 @@ export class UserService {
       name: user.name,
     };
 
-    const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_LIFETIME,
-    });
+    const accessToken = jwt.sign(
+      payload,
+      this.configService.get('JWT_SECRET'),
+      {
+        expiresIn: this.configService.get('JWT_LIFETIME'),
+      },
+    );
 
     return {
       accessToken,
