@@ -21,6 +21,5 @@ export class Migration1718196169112 implements MigrationInterface {
     );
     await queryRunner.query(`DROP TABLE "board"`);
     await queryRunner.query(`DROP TABLE "user"`);
-    ß;
   }
 }
