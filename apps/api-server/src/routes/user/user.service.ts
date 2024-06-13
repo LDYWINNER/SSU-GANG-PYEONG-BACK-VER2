@@ -29,18 +29,18 @@ export class UserService {
     });
   }
 
-  async getUserForLogin(username: string) {
+  async getUserForLogin(email: string) {
     return this.userRepository
       .createQueryBuilder('user')
       .addSelect('user.password') // Explicitly select the password field
-      .where('user.username = :username', { username })
+      .where('user.email = :email', { email })
       .getOne();
   }
 
   async login(data: LoginUserDto) {
-    const { username, password } = data;
+    const { email, password } = data;
 
-    const user = await this.getUserForLogin(username);
+    const user = await this.getUserForLogin(email);
 
     if (!user) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
@@ -50,7 +50,7 @@ export class UserService {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
 
     const payload = {
-      username,
+      username: user.username,
       email: user.email,
     };
 

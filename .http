@@ -54,9 +54,10 @@ POST http://localhost:3000/user
 content-type: application/json
 
 {
-    "username": "seederUser",
-    "email": "gildong@stonybrook.edu",
-    "password": "hong123456"
+    "username": "seederUser10",
+    "email": "gildong2@stonybrook.edu",
+    "password": "Hong123456!",
+    "passwordConfirm": "Hong123456!"
 }
 
 ###
@@ -67,8 +68,8 @@ POST http://localhost:3000/user/login
 content-type: application/json
 
 {
-    "username": "seederUser3",
-    "password": "hong123456"
+    "email": "gildong2@stonybrook.edu",
+    "password": "Hong123456!"
 }
 
 ###
@@ -79,8 +80,8 @@ POST http://localhost:3000/login
 content-type: application/json
 
 {
-    "username": "fastcampus2022",
-  "password": "fastcampusgood"
+    "email": "gildong2@stonybrook.edu",
+    "password": "Hong123456!"
 }
 
 ###
@@ -88,4 +89,4 @@ content-type: application/json
 # 유저 ME
 GET http://localhost:3000/me
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJmYXN0Y2FtcHVzMjAyMiIsIm5hbWUiOiJmYXN0Y2FtcHVzbmFtZSIsImlhdCI6MTcxODE3NjQ0NiwiZXhwIjoxNzIwNzY4NDQ2fQ.nUIYe4rFe9X2GxpRsZJd_AVG7qqwmqtPgXij8r0Sy_Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlZWRlclVzZXIxMCIsImVtYWlsIjoiZ2lsZG9uZzJAc3Rvbnlicm9vay5lZHUiLCJpYXQiOjE3MTgyNTEwMjcsImV4cCI6MTcyMDg0MzAyN30.vvmYKUqMJYn68oICFZMPSmiHqxKIm8Ftq4iH5hYAe40
