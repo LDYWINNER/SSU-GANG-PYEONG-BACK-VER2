@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ApiServerModule } from './api-server.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiServerModule);
@@ -14,6 +15,14 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  // ValidationPipe를 전역으로 설정
+  app.useGlobalPipes(
+    new ValidationPipe({
+      // class-transformer 적용
+      transform: true,
+    }),
+  );
 
   await app.listen(3000);
 }
