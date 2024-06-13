@@ -1,6 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { ApiServerModule } from './api-server.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import {
+  SwaggerModule,
+  DocumentBuilder,
+  SwaggerCustomOptions,
+} from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
@@ -14,8 +18,13 @@ async function bootstrap() {
     .addTag('User')
     .addBearerAuth()
     .build();
+  const customOptions: SwaggerCustomOptions = {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  };
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, customOptions);
 
   // ValidationPipe를 전역으로 설정
   app.useGlobalPipes(
