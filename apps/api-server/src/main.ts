@@ -8,6 +8,7 @@ import {
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
+  const port = 3000;
   const app = await NestFactory.create(ApiServerModule);
 
   const config = new DocumentBuilder()
@@ -35,5 +36,7 @@ async function bootstrap() {
   );
 
   await app.listen(3000);
+  console.info(`listening on port ${port}`);
+  console.info(`NODE_ENV: ${process.env.NODE_ENV}`);
 }
 bootstrap();

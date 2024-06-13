@@ -16,7 +16,7 @@ export class User {
     description: '유저 이메일',
     example: 'admin@stonybrook.edu',
   })
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: false })
   email: string;
 
   @ApiProperty({
