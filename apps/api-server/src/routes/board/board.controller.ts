@@ -21,6 +21,7 @@ import { PageReqDto } from '../../common/dto/page-request.dto';
 import { ApiGetItemsResponse } from '../../common/decorators/swagger.decorator';
 import { FindBoardResDto } from './dto/res.dto';
 import { PageResDto } from '../../common/dto/page-response.dto';
+import { Public } from '../../common/decorators/public.decorator';
 
 @Controller('board')
 @ApiTags('Board')
@@ -29,11 +30,13 @@ export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @ApiGetItemsResponse(FindBoardResDto)
+  @Public()
   @Get()
   findAll(@Query() { page, size }: PageReqDto) {
     return this.boardService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.boardService.findOne(id);
@@ -41,7 +44,6 @@ export class BoardController {
 
   @ApiBearerAuth()
   @Post()
-  @UseGuards(JwtAuthGuard)
   create(@UserInfo() userInfo, @Body('contents') contents: string) {
     if (!userInfo) throw new UnauthorizedException();
 
@@ -53,7 +55,6 @@ export class BoardController {
 
   @ApiBearerAuth()
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
   update(
     @UserInfo() userInfo,
     @Param('id') id: string,
@@ -62,8 +63,8 @@ export class BoardController {
     return this.boardService.update(userInfo.id, id, data);
   }
 
+  @ApiBearerAuth()
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
   remove(@UserInfo() userInfo, @Param('id') id: string) {
     return this.boardService.delete(userInfo.id, id);
   }

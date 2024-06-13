@@ -15,6 +15,7 @@ import {
   ApiPostResponse,
 } from '../../common/decorators/swagger.decorator';
 import { FindUserResDto, SigninResDto, SignupResDto } from './dto/res.dto';
+import { Public } from '../../common/decorators/public.decorator';
 
 @Controller('user')
 @ApiTags('User')
@@ -23,6 +24,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiPostResponse(SignupResDto)
+  @Public()
   @Post()
   async signup(
     @Body(new ValidationPipe())
@@ -38,6 +40,7 @@ export class UserController {
   }
 
   @ApiPostResponse(SigninResDto)
+  @Public()
   @Post('login')
   login(@Body(new ValidationPipe()) data: LoginUserDto) {
     return this.userService.login(data);
