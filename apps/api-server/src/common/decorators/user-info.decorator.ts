@@ -6,3 +6,11 @@ export const UserInfo = createParamDecorator(
     return request.user;
   },
 );
+
+export interface UserAfterAuth {
+  id: string;
+  username: string;
+  email: string;
+  iat: number;
+  exp: number;
+}
