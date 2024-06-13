@@ -12,7 +12,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
-import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { UserInfo } from '../../common/decorators/user-info.decorator';
@@ -39,6 +39,7 @@ export class BoardController {
     return this.boardService.findOne(id);
   }
 
+  @ApiBearerAuth()
   @Post()
   @UseGuards(JwtAuthGuard)
   create(@UserInfo() userInfo, @Body('contents') contents: string) {
@@ -50,6 +51,7 @@ export class BoardController {
     });
   }
 
+  @ApiBearerAuth()
   @Put(':id')
   @UseGuards(JwtAuthGuard)
   update(
