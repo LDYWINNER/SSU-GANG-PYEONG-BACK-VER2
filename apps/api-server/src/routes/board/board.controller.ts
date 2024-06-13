@@ -6,7 +6,6 @@ import {
   Body,
   Put,
   Delete,
-  UseGuards,
   UnauthorizedException,
   ValidationPipe,
   Query,
@@ -14,8 +13,10 @@ import {
 import { BoardService } from './board.service';
 import { ApiBearerAuth, ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
-import { UserInfo } from '../../common/decorators/user-info.decorator';
+import {
+  UserAfterAuth,
+  UserInfo,
+} from '../../common/decorators/user-info.decorator';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { PageReqDto } from '../../common/dto/page-request.dto';
 import { ApiGetItemsResponse } from '../../common/decorators/swagger.decorator';
@@ -44,7 +45,10 @@ export class BoardController {
 
   @ApiBearerAuth()
   @Post()
-  create(@UserInfo() userInfo, @Body('contents') contents: string) {
+  create(
+    @UserInfo() userInfo: UserAfterAuth,
+    @Body('contents') contents: string,
+  ) {
     if (!userInfo) throw new UnauthorizedException();
 
     return this.boardService.create({
