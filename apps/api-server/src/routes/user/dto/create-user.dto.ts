@@ -33,8 +33,7 @@ export class CreateUserDto {
   @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{10,30}$/)
   @ApiProperty({
     description: '비밀번호 확인',
-    required: true,
     example: 'Password1234*',
   })
-  passwordConfirm: string;
+  passwordConfirm?: string;
 }

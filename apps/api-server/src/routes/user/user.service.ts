@@ -17,8 +17,19 @@ export class UserService {
     private readonly configService: ConfigService,
   ) {}
 
+  async getUserForLogin(email: string) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password') // Explicitly select the password field
+      .where('user.email = :email', { email })
+      .getOne();
+  }
+
   async createUser(data: CreateUserDto) {
     const { username, email, password } = data;
+
+    const user = await this.getUserForLogin(email);
+    if (user) throw new HttpException('CONFLICT', HttpStatus.CONFLICT);
 
     const encryptedPassword = await this.encryptPassword(password);
 
@@ -27,14 +38,6 @@ export class UserService {
       email,
       password: encryptedPassword,
     });
-  }
-
-  async getUserForLogin(email: string) {
-    return this.userRepository
-      .createQueryBuilder('user')
-      .addSelect('user.password') // Explicitly select the password field
-      .where('user.email = :email', { email })
-      .getOne();
   }
 
   async login(data: LoginUserDto) {

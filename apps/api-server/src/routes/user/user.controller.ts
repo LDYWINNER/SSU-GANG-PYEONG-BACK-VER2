@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -17,8 +24,17 @@ export class UserController {
 
   @ApiPostResponse(SignupResDto)
   @Post()
-  signup(@Body(new ValidationPipe()) data: CreateUserDto) {
-    return this.userService.createUser(data);
+  async signup(
+    @Body(new ValidationPipe())
+    { username, email, password, passwordConfirm }: CreateUserDto,
+  ) {
+    if (password !== passwordConfirm) throw new BadRequestException();
+    const { id } = await this.userService.createUser({
+      username,
+      email,
+      password,
+    });
+    return { id };
   }
 
   @ApiPostResponse(SigninResDto)
