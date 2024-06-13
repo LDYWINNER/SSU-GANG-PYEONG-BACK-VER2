@@ -60,7 +60,7 @@ export class BoardController {
   @ApiBearerAuth()
   @Put(':id')
   update(
-    @UserInfo() userInfo,
+    @UserInfo() userInfo: UserAfterAuth,
     @Param('id') id: string,
     @Body(new ValidationPipe()) data: UpdateBoardDto,
   ) {
@@ -69,7 +69,7 @@ export class BoardController {
 
   @ApiBearerAuth()
   @Delete(':id')
-  remove(@UserInfo() userInfo, @Param('id') id: string) {
+  remove(@UserInfo() userInfo: UserAfterAuth, @Param('id') id: string) {
     return this.boardService.delete(userInfo.id, id);
   }
 }
