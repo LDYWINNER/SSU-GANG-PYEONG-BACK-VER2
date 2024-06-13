@@ -9,6 +9,7 @@ import {
   UseGuards,
   UnauthorizedException,
   ValidationPipe,
+  Query,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
@@ -16,15 +17,16 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { UserInfo } from '../../decorators/user-info.decorator';
 import { CreateBoardDto } from './dto/create-board.dto';
+import { PageReqDto } from '../../common/dto/page-request.dto';
 
 @Controller('board')
 @ApiTags('Board')
-@ApiExtraModels(CreateBoardDto)
+@ApiExtraModels(CreateBoardDto, PageReqDto)
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @Get()
-  findAll() {
+  findAll(@Query() { page, size }: PageReqDto) {
     return this.boardService.findAll();
   }
 
