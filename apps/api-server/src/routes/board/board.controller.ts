@@ -15,16 +15,20 @@ import { BoardService } from './board.service';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
-import { UserInfo } from '../../decorators/user-info.decorator';
+import { UserInfo } from '../../common/decorators/user-info.decorator';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { PageReqDto } from '../../common/dto/page-request.dto';
+import { ApiGetItemsResponse } from '../../common/decorators/swagger.decorator';
+import { FindBoardResDto } from './dto/res.dto';
+import { PageResDto } from '../../common/dto/page-response.dto';
 
 @Controller('board')
 @ApiTags('Board')
-@ApiExtraModels(CreateBoardDto, PageReqDto)
+@ApiExtraModels(CreateBoardDto, PageReqDto, PageResDto)
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
+  @ApiGetItemsResponse(FindBoardResDto)
   @Get()
   findAll(@Query() { page, size }: PageReqDto) {
     return this.boardService.findAll();

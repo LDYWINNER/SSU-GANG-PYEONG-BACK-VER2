@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { ApiPostResponse } from './decorators/swagger.decorator';
+import { ApiPostResponse } from './common/decorators/swagger.decorator';
 import { SigninResDto } from './routes/user/dto/res.dto';
 
 @Controller()

@@ -3,8 +3,11 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { ApiPostResponse } from '../../decorators/swagger.decorator';
-import { SigninResDto, SignupResDto } from './dto/res.dto';
+import {
+  ApiGetItemsResponse,
+  ApiPostResponse,
+} from '../../common/decorators/swagger.decorator';
+import { FindUserResDto, SigninResDto, SignupResDto } from './dto/res.dto';
 
 @Controller('user')
 @ApiTags('User')
@@ -24,6 +27,7 @@ export class UserController {
     return this.userService.login(data);
   }
 
+  @ApiGetItemsResponse(FindUserResDto)
   @Get()
   getUsers() {
     return this.userService.getUsers();
