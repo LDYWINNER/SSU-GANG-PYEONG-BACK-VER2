@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateBoardDto {
-  @IsNumber()
   @IsNotEmpty()
+  @IsUUID()
   @ApiProperty({
     description: '작성자 아이디',
     required: true,
@@ -12,6 +12,7 @@ export class CreateBoardDto {
   userId: string;
 
   @IsNotEmpty()
+  @IsString()
   @ApiProperty({
     description: '내용',
     required: true,
