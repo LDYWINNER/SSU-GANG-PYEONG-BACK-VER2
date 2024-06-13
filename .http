@@ -12,7 +12,7 @@ GET http://localhost:3000/board/16
 # 게시글 생성
 POST http://localhost:3000/board
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzZWVkZXJVc2VyMyIsIm5hbWUiOiJnaWxkb25nIiwiaWF0IjoxNzEyNzkwMzg2LCJleHAiOjE3MTM5OTk5ODZ9.RkEQeTxhITDgwxNoTU2unKPW3YiK_gXaO0pUM0JF664
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZjIxNTRhLWQyYjAtNDE1ZS05YzZhLTMyZTUxOTVjMjdmMCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjEwIiwiZW1haWwiOiJnaWxkb25nMkBzdG9ueWJyb29rLmVkdSIsImlhdCI6MTcxODI2NzExMiwiZXhwIjoxNzIwODU5MTEyfQ.iiC0PVZVK3nL-imp_h6-7nKZMyM9uHEDE7f77yzlRj8
 
 {
     "contents": "새로운 게시글"
@@ -54,8 +54,8 @@ POST http://localhost:3000/user
 content-type: application/json
 
 {
-    "username": "seederUser2",
-    "email": "gildong3@stonybrook.edu",
+    "username": "seederUser3",
+    "email": "gildong4@stonybrook.edu",
     "password": "Hong123456!",
     "passwordConfirm": "Hong123456!"
 }
@@ -89,4 +89,4 @@ content-type: application/json
 # 유저 ME
 GET http://localhost:3000/me
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlZWRlclVzZXIxMCIsImVtYWlsIjoiZ2lsZG9uZzJAc3Rvbnlicm9vay5lZHUiLCJpYXQiOjE3MTgyNTEwMjcsImV4cCI6MTcyMDg0MzAyN30.vvmYKUqMJYn68oICFZMPSmiHqxKIm8Ftq4iH5hYAe40
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZjIxNTRhLWQyYjAtNDE1ZS05YzZhLTMyZTUxOTVjMjdmMCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjEwIiwiZW1haWwiOiJnaWxkb25nMkBzdG9ueWJyb29rLmVkdSIsImlhdCI6MTcxODI2NzExMiwiZXhwIjoxNzIwODU5MTEyfQ.iiC0PVZVK3nL-imp_h6-7nKZMyM9uHEDE7f77yzlRj8
