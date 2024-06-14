@@ -76,7 +76,7 @@ content-type: application/json
 
 # 유저 로그인 (passport)
 
-POST http://localhost:3000/login
+POST http://localhost:3000/auth/login
 content-type: application/json
 
 {

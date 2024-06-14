@@ -11,6 +11,7 @@ import ConfigModule from '../config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RefreshToken } from '../entity/refresh-token.entity';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
@@ -35,5 +36,6 @@ import { RefreshToken } from '../entity/refresh-token.entity';
     },
   ],
   exports: [AuthService],
+  controllers: [AuthController],
 })
 export class AuthModule {}
