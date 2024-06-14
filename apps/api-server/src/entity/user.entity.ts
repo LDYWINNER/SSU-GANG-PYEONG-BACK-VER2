@@ -35,7 +35,7 @@ export class User {
   @Column({ select: false })
   password: string;
 
-  @Column({ type: 'enum', enum: Role })
+  @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role = Role.User;
 
   @ApiProperty({ description: '작성한 게시글' })
