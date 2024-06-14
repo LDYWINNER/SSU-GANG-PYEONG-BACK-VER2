@@ -45,6 +45,7 @@ GET http://localhost:3000
 # 유저 리스트 가져오기
 
 GET http://localhost:3000/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZjIxNTRhLWQyYjAtNDE1ZS05YzZhLTMyZTUxOTVjMjdmMCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjEwIiwiZW1haWwiOiJnaWxkb25nMkBzdG9ueWJyb29rLmVkdSIsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcxODM4Mzk0NSwiZXhwIjoxNzE4NDcwMzQ1fQ.ua9uj49XCM2qGE5ZJGYZJOJ0-dc-Rv4JAYIJC1ZA7SA
 
 ###
 

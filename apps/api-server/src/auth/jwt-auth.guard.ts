@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from '../common/decorators/public.decorator';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../routes/user/user.service';
+import { Role } from '../common/enum/user.enum';
+import { ROLES_KEY } from '../common/decorators/role.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -28,7 +30,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getHandler(),
       context.getClass(),
     ]);
-
     if (isPublic) {
       return true;
     }
@@ -42,6 +43,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (url !== '/api/auth/refresh' && decoded['tokenType'] === 'refresh') {
       console.error('accessToken is required');
       throw new UnauthorizedException();
+    }
+
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (requiredRoles) {
+      const userId = decoded['id'];
+      return this.userService.checkUserIsAdmin(userId);
     }
 
     return super.canActivate(context);

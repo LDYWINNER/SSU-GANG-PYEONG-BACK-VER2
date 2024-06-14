@@ -16,6 +16,8 @@ import {
 } from '../../common/decorators/swagger.decorator';
 import { FindUserResDto, SigninResDto, SignupResDto } from './dto/res.dto';
 import { Public } from '../../common/decorators/public.decorator';
+import { Roles } from '../../common/decorators/role.decorator';
+import { Role } from '../../common/enum/user.enum';
 
 @Controller('user')
 @ApiTags('User')
@@ -47,6 +49,7 @@ export class UserController {
   }
 
   @ApiGetItemsResponse(FindUserResDto)
+  @Roles(Role.Admin)
   @Get()
   getUsers() {
     return this.userService.getUsers();
