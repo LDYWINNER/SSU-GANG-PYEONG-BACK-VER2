@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Board } from './board.entity';
+import { RefreshToken } from './refresh-token.entity';
 
 @Entity()
 export class User {
@@ -33,4 +40,7 @@ export class User {
 
   @Column({ select: false, nullable: true, insert: false, update: false })
   boardCount?: number;
+
+  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
+  refreshToken: RefreshToken;
 }
