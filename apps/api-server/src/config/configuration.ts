@@ -8,4 +8,5 @@ export default () => ({
   DEFAULT_SALT: process.env.DEFAULT_SALT,
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_LIFETIME: process.env.JWT_LIFETIME,
+  JWT_REFRESH_LIFETIME: process.env.JWT_REFRESH_LIFETIME,
 });

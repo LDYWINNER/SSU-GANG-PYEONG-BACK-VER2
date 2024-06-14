@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { LoginUserDto } from './dto/login-user.dto';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import { Role } from '../../common/enum/user.enum';
 
 @Injectable()
 export class UserService {
@@ -23,6 +24,11 @@ export class UserService {
       .addSelect('user.password') // Explicitly select the password field
       .where('user.email = :email', { email })
       .getOne();
+  }
+
+  async findOneById(userId: string) {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    return user;
   }
 
   async createUser(data: CreateUserDto) {
@@ -69,6 +75,11 @@ export class UserService {
     return {
       accessToken,
     };
+  }
+
+  async checkUserIsAdmin(id: string) {
+    const user = await this.userRepository.findOneBy({ id });
+    return user.role === Role.Admin;
   }
 
   async getUsers() {

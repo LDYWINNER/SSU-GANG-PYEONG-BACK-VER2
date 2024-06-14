@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Board } from './board.entity';
 import { RefreshToken } from './refresh-token.entity';
+import { Role } from '../common/enum/user.enum';
 
 @Entity()
 export class User {
@@ -33,6 +34,9 @@ export class User {
   })
   @Column({ select: false })
   password: string;
+
+  @Column({ type: 'enum', enum: Role })
+  role: Role = Role.User;
 
   @ApiProperty({ description: '작성한 게시글' })
   @OneToMany(() => Board, (board) => board.user)

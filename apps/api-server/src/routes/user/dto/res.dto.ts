@@ -17,6 +17,9 @@ export class SignupResDto {
 export class SigninResDto {
   @ApiProperty({ required: true })
   accessToken: string;
+
+  @ApiProperty({ required: true })
+  refreshToken: string;
 }
 
 export class FindUserResDto {
@@ -34,4 +37,12 @@ export class FindUserResDto {
 
   @ApiProperty({ required: true })
   createdAt: string;
+}
+
+export class RefreshResDto {
+  @ApiProperty({ required: true })
+  accessToken: string;
+
+  @ApiProperty({ required: true })
+  refreshToken: string;
 }

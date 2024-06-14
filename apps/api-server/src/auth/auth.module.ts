@@ -10,13 +10,14 @@ import { JwtStrategy } from './jwt.strategy';
 import ConfigModule from '../config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { RefreshToken } from '../entity/refresh-token.entity';
 
 @Module({
   imports: [
     ConfigModule(),
     UserModule,
     PassportModule,
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, RefreshToken]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: {

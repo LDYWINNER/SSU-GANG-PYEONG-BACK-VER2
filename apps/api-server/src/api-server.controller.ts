@@ -5,6 +5,7 @@ import {
   Query,
   Request,
   UseGuards,
+  Headers,
 } from '@nestjs/common';
 import { ApiServerService } from './api-server.service';
 import { ConfigService } from '@nestjs/config';
@@ -12,9 +13,15 @@ import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ApiPostResponse } from './common/decorators/swagger.decorator';
-import { SigninResDto } from './routes/user/dto/res.dto';
+import { RefreshResDto, SigninResDto } from './routes/user/dto/res.dto';
 import { Public } from './common/decorators/public.decorator';
+import {
+  UserAfterAuth,
+  UserInfo,
+} from './common/decorators/user-info.decorator';
+import { ApiBearerAuth, ApiExtraModels } from '@nestjs/swagger';
 
+@ApiExtraModels(RefreshResDto)
 @Controller()
 export class ApiServerController {
   constructor(
@@ -42,6 +49,21 @@ export class ApiServerController {
   @Post('login')
   async login(@Request() req) {
     return this.authService.login(req.user);
+  }
+
+  @ApiPostResponse(RefreshResDto)
+  @ApiBearerAuth()
+  @Post('refresh')
+  async refresh(
+    @Headers('authorization') authorization: string,
+    @UserInfo() userInfo: UserAfterAuth,
+  ) {
+    const token = /Bearer\s(.+)/.exec(authorization)[1];
+    const { accessToken, refreshToken } = await this.authService.refresh(
+      token,
+      userInfo.id,
+    );
+    return { accessToken, refreshToken };
   }
 
   // jwt 검증용
