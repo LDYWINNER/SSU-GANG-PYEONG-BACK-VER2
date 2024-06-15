@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Board } from './board.entity';
 import { RefreshToken } from './refresh-token.entity';
@@ -47,4 +49,12 @@ export class User {
 
   @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
   refreshToken: RefreshToken;
+
+  @ApiProperty({ description: '생성일' })
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @ApiProperty({ description: '수정일' })
+  @UpdateDateColumn()
+  updateAt: Date;
 }
