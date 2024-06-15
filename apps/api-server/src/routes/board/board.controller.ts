@@ -34,7 +34,7 @@ export class BoardController {
   @Public()
   @Get()
   findAll(@Query() { page, size }: PageReqDto) {
-    return this.boardService.findAll();
+    return this.boardService.findAll(page, size);
   }
 
   @Public()
