@@ -51,12 +51,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRmNmE4MGE0L
 
 # 유저 회원가입
 
-POST http://localhost:3000/user
+POST http://localhost:3000/auth
 content-type: application/json
 
 {
-    "username": "seederUser",
-    "email": "gildong@stonybrook.edu",
+    "username": "seederUser2",
+    "email": "gildong2@stonybrook.edu",
     "password": "Hong123456!",
     "passwordConfirm": "Hong123456!"
 }

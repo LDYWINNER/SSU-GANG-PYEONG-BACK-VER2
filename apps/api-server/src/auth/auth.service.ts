@@ -53,16 +53,23 @@ export class AuthService {
   async createUser(data: CreateUserDto) {
     const { username, email, password } = data;
 
-    const user = await this.getUserForLogin(email);
-    if (user) throw new HttpException('CONFLICT', HttpStatus.CONFLICT);
+    const existingUser = await this.getUserForLogin(email);
+    if (existingUser) throw new HttpException('CONFLICT', HttpStatus.CONFLICT);
 
     const encryptedPassword = await this.encryptPassword(password);
 
-    return this.userRepository.save({
+    const newUser = this.userRepository.create({
       username,
       email,
       password: encryptedPassword,
     });
+    await this.userRepository.save(newUser);
+
+    const accessToken = this.generateAccessToken(newUser);
+    const refreshToken = this.generateRefreshToken(newUser.id);
+    await this.createRefreshTokenUsingUser(newUser.id, refreshToken);
+
+    return { id: newUser.id, accessToken, refreshToken };
   }
 
   async encryptPassword(password: string) {
