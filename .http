@@ -63,18 +63,6 @@ content-type: application/json
 
 ###
 
-# 유저 로그인
-
-# POST http://localhost:3000/user/login
-# content-type: application/json
-
-# {
-#     "email": "gildong2@stonybrook.edu",
-#     "password": "Hong123456!"
-# }
-
-###
-
 # 유저 로그인 (passport)
 
 POST http://localhost:3000/auth/login

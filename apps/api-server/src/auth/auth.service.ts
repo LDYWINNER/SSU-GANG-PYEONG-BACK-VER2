@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { UserService } from '../routes/user/user.service';
 import { compare } from 'bcrypt';
 import { User } from '../entity/user.entity';
@@ -7,11 +12,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshToken } from '../entity/refresh-token.entity';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
+import { CreateUserDto } from './dto/create-user.dto';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     @InjectRepository(RefreshToken)
     private refreshTokenRepository: Repository<RefreshToken>,
@@ -19,7 +28,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string) {
-    const user = await this.userService.getUserForLogin(email);
+    const user = await this.getUserForLogin(email);
     console.log(user, email);
     if (user) {
       const match = await compare(password, user.password);
@@ -31,6 +40,33 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  async getUserForLogin(email: string) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password') // Explicitly select the password field
+      .where('user.email = :email', { email })
+      .getOne();
+  }
+
+  async createUser(data: CreateUserDto) {
+    const { username, email, password } = data;
+
+    const user = await this.getUserForLogin(email);
+    if (user) throw new HttpException('CONFLICT', HttpStatus.CONFLICT);
+
+    const encryptedPassword = await this.encryptPassword(password);
+
+    return this.userRepository.save({
+      username,
+      email,
+      password: encryptedPassword,
+    });
+  }
+
+  async encryptPassword(password: string) {
+    return hash(password, Number(this.configService.get('DEFAULT_SALT')));
   }
 
   async login(user: User) {
