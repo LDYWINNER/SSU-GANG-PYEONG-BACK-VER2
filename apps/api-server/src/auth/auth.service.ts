@@ -10,7 +10,7 @@ import { User } from '../entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshToken } from '../entity/refresh-token.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'bcrypt';
@@ -18,6 +18,7 @@ import { hash } from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
+    private dataSource: DataSource,
     private readonly userService: UserService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -53,23 +54,44 @@ export class AuthService {
   async createUser(data: CreateUserDto) {
     const { username, email, password } = data;
 
-    const existingUser = await this.getUserForLogin(email);
-    if (existingUser) throw new HttpException('CONFLICT', HttpStatus.CONFLICT);
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    const encryptedPassword = await this.encryptPassword(password);
+    let error;
+    try {
+      const existingUser = await this.getUserForLogin(email);
+      if (existingUser)
+        throw new HttpException('CONFLICT', HttpStatus.CONFLICT);
 
-    const newUser = this.userRepository.create({
-      username,
-      email,
-      password: encryptedPassword,
-    });
-    await this.userRepository.save(newUser);
+      const encryptedPassword = await this.encryptPassword(password);
 
-    const accessToken = this.generateAccessToken(newUser);
-    const refreshToken = this.generateRefreshToken(newUser.id);
-    await this.createRefreshTokenUsingUser(newUser.id, refreshToken);
+      const userEntity = queryRunner.manager.create(User, {
+        username,
+        email,
+        password: encryptedPassword,
+      });
+      await queryRunner.manager.save(userEntity);
 
-    return { id: newUser.id, accessToken, refreshToken };
+      const accessToken = this.generateAccessToken(userEntity);
+      const refreshToken = this.generateRefreshToken(userEntity.id);
+
+      const refreshTokenEntity = queryRunner.manager.create(RefreshToken, {
+        user: { id: userEntity.id },
+        token: refreshToken,
+      });
+
+      await queryRunner.manager.save(refreshTokenEntity);
+      await queryRunner.commitTransaction();
+
+      return { id: userEntity.id, accessToken, refreshToken };
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+      error = e;
+    } finally {
+      await queryRunner.release();
+      if (error) throw error;
+    }
   }
 
   async encryptPassword(password: string) {
