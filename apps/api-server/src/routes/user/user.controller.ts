@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -18,6 +19,7 @@ import { FindUserResDto, SigninResDto, SignupResDto } from './dto/res.dto';
 import { Public } from '../../common/decorators/public.decorator';
 import { Roles } from '../../common/decorators/role.decorator';
 import { Role } from '../../common/enum/user.enum';
+import { PageReqDto } from '../../common/dto/page-request.dto';
 
 @Controller('user')
 @ApiTags('User')
@@ -51,7 +53,18 @@ export class UserController {
   @ApiGetItemsResponse(FindUserResDto)
   @Roles(Role.Admin)
   @Get()
-  getUsers() {
-    return this.userService.getUsers();
+  async getUsers(
+    @Query() { page, size }: PageReqDto,
+  ): Promise<FindUserResDto[]> {
+    const users = await this.userService.getUsers(page, size);
+    return users.map(({ id, email, username, createdAt, boardCount }) => {
+      return {
+        id,
+        email,
+        username,
+        createdAt: createdAt.toISOString(),
+        boardCount,
+      };
+    });
   }
 }

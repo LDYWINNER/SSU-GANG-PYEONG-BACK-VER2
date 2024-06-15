@@ -82,7 +82,7 @@ export class UserService {
     return user.role === Role.Admin;
   }
 
-  async getUsers() {
+  async getUsers(page: number, size: number) {
     const qb = this.userRepository.createQueryBuilder();
 
     qb.addSelect((subQuery) => {
@@ -91,6 +91,8 @@ export class UserService {
         .from(Board, 'Board')
         .where('Board.userId = User.id');
     }, 'User_boardCount');
+
+    qb.skip((page - 1) * size).take(size);
 
     return qb.getMany();
   }

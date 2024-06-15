@@ -45,7 +45,7 @@ GET http://localhost:3000
 # 유저 리스트 가져오기
 
 GET http://localhost:3000/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZjIxNTRhLWQyYjAtNDE1ZS05YzZhLTMyZTUxOTVjMjdmMCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjEwIiwiZW1haWwiOiJnaWxkb25nMkBzdG9ueWJyb29rLmVkdSIsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcxODM4Mzk0NSwiZXhwIjoxNzE4NDcwMzQ1fQ.ua9uj49XCM2qGE5ZJGYZJOJ0-dc-Rv4JAYIJC1ZA7SA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRmNmE4MGE0LTg3MDYtNDAxZC04MGY5LTBjY2RmOWMwMTJmYyIsInVzZXJuYW1lIjoic2VlZGVyVXNlciIsImVtYWlsIjoiZ2lsZG9uZ0BzdG9ueWJyb29rLmVkdSIsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcxODQzNzgzOSwiZXhwIjoxNzE4NTI0MjM5fQ.eE0vCpxiiCsZOR3fUmjrDjcG93EQ-o9zIdjRsnpW9bA
 
 ###
 
@@ -55,8 +55,8 @@ POST http://localhost:3000/user
 content-type: application/json
 
 {
-    "username": "seederUser3",
-    "email": "gildong4@stonybrook.edu",
+    "username": "seederUser",
+    "email": "gildong@stonybrook.edu",
     "password": "Hong123456!",
     "passwordConfirm": "Hong123456!"
 }
@@ -65,13 +65,13 @@ content-type: application/json
 
 # 유저 로그인
 
-POST http://localhost:3000/user/login
-content-type: application/json
+# POST http://localhost:3000/user/login
+# content-type: application/json
 
-{
-    "email": "gildong2@stonybrook.edu",
-    "password": "Hong123456!"
-}
+# {
+#     "email": "gildong2@stonybrook.edu",
+#     "password": "Hong123456!"
+# }
 
 ###
 
@@ -81,7 +81,7 @@ POST http://localhost:3000/auth/login
 content-type: application/json
 
 {
-    "email": "gildong2@stonybrook.edu",
+    "email": "gildong@stonybrook.edu",
     "password": "Hong123456!"
 }
 

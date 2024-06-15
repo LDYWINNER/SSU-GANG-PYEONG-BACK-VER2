@@ -6,6 +6,7 @@ import {
   SwaggerCustomOptions,
 } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { TransformInterceptor } from './common/interceptor/transform.interceptor';
 
 async function bootstrap() {
   const port = 3000;
@@ -34,6 +35,8 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   await app.listen(3000);
   console.info(`listening on port ${port}`);
