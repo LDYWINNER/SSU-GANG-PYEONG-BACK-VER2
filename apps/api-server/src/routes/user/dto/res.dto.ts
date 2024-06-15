@@ -5,13 +5,10 @@ export class SignupResDto {
   id: string;
 
   @ApiProperty({ required: true })
-  username: string;
+  accessToken: string;
 
   @ApiProperty({ required: true })
-  password: string;
-
-  @ApiProperty({ required: true })
-  boardCount: string;
+  refreshToken: string;
 }
 
 export class SigninResDto {

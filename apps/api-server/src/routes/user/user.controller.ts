@@ -33,14 +33,16 @@ export class UserController {
   async signup(
     @Body(new ValidationPipe())
     { username, email, password, passwordConfirm }: CreateUserDto,
-  ) {
+  ): Promise<SignupResDto> {
     if (password !== passwordConfirm) throw new BadRequestException();
-    const { id } = await this.userService.createUser({
-      username,
-      email,
-      password,
-    });
-    return { id };
+    const { id, accessToken, refreshToken } = await this.userService.createUser(
+      {
+        username,
+        email,
+        password,
+      },
+    );
+    return { id, accessToken, refreshToken };
   }
 
   @ApiPostResponse(SigninResDto)
