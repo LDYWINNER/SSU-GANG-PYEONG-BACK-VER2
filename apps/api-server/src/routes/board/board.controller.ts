@@ -26,7 +26,7 @@ import { Public } from '../../common/decorators/public.decorator';
 
 @Controller('board')
 @ApiTags('Board')
-@ApiExtraModels(CreateBoardDto, PageReqDto, PageResDto)
+@ApiExtraModels(CreateBoardDto, PageReqDto, PageResDto, FindBoardResDto)
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
