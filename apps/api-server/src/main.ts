@@ -7,10 +7,14 @@ import {
 } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
+import * as Sentry from '@sentry/node';
+import { SentryInterceptor } from './common/interceptor/sentry.interceptor';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const port = 3000;
   const app = await NestFactory.create(ApiServerModule);
+  const configService = app.get(ConfigService);
 
   const config = new DocumentBuilder()
     .setTitle('SSU-GANG-PYEONG-BACKEND-VER.2.0')
@@ -36,7 +40,11 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalInterceptors(new TransformInterceptor());
+  Sentry.init({ dsn: configService.get('SENTRY_DSN') });
+  app.useGlobalInterceptors(
+    new SentryInterceptor(),
+    new TransformInterceptor(),
+  );
 
   await app.listen(3000);
   console.info(`listening on port ${port}`);

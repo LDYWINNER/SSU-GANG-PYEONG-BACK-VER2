@@ -9,4 +9,6 @@ export default () => ({
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_LIFETIME: process.env.JWT_LIFETIME,
   JWT_REFRESH_LIFETIME: process.env.JWT_REFRESH_LIFETIME,
+  SENTRY_DSN: process.env.SENTRY_DSN,
+  SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
 });
