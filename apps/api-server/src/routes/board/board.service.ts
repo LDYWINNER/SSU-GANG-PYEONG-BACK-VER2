@@ -4,7 +4,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -37,10 +36,6 @@ export class BoardService {
     if (!board) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
 
     return board;
-  }
-
-  async create(data: CreateBoardDto) {
-    return this.boardRepository.save(data);
   }
 
   async update(userId: string, id: string, data: UpdateBoardDto) {

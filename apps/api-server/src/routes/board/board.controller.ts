@@ -6,7 +6,6 @@ import {
   Body,
   Put,
   Delete,
-  UnauthorizedException,
   ValidationPipe,
   Query,
   UseGuards,
@@ -26,20 +25,40 @@ import { PageResDto } from '../../common/dto/page-response.dto';
 import { Public } from '../../common/decorators/public.decorator';
 import { ThrottlerBehindProxyGuard } from '../../common/guard/throttler-behind-proxy.guard';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
+import { CreateBoardCommand } from './command/create-board.command';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { FindBoardsQuery } from './query/find-boards.query';
 
 @Controller('board')
 @ApiTags('Board')
 @ApiExtraModels(CreateBoardDto, PageReqDto, PageResDto, FindBoardResDto)
 @UseGuards(ThrottlerBehindProxyGuard)
 export class BoardController {
-  constructor(private readonly boardService: BoardService) {}
+  constructor(
+    private commandBus: CommandBus,
+    private queryBus: QueryBus,
+    private readonly boardService: BoardService,
+  ) {}
 
   @ApiGetItemsResponse(FindBoardResDto)
   @Public()
   @SkipThrottle()
   @Get()
-  findAll(@Query() { page, size }: PageReqDto) {
-    return this.boardService.findAll(page, size);
+  async findAll(
+    @Query() { page, size }: PageReqDto,
+  ): Promise<FindBoardResDto[]> {
+    const findBoardsQuery = new FindBoardsQuery(page, size);
+    const boards = await this.queryBus.execute(findBoardsQuery);
+    return boards.map(({ id, contents, user }) => {
+      return {
+        id,
+        contents,
+        user: {
+          id: user.id,
+          email: user.email,
+        },
+      };
+    });
   }
 
   @Public()
@@ -52,16 +71,13 @@ export class BoardController {
   @ApiBearerAuth()
   @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post()
-  create(
+  async create(
     @UserInfo() userInfo: UserAfterAuth,
     @Body('contents') contents: string,
   ) {
-    if (!userInfo) throw new UnauthorizedException();
-
-    return this.boardService.create({
-      userId: userInfo.id,
-      contents,
-    });
+    const command = new CreateBoardCommand(userInfo.id, contents);
+    const { id } = await this.commandBus.execute(command);
+    return { id, contents };
   }
 
   @ApiBearerAuth()

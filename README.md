@@ -3,6 +3,7 @@
 ### BASE
 
 - nestjs (mono repo multi module)
+- board module(CQRS 아키텍처 적용)
 
 ### Authentication & Authorization
 
@@ -12,6 +13,7 @@
 ### Database
 
 - typeorm migration 활용한 db 관리
+- tyeporm query runner를 활용한 db transaction
 - nestjs throttler를 활용한 rate limiter
 
 ### Infrastructure
