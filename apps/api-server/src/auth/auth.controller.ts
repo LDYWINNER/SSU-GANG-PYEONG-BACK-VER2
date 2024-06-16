@@ -19,7 +19,7 @@ import {
   UserAfterAuth,
   UserInfo,
 } from '../common/decorators/user-info.decorator';
-import { ApiBearerAuth, ApiExtraModels } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ThrottlerBehindProxyGuard } from '../common/guard/throttler-behind-proxy.guard';
@@ -27,6 +27,7 @@ import { ThrottlerBehindProxyGuard } from '../common/guard/throttler-behind-prox
 @ApiExtraModels(SignupResDto, RefreshResDto)
 @UseGuards(ThrottlerBehindProxyGuard)
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
