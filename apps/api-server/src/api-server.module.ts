@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './routes/user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { HealthModule } from './routes/health/health.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     BoardModule,
     UserModule,
     AuthModule,
+    HealthModule,
   ],
   controllers: [ApiServerController],
   providers: [ApiServerService],

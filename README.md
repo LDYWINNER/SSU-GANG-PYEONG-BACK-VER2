@@ -1,7 +1,5 @@
 # SSU-GANG-PYEONG-BACK-VER2
 
-SSU-GANG-PYEONG-BACKEND: nestjs backend
-
 ### BASE
 
 - nestjs (mono repo multi module)
@@ -19,6 +17,7 @@ SSU-GANG-PYEONG-BACKEND: nestjs backend
 ### Infrastructure
 
 - sentry와 slack을 활용한 error notification
+- nestjs terminus 헬스체크를 활용한 서버 관리
 
 ### 문서화
 
