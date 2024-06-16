@@ -9,6 +9,7 @@ import {
   UnauthorizedException,
   ValidationPipe,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { ApiBearerAuth, ApiExtraModels, ApiTags } from '@nestjs/swagger';
@@ -23,27 +24,33 @@ import { ApiGetItemsResponse } from '../../common/decorators/swagger.decorator';
 import { FindBoardResDto } from './dto/res.dto';
 import { PageResDto } from '../../common/dto/page-response.dto';
 import { Public } from '../../common/decorators/public.decorator';
+import { ThrottlerBehindProxyGuard } from '../../common/guard/throttler-behind-proxy.guard';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @Controller('board')
 @ApiTags('Board')
 @ApiExtraModels(CreateBoardDto, PageReqDto, PageResDto, FindBoardResDto)
+@UseGuards(ThrottlerBehindProxyGuard)
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @ApiGetItemsResponse(FindBoardResDto)
   @Public()
+  @SkipThrottle()
   @Get()
   findAll(@Query() { page, size }: PageReqDto) {
     return this.boardService.findAll(page, size);
   }
 
   @Public()
+  @SkipThrottle()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.boardService.findOne(id);
   }
 
   @ApiBearerAuth()
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post()
   create(
     @UserInfo() userInfo: UserAfterAuth,

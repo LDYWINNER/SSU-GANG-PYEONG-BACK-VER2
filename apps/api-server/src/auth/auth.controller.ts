@@ -22,8 +22,10 @@ import {
 import { ApiBearerAuth, ApiExtraModels } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { ThrottlerBehindProxyGuard } from '../common/guard/throttler-behind-proxy.guard';
 
 @ApiExtraModels(SignupResDto, RefreshResDto)
+@UseGuards(ThrottlerBehindProxyGuard)
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
