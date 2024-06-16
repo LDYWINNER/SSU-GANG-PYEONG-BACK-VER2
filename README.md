@@ -3,7 +3,7 @@
 ### BASE
 
 - nestjs (mono repo multi module)
-- board module(CQRS 아키텍처 적용)
+- board module(CQRS 아키텍처 적용: Simple CQRS architecture)
 
 ### Authentication & Authorization
 
