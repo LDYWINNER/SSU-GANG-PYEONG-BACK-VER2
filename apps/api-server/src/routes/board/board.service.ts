@@ -16,13 +16,6 @@ export class BoardService {
     private boardRepository: Repository<Board>,
   ) {}
 
-  async findAll(page: number, size: number) {
-    return this.boardRepository.find({
-      skip: (page - 1) * size,
-      take: size,
-    });
-  }
-
   async findOne(id: string) {
     const board = await this.boardRepository.findOne({
       where: {
