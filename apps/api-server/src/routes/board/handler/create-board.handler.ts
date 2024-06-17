@@ -15,16 +15,24 @@ export class CreateBoardHandler implements ICommandHandler<CreateBoardCommand> {
   ) {}
 
   async execute(command: CreateBoardCommand): Promise<Board> {
-    const { userId, contents } = command;
+    const { userId, title, contents, views, category, anonymity } = command;
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
     let error;
     try {
       const user = await queryRunner.manager.findOneBy(User, { id: userId });
       const board = await queryRunner.manager.save(
-        queryRunner.manager.create(Board, { user, contents }),
+        queryRunner.manager.create(Board, {
+          title,
+          contents,
+          views,
+          category,
+          anonymity,
+          user,
+        }),
       );
-      await this.uploadBoard(board.id);
+
+      await queryRunner.manager.save(board);
       await queryRunner.commitTransaction();
       this.eventBus.publish(new BoardCreatedEvent(board.id));
       return board;
@@ -35,9 +43,5 @@ export class CreateBoardHandler implements ICommandHandler<CreateBoardCommand> {
       await queryRunner.release();
       if (error) throw error;
     }
-  }
-
-  private async uploadBoard(id: string) {
-    console.log(`upload video ${id}`);
   }
 }

@@ -12,10 +12,14 @@ GET http://localhost:3000/board/16
 # 게시글 생성
 POST http://localhost:3000/board
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZjIxNTRhLWQyYjAtNDE1ZS05YzZhLTMyZTUxOTVjMjdmMCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjEwIiwiZW1haWwiOiJnaWxkb25nMkBzdG9ueWJyb29rLmVkdSIsImlhdCI6MTcxODI2NzExMiwiZXhwIjoxNzIwODU5MTEyfQ.iiC0PVZVK3nL-imp_h6-7nKZMyM9uHEDE7f77yzlRj8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRmNmE4MGE0LTg3MDYtNDAxZC04MGY5LTBjY2RmOWMwMTJmYyIsInVzZXJuYW1lIjoic2VlZGVyVXNlciIsImVtYWlsIjoiZ2lsZG9uZ0BzdG9ueWJyb29rLmVkdSIsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcxODYwMzM5MiwiZXhwIjoxNzE4Njg5NzkyfQ.g2Yc9yGEzh3PDfn8wM6qymT6vPFNjpBvV-DeVuFrw1s
 
 {
-    "contents": "새로운 게시글"
+    "title": "새로운 게시글",
+    "contents": "새로운 게시글",
+    "views": "0",
+    "category": "자유게시판",
+    "anonymity": "false"
 }
 
 ###

@@ -15,10 +15,6 @@ export class Board {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
   id: string;
 
-  @ApiProperty({ description: 'user_id' })
-  @Column('uuid')
-  userId: string;
-
   @ApiProperty({ description: '제목' })
   @Column()
   title: string;
@@ -28,7 +24,7 @@ export class Board {
   contents: string;
 
   @ApiProperty({ description: '조회 수' })
-  @Column()
+  @Column({ default: 0 })
   views: number;
 
   @ApiProperty({ description: '게시판 카테고리' })
@@ -36,7 +32,7 @@ export class Board {
   category: string;
 
   @ApiProperty({ description: '익명 여부' })
-  @Column()
+  @Column({ default: true })
   anonymity: boolean;
 
   @ApiProperty({ description: '생성일' })

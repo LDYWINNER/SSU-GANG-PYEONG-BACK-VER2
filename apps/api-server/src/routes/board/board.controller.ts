@@ -91,9 +91,18 @@ export class BoardController {
   @Post()
   async create(
     @UserInfo() userInfo: UserAfterAuth,
-    @Body('contents') contents: string,
+    @Body(new ValidationPipe()) data: CreateBoardDto,
   ) {
-    const command = new CreateBoardCommand(userInfo.id, contents);
+    const { title, contents, category, anonymity } = data;
+    const views = 0;
+    const command = new CreateBoardCommand(
+      userInfo.id,
+      title,
+      contents,
+      views,
+      category,
+      anonymity,
+    );
     const { id } = await this.commandBus.execute(command);
     return { id, contents };
   }

@@ -28,7 +28,23 @@ export class BoardService {
 
     if (!board) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
 
+    await this.boardRepository.update({ id }, { views: () => 'views + 1' });
+
     return board;
+  }
+
+  async findTop5Download() {
+    const boards = await this.boardRepository.find({
+      relations: {
+        user: true,
+      },
+      order: {
+        views: 'DESC',
+      },
+      take: 5,
+    });
+
+    return boards;
   }
 
   async update(userId: string, id: string, data: UpdateBoardDto) {
@@ -36,7 +52,7 @@ export class BoardService {
 
     if (!board) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
-    if (userId !== board.userId) {
+    if (userId !== board.user.id) {
       throw new UnauthorizedException();
     }
 
@@ -50,7 +66,7 @@ export class BoardService {
 
     if (!board) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
-    if (userId !== board.userId) {
+    if (userId !== board.user.id) {
       throw new UnauthorizedException();
     }
 
