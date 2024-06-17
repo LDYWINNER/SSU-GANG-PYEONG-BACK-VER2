@@ -18,5 +18,6 @@ import { FindBoardsQueryHandler } from './handler/find-boards.handler';
     BoardCreatedHandler,
     FindBoardsQueryHandler,
   ],
+  exports: [BoardService],
 })
 export class BoardModule {}

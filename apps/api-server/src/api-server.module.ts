@@ -9,6 +9,7 @@ import { UserModule } from './routes/user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './routes/health/health.module';
+import { AnalyticsModule } from './routes/analytics/analytics.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { HealthModule } from './routes/health/health.module';
     UserModule,
     AuthModule,
     HealthModule,
+    AnalyticsModule,
   ],
   controllers: [ApiServerController],
   providers: [ApiServerService],
