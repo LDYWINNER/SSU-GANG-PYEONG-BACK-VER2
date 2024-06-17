@@ -21,6 +21,7 @@
 - sentry와 slack을 활용한 error notification
 - nestjs terminus 헬스체크를 활용한 서버 관리
 - nestjs schedule을 활용한 cron job 처리
+- Github Actions를 활용한 CD
 
 ### 문서화
 
