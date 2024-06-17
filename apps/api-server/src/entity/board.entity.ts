@@ -19,17 +19,33 @@ export class Board {
   @Column('uuid')
   userId: string;
 
+  @ApiProperty({ description: '제목' })
+  @Column()
+  title: string;
+
   @ApiProperty({ description: '내용' })
   @Column()
   contents: string;
 
-  @ApiProperty({ description: '수정일' })
-  @UpdateDateColumn()
-  updateAt: Date;
+  @ApiProperty({ description: '조회 수' })
+  @Column()
+  views: number;
+
+  @ApiProperty({ description: '게시판 카테고리' })
+  @Column()
+  category: string;
+
+  @ApiProperty({ description: '익명 여부' })
+  @Column()
+  anonymity: boolean;
 
   @ApiProperty({ description: '생성일' })
   @CreateDateColumn()
   createdAt: Date;
+
+  @ApiProperty({ description: '수정일' })
+  @UpdateDateColumn()
+  updateAt: Date;
 
   @ApiProperty({ description: '유저정보' })
   @ManyToOne(() => User)
