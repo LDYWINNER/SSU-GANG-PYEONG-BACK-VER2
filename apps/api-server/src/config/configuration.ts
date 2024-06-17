@@ -11,4 +11,6 @@ export default () => ({
   JWT_REFRESH_LIFETIME: process.env.JWT_REFRESH_LIFETIME,
   SENTRY_DSN: process.env.SENTRY_DSN,
   SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
+  NODEMAIL_USER: process.env.NODEMAIL_USER,
+  NODEMAIL_PASS: process.env.NODEMAIL_PASS,
 });
