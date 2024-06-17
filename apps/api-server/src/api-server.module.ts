@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './routes/health/health.module';
 import { AnalyticsModule } from './routes/analytics/analytics.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AnalyticsModule } from './routes/analytics/analytics.module';
     AuthModule,
     HealthModule,
     AnalyticsModule,
+    EmailModule,
   ],
   controllers: [ApiServerController],
   providers: [ApiServerService],

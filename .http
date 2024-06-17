@@ -5,7 +5,7 @@ GET http://localhost:3000/board
 ###
 
 # 게시글 하나 가져오기
-GET http://localhost:3000/board/16
+GET http://localhost:3000/board/9e280d6a-08fe-42e8-b551-cd91a153d6cf
 
 ###
 
