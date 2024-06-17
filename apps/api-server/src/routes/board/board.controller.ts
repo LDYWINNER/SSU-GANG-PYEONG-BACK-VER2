@@ -19,7 +19,10 @@ import {
 } from '../../common/decorators/user-info.decorator';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { PageReqDto } from '../../common/dto/page-request.dto';
-import { ApiGetItemsResponse } from '../../common/decorators/swagger.decorator';
+import {
+  ApiGetItemsResponse,
+  ApiGetResponse,
+} from '../../common/decorators/swagger.decorator';
 import { FindBoardResDto } from './dto/res.dto';
 import { PageResDto } from '../../common/dto/page-response.dto';
 import { Public } from '../../common/decorators/public.decorator';
@@ -56,6 +59,9 @@ export class BoardController {
         user: {
           id: user.id,
           email: user.email,
+          username: user.username,
+          boardCount: user.boardCount,
+          createdAt: user.createdAt.toISOString(),
         },
       };
     });
@@ -63,9 +69,21 @@ export class BoardController {
 
   @Public()
   @SkipThrottle()
+  @ApiGetResponse(FindBoardResDto)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.boardService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<FindBoardResDto> {
+    const { contents, user } = await this.boardService.findOne(id);
+    return {
+      id,
+      contents,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        boardCount: user.boardCount,
+        createdAt: user.createdAt.toISOString(),
+      },
+    };
   }
 
   @ApiBearerAuth()
