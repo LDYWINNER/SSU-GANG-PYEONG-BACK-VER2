@@ -1,0 +1,72 @@
+name: CI/CD Docker
+
+on:
+  push:
+    branches: [main]
+
+env:
+  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/ssu-gang-pyeong-ver2
+  VERSION: ${{ github.sha }}
+  NAME: cicd_test
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v2
+      - name: Set up docker buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Cache docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ env.VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Login to ghcr
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: ${{ env.DOCKER_IMAGE }}:latest
+          context: .
+          build-args: |
+            "NODE_ENV=${{ secrets.NODE_ENV }}"
+            "ENVIRONMENT=${{ secrets.ENVIRONMENT }}"
+            "DB_USERNAME=${{ secrets.DB_USERNAME }}"
+            "DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+            "DB_HOST=${{ secrets.DB_HOST }}"
+            "DB_NAME=${{ secrets.DB_NAME }}"
+            "SENTRY_DSN=${{ secrets.SENTRY_DSN }}"
+            "SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }}"
+            "NODEMAIL_USER=${{ secrets.NODEMAIL_USER }}"
+            "NODEMAIL_PASS=${{ secrets.NODEMAIL_PASS }}"
+            "JWT_SECRET=${{ secrets.JWT_SECRET }}"
+            "JWT_LIFETIME=${{ secrets.JWT_LIFETIME }}"
+            "JWT_REFRESH_LIFETIME=${{ secrets.JWT_REFRESH_LIFETIME }}"
+
+  deploy:
+    needs: build
+    name: Deploy
+    runs-on: [self-hosted, Linux, x64]
+    steps:
+      - name: Login to ghcr
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      - name: Docker run
+        run: |
+          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          docker run --add-host=host.docker.internal:host-gateway -d -p 80:3000 --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
