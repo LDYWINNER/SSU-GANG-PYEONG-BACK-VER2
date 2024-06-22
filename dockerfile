@@ -35,4 +35,4 @@ ENV JWT_LIFETIME ${JWT_LIFETIME}
 ARG JWT_REFRESH_LIFETIME
 ENV JWT_REFRESH_LIFETIME ${JWT_REFRESH_LIFETIME}
 
-CMD npm run typeorm migration:run;npm run start:prod
+CMD npm run start:prod
