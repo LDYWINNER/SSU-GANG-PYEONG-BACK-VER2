@@ -13,7 +13,7 @@
     "start:debug": "cross-env NODE_ENV=local nest start --debug --watch",
     "start:prodTemp": "cross-env NODE_ENV=production pm2 start dist/main.js",
     "start:prod": "cross-env NODE_ENV=local node dist/apps/api-server/main",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/database/data-source.ts",
+    "typeorm": "ts-node -r ./node_modules/tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource /app/apps/api-server/src/database/data-source.ts",
     "migration:create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create ./apps/api-server/src/database/migrations/Migration",
     "migration:generate": "npm run typeorm migration:generate ./apps/api-server/src/database/migrations/migration_filename",
     "migration:run": "npm run typeorm  migration:run",
