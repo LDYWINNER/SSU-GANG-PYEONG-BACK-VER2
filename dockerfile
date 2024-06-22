@@ -6,6 +6,8 @@ ADD . .
 RUN npm uninstall bcrypt --force
 RUN npm install bcrypt --force
 RUN npm install --force
+
+WORKDIR /app/apps/api-server
 RUN npm run build
 
 ARG NODE_ENV
