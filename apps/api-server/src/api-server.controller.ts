@@ -13,7 +13,7 @@ export class ApiServerController {
   @Public()
   @Get()
   getHello(): string {
-    console.log(this.configService.get('ENVIRONMENT'));
+    console.log(this.configService.get('STAGE'));
     return this.apiServerService.getHello();
   }
 

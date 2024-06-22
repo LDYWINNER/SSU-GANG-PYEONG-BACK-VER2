@@ -41,19 +41,15 @@ jobs:
           tags: ${{ env.DOCKER_IMAGE }}:latest
           context: .
           build-args: |
-            "NODE_ENV=${{ secrets.NODE_ENV }}"
-            "ENVIRONMENT=${{ secrets.ENVIRONMENT }}"
-            "DB_USERNAME=${{ secrets.DB_USERNAME }}"
-            "DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
-            "DB_HOST=${{ secrets.DB_HOST }}"
-            "DB_NAME=${{ secrets.DB_NAME }}"
+            "STAGE=${{ secrets.STAGE }}"
+            "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}"
             "SENTRY_DSN=${{ secrets.SENTRY_DSN }}"
-            "SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }}"
-            "NODEMAIL_USER=${{ secrets.NODEMAIL_USER }}"
-            "NODEMAIL_PASS=${{ secrets.NODEMAIL_PASS }}"
+            "SLACK_WEBHOOK=${{ secrets.SLACK_WEBHOOK }}"
+            "EMAIL_USER=${{ secrets.EMAIL_USER }}"
+            "EMAIL_PASS=${{ secrets.EMAIL_PASS }}"
             "JWT_SECRET=${{ secrets.JWT_SECRET }}"
-            "JWT_LIFETIME=${{ secrets.JWT_LIFETIME }}"
-            "JWT_REFRESH_LIFETIME=${{ secrets.JWT_REFRESH_LIFETIME }}"
+            "SWAGGER_USER=${{ secrets.SWAGGER_USER }}"
+            "SWAGGER_PASSWORD=${{ secrets.SWAGGER_PASSWORD }}"
 
   deploy:
     needs: build
