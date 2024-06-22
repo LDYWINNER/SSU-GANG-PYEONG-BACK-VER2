@@ -1,12 +1,15 @@
 FROM node:18.14.2 AS builder
-RUN mkdir -p /apps/api-server
-WORKDIR /api-server
-ADD . .
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY package.json .
 
 RUN npm uninstall bcrypt --force
 RUN npm install bcrypt --force
 RUN npm install --force
 RUN npm run build
+
+COPY . .
 
 ARG STAGE
 ENV STAGE ${STAGE}
