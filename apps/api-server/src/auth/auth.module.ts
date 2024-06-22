@@ -7,22 +7,25 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './auth.strategy';
 import { JwtStrategy } from './jwt.strategy';
-import ConfigModule from '../config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RefreshToken } from '../entity/refresh-token.entity';
 import { AuthController } from './auth.controller';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule(),
     UserModule,
     PassportModule,
     TypeOrmModule.forFeature([User, RefreshToken]),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: {
-        expiresIn: process.env.JWT_LIFETIME,
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          global: true,
+          secret: configService.get('jwt.secret'),
+          signOptions: { expiresIn: configService.get('jwt.lifetime') },
+        };
       },
     }),
   ],

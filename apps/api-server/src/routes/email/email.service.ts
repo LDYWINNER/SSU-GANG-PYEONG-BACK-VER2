@@ -12,7 +12,7 @@ export class EmailService {
     });
 
     await this.mailerService.sendMail({
-      from: `SSUGANGPYEONG <${process.env.NODEMAILER_USER}>`,
+      from: `SSUGANGPYEONG <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'SSU BE ver2 Board report',
       html: `

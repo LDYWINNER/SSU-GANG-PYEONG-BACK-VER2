@@ -12,8 +12,8 @@ import { ConfigService } from '@nestjs/config';
           host: 'smtp.gmail.com',
           port: 587,
           auth: {
-            user: configService.get('EMAIL_USER'),
-            pass: configService.get('EMAIL_PASS'),
+            user: configService.get('email.user'),
+            pass: configService.get('email.pass'),
           },
         },
       }),

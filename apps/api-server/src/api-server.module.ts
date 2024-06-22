@@ -3,7 +3,6 @@ import { ApiServerController } from './api-server.controller';
 import { ApiServerService } from './api-server.service';
 import { BoardModule } from './routes/board/board.module';
 import { LoggingMiddleware } from './middleware/logging.middleware';
-import ConfigModule from './config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UserModule } from './routes/user/user.module';
 import { AuthModule } from './auth/auth.module';
@@ -11,7 +10,11 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './routes/health/health.module';
 import { AnalyticsModule } from './routes/analytics/analytics.module';
 import { EmailModule } from './routes/email/email.module';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import postgresConfig from './config/postgres.config';
+import jwtConfig from './config/jwt.config';
+import sentryConfig from './config/sentry.config';
+import emailConfig from './config/email.config';
 
 @Module({
   imports: [
@@ -21,7 +24,10 @@ import { ConfigService } from '@nestjs/config';
         limit: 10,
       },
     ]),
-    ConfigModule(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [postgresConfig, jwtConfig, sentryConfig, emailConfig],
+    }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {

@@ -40,7 +40,7 @@ async function bootstrap() {
     }),
   );
 
-  Sentry.init({ dsn: configService.get('SENTRY_DSN') });
+  Sentry.init({ dsn: configService.get('sentry.dsn') });
   app.useGlobalInterceptors(
     new SentryInterceptor(),
     new TransformInterceptor(),
@@ -48,6 +48,6 @@ async function bootstrap() {
 
   await app.listen(3000);
   console.info(`listening on port ${port}`);
-  console.info(`NODE_ENV: ${process.env.NODE_ENV}`);
+  console.info(`NODE_ENV: ${process.env.STAGE}`);
 }
 bootstrap();

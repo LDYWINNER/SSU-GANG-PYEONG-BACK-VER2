@@ -95,7 +95,7 @@ export class AuthService {
   }
 
   async encryptPassword(password: string) {
-    return hash(password, Number(this.configService.get('DEFAULT_SALT')));
+    return hash(password, Number(this.configService.get('jwt.salt')));
   }
 
   async login(user: User) {
@@ -132,7 +132,7 @@ export class AuthService {
       tokenType: 'access',
     };
     return this.jwtService.sign(payload, {
-      expiresIn: this.configService.get('JWT_LIFETIME'),
+      expiresIn: this.configService.get('jwt.lifetime'),
     });
   }
 
@@ -143,7 +143,7 @@ export class AuthService {
     };
 
     return this.jwtService.sign(payload, {
-      expiresIn: this.configService.get('JWT_REFRESH_LIFETIME'),
+      expiresIn: this.configService.get('jwt.refreshLifetime'),
     });
   }
 
