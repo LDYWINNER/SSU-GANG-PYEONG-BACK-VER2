@@ -13,6 +13,7 @@ import { EmailModule } from './routes/email/email.module';
 import { CourseModule } from './routes/course/course.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TodoModule } from './routes/todo/todo.module';
+import { TableModule } from './routes/table/table.module';
 import postgresConfig from './config/postgres.config';
 import jwtConfig from './config/jwt.config';
 import sentryConfig from './config/sentry.config';
@@ -60,6 +61,7 @@ import emailConfig from './config/email.config';
     EmailModule,
     CourseModule,
     TodoModule,
+    TableModule,
   ],
   controllers: [ApiServerController],
   providers: [ApiServerService],
