@@ -11,6 +11,7 @@ import { HealthModule } from './routes/health/health.module';
 import { AnalyticsModule } from './routes/analytics/analytics.module';
 import { EmailModule } from './routes/email/email.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CourseModule } from './course/course.module';
 import postgresConfig from './config/postgres.config';
 import jwtConfig from './config/jwt.config';
 import sentryConfig from './config/sentry.config';
@@ -56,6 +57,7 @@ import emailConfig from './config/email.config';
     HealthModule,
     AnalyticsModule,
     EmailModule,
+    CourseModule,
   ],
   controllers: [ApiServerController],
   providers: [ApiServerService],
