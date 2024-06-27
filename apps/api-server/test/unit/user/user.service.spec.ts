@@ -1,6 +1,6 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from 'apps/api-server/src/entity/user.entity';
-import { UserService } from 'apps/api-server/src/routes/user/user.service';
+import { User } from '../../../src/entity/user.entity';
+import { UserService } from '../../../src/routes/user/user.service';
 import { Test, TestingModule } from '@nestjs/testing';
 
 class MockRepository {
