@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PersonalScheduleService } from './personal-schedule.service';
+import { PersonalScheduleService } from '../../../src/routes/table/personal-schedule/personal-schedule.service';
 
 describe('PersonalScheduleService', () => {
   let service: PersonalScheduleService;

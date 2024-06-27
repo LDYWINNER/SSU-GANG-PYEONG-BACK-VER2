@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SchoolScheduleController } from './school-schedule.controller';
+import { SchoolScheduleController } from '../../../src/routes/table/school-schedule/school-schedule.controller';
 
 describe('SchoolScheduleController', () => {
   let controller: SchoolScheduleController;

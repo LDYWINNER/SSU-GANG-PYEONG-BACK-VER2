@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PersonalScheduleController } from './personal-schedule.controller';
+import { PersonalScheduleController } from '../../../src/routes/table/personal-schedule/personal-schedule.controller';
 
 describe('PersonalScheduleController', () => {
   let controller: PersonalScheduleController;
@@ -9,7 +9,9 @@ describe('PersonalScheduleController', () => {
       controllers: [PersonalScheduleController],
     }).compile();
 
-    controller = module.get<PersonalScheduleController>(PersonalScheduleController);
+    controller = module.get<PersonalScheduleController>(
+      PersonalScheduleController,
+    );
   });
 
   it('should be defined', () => {
