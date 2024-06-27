@@ -12,6 +12,7 @@ import { AnalyticsModule } from './routes/analytics/analytics.module';
 import { EmailModule } from './routes/email/email.module';
 import { CourseModule } from './routes/course/course.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TodoModule } from './todo/todo.module';
 import postgresConfig from './config/postgres.config';
 import jwtConfig from './config/jwt.config';
 import sentryConfig from './config/sentry.config';
@@ -58,6 +59,7 @@ import emailConfig from './config/email.config';
     AnalyticsModule,
     EmailModule,
     CourseModule,
+    TodoModule,
   ],
   controllers: [ApiServerController],
   providers: [ApiServerService],
