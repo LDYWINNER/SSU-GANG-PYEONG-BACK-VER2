@@ -1,35 +1,33 @@
-// import { getRepositoryToken } from '@nestjs/typeorm';
-// import { User } from '../../entity/user.entity';
-// import { UserService } from './user.service';
-// import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from 'apps/api-server/src/entity/user.entity';
+import { UserService } from 'apps/api-server/src/routes/user/user.service';
+import { Test, TestingModule } from '@nestjs/testing';
 
-// class MockRepository {
-//   async findOneBy(query) {
-//     const user: User = new User();
-//     user.email = query.email;
-//     return user;
-//   }
-// }
+class MockRepository {
+  async findOneBy(query) {
+    const user: User = new User();
+    user.email = query.email;
+    return user;
+  }
+}
 
-// describe('User', () => {
-//   let userService: UserService;
+describe('User', () => {
+  let userService: UserService;
 
-//   beforeEach(async () => {
-//     const module: TestingModule = await Test.createTestingModule({
-//       providers: [
-//         UserService,
-//         {
-//           provide: getRepositoryToken(User),
-//           useClass: MockRepository,
-//         },
-//       ],
-//     }).compile();
-//     userService = module.get<UserService>(UserService);
-//   });
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        UserService,
+        {
+          provide: getRepositoryToken(User),
+          useClass: MockRepository,
+        },
+      ],
+    }).compile();
+    userService = module.get<UserService>(UserService);
+  });
 
-//   it('should', async () => {
-//     const email = 'nestjs@fastcampus.com';
-//     const result = await userService.findOneByEmail(email);
-//     expect(result.email).toBe(email);
-//   });
-// });
+  it('should be defined', () => {
+    expect(userService).toBeDefined();
+  });
+});
