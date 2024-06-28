@@ -2,14 +2,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../../../src/entity/user.entity';
 import { UserService } from '../../../src/routes/user/user.service';
 import { Test, TestingModule } from '@nestjs/testing';
-
-class MockRepository {
-  async findOneBy(query) {
-    const user: User = new User();
-    user.id = query.id;
-    return user;
-  }
-}
+import { StubUserRepository } from './stub-repository';
 
 describe('User', () => {
   let userService: UserService;
@@ -20,7 +13,7 @@ describe('User', () => {
         UserService,
         {
           provide: getRepositoryToken(User),
-          useClass: MockRepository,
+          useClass: StubUserRepository,
         },
       ],
     }).compile();

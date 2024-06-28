@@ -11,6 +11,7 @@ import {
 import { RefreshToken } from './refresh-token.entity';
 import { Role } from '../common/enum/user.enum';
 import { BoardPost } from './board-post.entity';
+import { Table } from './table.entity';
 
 @Entity()
 export class User {
@@ -37,18 +38,23 @@ export class User {
   @Column({ select: false })
   password: string;
 
+  @ApiProperty({ description: '작성한 게시글' })
   @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role = Role.User;
+
+  @ApiProperty({ description: '시간표 테이블' })
+  @OneToMany(() => Table, (table) => table.user)
+  tables?: Table[];
 
   @ApiProperty({ description: '작성한 게시글' })
   @OneToMany(() => BoardPost, (boardPost) => boardPost.user)
   boardPosts?: BoardPost[];
 
   @Column({ select: false, nullable: true, insert: false, update: false })
-  postCount?: number;
+  postCount: number;
 
   @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
-  refreshToken: RefreshToken;
+  refreshToken?: RefreshToken;
 
   @ApiProperty({ description: '생성일' })
   @CreateDateColumn()
