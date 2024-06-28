@@ -12,27 +12,27 @@ export class StubTableRepository {
     return Promise.resolve(table);
   }
 
-  // 임시 구현
   findOne(conditions: any): Promise<Table> {
     return Promise.resolve(
-      this.tables.find(
-        (table) =>
-          table.title === conditions.where.title &&
-          table.user.id === conditions.where.user.id,
-      ),
+      this.tables.find((table) => table.id === conditions.where.id),
     );
   }
 
-  delete(conditions: any): Promise<{ affected: number }> {
-    const index = this.tables.findIndex(
-      (table) =>
-        table.title === conditions.title &&
-        table.user.id === conditions.user.id,
-    );
+  async update(id: string, newTable: Partial<Table>): Promise<any> {
+    const index = this.tables.findIndex((table) => table.id === id);
+    if (index >= 0) {
+      this.tables[index] = { ...this.tables[index], ...newTable };
+      return this.tables[index];
+    }
+    return Promise.reject(new Error('Table not found'));
+  }
+
+  async remove(table: Table): Promise<Table> {
+    const index = this.tables.findIndex((t) => t.id === table.id);
     if (index >= 0) {
       this.tables.splice(index, 1);
-      return Promise.resolve({ affected: 1 });
+      return table;
     }
-    return Promise.resolve({ affected: 0 });
+    return Promise.reject(new Error('Table not found'));
   }
 }

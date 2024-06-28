@@ -6,14 +6,17 @@ import { StubUserRepository } from './stub-repository';
 
 describe('User', () => {
   let userService: UserService;
+  let userRepository: StubUserRepository;
 
   beforeEach(async () => {
+    userRepository = new StubUserRepository();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
         {
           provide: getRepositoryToken(User),
-          useClass: StubUserRepository,
+          useValue: userRepository,
         },
       ],
     }).compile();
@@ -25,7 +28,7 @@ describe('User', () => {
   });
 
   it('should', async () => {
-    const id = 'test_id';
+    const id = 'test_user_id';
     const result = await userService.findOneById(id);
     expect(result.id).toBe(id);
   });
