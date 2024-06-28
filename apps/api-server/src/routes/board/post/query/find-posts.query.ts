@@ -1,6 +1,6 @@
 import { IQuery } from '@nestjs/cqrs';
 
-export class FindBoardsQuery implements IQuery {
+export class FindPostsQuery implements IQuery {
   constructor(
     readonly page: number,
     readonly size: number,

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateBoardDto {
+export class CreatePostDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
@@ -32,11 +32,11 @@ export class CreateBoardDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
-    description: '카테고리',
+    description: '게시판',
     required: true,
     example: '자유게시판',
   })
-  category: string;
+  board: string;
 
   @IsNotEmpty()
   @IsString()

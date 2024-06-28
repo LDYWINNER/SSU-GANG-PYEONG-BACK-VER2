@@ -5,19 +5,24 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Board } from '../../entity/board.entity';
 import { User } from '../../entity/user.entity';
 import { CqrsModule } from '@nestjs/cqrs';
-import { CreateBoardHandler } from './handler/create-board.handler';
-import { BoardCreatedHandler } from './handler/board-created.handler';
-import { FindBoardsQueryHandler } from './handler/find-boards.handler';
+import { CreatePostHandler } from './post/handler/create-post.handler';
+import { PostCreatedHandler } from './post/handler/post-created.handler';
+import { FindPostsQueryHandler } from './post/handler/find-posts.handler';
+import { PostController } from './post/post.controller';
+import { CommentController } from './comment/comment.controller';
+import { PostService } from './post/post.service';
+import { BoardPost } from '../../entity/board-post.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Board, User]), CqrsModule],
-  controllers: [BoardController],
+  imports: [TypeOrmModule.forFeature([Board, BoardPost, User]), CqrsModule],
+  controllers: [BoardController, PostController, CommentController],
   providers: [
     BoardService,
-    CreateBoardHandler,
-    BoardCreatedHandler,
-    FindBoardsQueryHandler,
+    CreatePostHandler,
+    PostCreatedHandler,
+    FindPostsQueryHandler,
+    PostService,
   ],
-  exports: [BoardService],
+  exports: [BoardService, PostService],
 })
 export class BoardModule {}

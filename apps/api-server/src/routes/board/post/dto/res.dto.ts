@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FindUserResDto } from '../../user/dto/res.dto';
+import { FindUserResDto } from '../../../user/dto/res.dto';
 
-export class FindBoardResDto {
+export class FindPostResDto {
   @ApiProperty({ required: true })
   id: string;
 

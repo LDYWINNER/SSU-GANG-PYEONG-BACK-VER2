@@ -1,5 +1,5 @@
 import { IEvent } from '@nestjs/cqrs';
 
-export class BoardCreatedEvent implements IEvent {
+export class PostCreatedEvent implements IEvent {
   constructor(readonly id: string) {}
 }

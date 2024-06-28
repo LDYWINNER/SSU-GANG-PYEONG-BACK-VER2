@@ -3,24 +3,21 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  ManyToOne,
 } from 'typeorm';
 import { User } from './user.entity';
+import { BoardPost } from './board-post.entity';
 
 @Entity()
-export class Board {
+export class Comment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ description: '게시판 이름' })
+  @ApiProperty({ description: '댓글 내용' })
   @Column()
-  title: string;
-
-  @ApiProperty({ description: '게시판 설명' })
-  @Column({ nullable: true })
-  description: string;
+  content: string;
 
   @ApiProperty({ description: '생성일' })
   @CreateDateColumn()
@@ -33,4 +30,8 @@ export class Board {
   @ApiProperty({ description: '유저 정보' })
   @ManyToOne(() => User)
   user: User;
+
+  @ApiProperty({ description: '게시글' })
+  @ManyToOne(() => BoardPost)
+  boardPost: BoardPost;
 }
