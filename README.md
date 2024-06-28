@@ -5,7 +5,7 @@
 - nestjs 프로젝트(mono repo multi module)
 - board module(CQRS 아키텍처 적용: Simple CQRS architecture)
 - Test Driven Development 적용
-  - 최대한 사람의 언어를 사용하는 테스트 코드
+  - 최대한 사람의 언어를 사용하고 내부 구현을 검증하기 보다 최종 결과를 검증하는 테스트 코드를 작성하려고 노력함
 
 ### 기능(domain)
 

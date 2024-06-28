@@ -6,7 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 class MockRepository {
   async findOneBy(query) {
     const user: User = new User();
-    user.email = query.email;
+    user.id = query.id;
     return user;
   }
 }
@@ -29,5 +29,11 @@ describe('User', () => {
 
   it('should be defined', () => {
     expect(userService).toBeDefined();
+  });
+
+  it('should', async () => {
+    const id = 'test_id';
+    const result = await userService.findOneById(id);
+    expect(result.id).toBe(id);
   });
 });
