@@ -8,9 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Board } from './board.entity';
 import { RefreshToken } from './refresh-token.entity';
 import { Role } from '../common/enum/user.enum';
+import { BoardPost } from './board-post.entity';
 
 @Entity()
 export class User {
@@ -41,11 +41,11 @@ export class User {
   role: Role = Role.User;
 
   @ApiProperty({ description: '작성한 게시글' })
-  @OneToMany(() => Board, (board) => board.user)
-  boards?: Board[];
+  @OneToMany(() => BoardPost, (boardPost) => boardPost.user)
+  boardPosts?: BoardPost[];
 
   @Column({ select: false, nullable: true, insert: false, update: false })
-  boardCount?: number;
+  postCount?: number;
 
   @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
   refreshToken: RefreshToken;
