@@ -1,13 +1,13 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { Board } from '../../entity/board.entity';
+import { BoardPost } from '../../entity/board-post.entity';
 
 @Injectable()
 export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  async send(email: string, boards: Board[]) {
-    const data = boards.map(({ id, title, views }) => {
+  async send(email: string, boardPosts: BoardPost[]) {
+    const data = boardPosts.map(({ id, title, views }) => {
       return `<tr><td>${id}</td><td>${title}</td><td>${views}</td></tr>`;
     });
 

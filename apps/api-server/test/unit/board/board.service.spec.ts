@@ -1,20 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BoardService } from './board.service';
+import { PostService } from '../../../src/routes/board/post/post.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Board } from '../../entity/board.entity';
+import { BoardPost } from '../../../src/entity/board-post.entity';
 import { Repository } from 'typeorm';
 
 describe('BoardService', () => {
-  let boardService: BoardService;
-  let boardRepository: Repository<Board>;
-  const boardRepositoryToken = getRepositoryToken(Board);
+  let boardPostService: PostService;
+  let boardPostRepository: Repository<BoardPost>;
+  const boardPostRepositoryToken = getRepositoryToken(BoardPost);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        BoardService,
+        PostService,
         {
-          provide: boardRepositoryToken,
+          provide: boardPostRepositoryToken,
           useValue: {
             create: jest.fn(),
             save: jest.fn(),
@@ -25,16 +25,18 @@ describe('BoardService', () => {
       ],
     }).compile();
 
-    boardService = module.get<BoardService>(BoardService);
-    boardRepository = module.get<Repository<Board>>(boardRepositoryToken);
+    boardPostService = module.get<PostService>(PostService);
+    boardPostRepository = module.get<Repository<BoardPost>>(
+      boardPostRepositoryToken,
+    );
   });
 
   it('should be defined', () => {
-    expect(boardService).toBeDefined();
+    expect(boardPostService).toBeDefined();
   });
 
   it('boardRepository should be defined', () => {
-    expect(boardRepository).toBeDefined();
+    expect(boardPostRepository).toBeDefined();
   });
 
   // describe('게시글 조회', () => {
