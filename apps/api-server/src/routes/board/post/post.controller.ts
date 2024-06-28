@@ -80,7 +80,7 @@ export class PostController {
         id: user.id,
         email: user.email,
         username: user.username,
-        boardCount: user.boardCount,
+        postCount: user.postCount,
         createdAt: user.createdAt.toISOString(),
       },
     };

@@ -11,7 +11,7 @@ export class FindUserResDto {
   email: string;
 
   @ApiProperty({ required: true })
-  boardCount: number;
+  postCount: number;
 
   @ApiProperty({ required: true })
   createdAt: string;

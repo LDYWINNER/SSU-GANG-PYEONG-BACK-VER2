@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Board } from '../../entity/board.entity';
 import { User } from '../../entity/user.entity';
 import { Repository } from 'typeorm';
 import { Role } from '../../common/enum/user.enum';
+import { BoardPost } from '../../entity/board-post.entity';
 
 @Injectable()
 export class UserService {
@@ -28,9 +28,9 @@ export class UserService {
     qb.addSelect((subQuery) => {
       return subQuery
         .select('count(id)')
-        .from(Board, 'Board')
-        .where('Board.userId = User.id');
-    }, 'User_boardCount');
+        .from(BoardPost, 'BoardPost')
+        .where('BoardPost.userId = User.id');
+    }, 'User_postCount');
 
     qb.skip((page - 1) * size).take(size);
 
