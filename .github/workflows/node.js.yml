@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
       - uses: actions/checkout@v4
@@ -23,8 +22,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Start services
-        run: docker-compose up -d
+      - name: Start PostgreSQL
+        run: docker-compose up -d db
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -34,10 +33,17 @@ jobs:
 
       - run: npm install --force
 
-      - run: |
-          # Wait for the database to be ready
-          sleep 10
-          npm test
+      - name: Wait for DB to be ready
+        run: |
+          echo "Waiting for PostgreSQL to be ready..."
+          while ! nc -z localhost 5432; do
+            sleep 1
+          done
+
+      - name: Run TypeORM migrations
+        run: npm run typeorm migration:run
+
+      - run: npm test
 
       - name: Stop services
         run: docker-compose down
