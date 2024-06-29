@@ -4,6 +4,7 @@ import { Table } from '../../entity/table.entity';
 import { User } from '../../entity/user.entity';
 import { Repository } from 'typeorm';
 import { UpdateTableDto } from './dto/update-table.dto';
+import { CreateTableDto } from './dto/create-table.dto';
 
 @Injectable()
 export class TableService {
@@ -14,7 +15,7 @@ export class TableService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  createTable = async (userId: string, tableName: string) => {
+  createTable = async (userId: string, data: CreateTableDto) => {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
@@ -23,7 +24,7 @@ export class TableService {
     }
 
     const newTable = this.tableRepository.create({
-      title: tableName,
+      title: data.name,
       subjects: [],
       user,
     });
@@ -39,19 +40,27 @@ export class TableService {
       throw new NotFoundException('Table not found');
     }
 
-    return this.tableRepository.update(tableId, {
+    await this.tableRepository.update(tableId, {
       ...newTable,
+    });
+
+    return this.tableRepository.findOne({
+      where: { id: tableId },
+      relations: ['user'],
     });
   };
 
   deleteTable = async (tableId: string) => {
     const table = await this.tableRepository.findOne({
       where: { id: tableId },
+      relations: ['user'],
     });
     if (!table) {
       throw new NotFoundException('Table not found');
     }
 
-    return this.tableRepository.remove(table);
+    await this.tableRepository.remove(table);
+
+    return table;
   };
 }

@@ -48,6 +48,7 @@ import emailConfig from './config/email.config';
         if (configService.get('STAGE') === 'local') {
           obj = Object.assign(obj, {
             logging: true,
+            synchronize: true,
           });
         }
         return obj;

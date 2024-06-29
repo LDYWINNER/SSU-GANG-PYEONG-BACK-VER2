@@ -44,7 +44,9 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       const tableRowCount = tableRepository.tables.length;
 
       // when
-      const result = await tableService.createTable(userId, tableName);
+      const result = await tableService.createTable(userId, {
+        name: tableName,
+      });
 
       // then
       expect(result).toEqual({
@@ -86,9 +88,9 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       const tableName = 'table_name';
 
       // then
-      expect(tableService.createTable(userId, tableName)).rejects.toThrow(
-        NotFoundException,
-      );
+      expect(
+        tableService.createTable(userId, { name: tableName }),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 

@@ -73,7 +73,7 @@ POST http://localhost:3000/auth/login
 content-type: application/json
 
 {
-    "email": "gildong@stonybrook.edu",
+    "email": "gildong2@stonybrook.edu",
     "password": "Hong123456!"
 }
 
@@ -83,3 +83,14 @@ content-type: application/json
 GET http://localhost:3000/me
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZjIxNTRhLWQyYjAtNDE1ZS05YzZhLTMyZTUxOTVjMjdmMCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjEwIiwiZW1haWwiOiJnaWxkb25nMkBzdG9ueWJyb29rLmVkdSIsImlhdCI6MTcxODI2NzExMiwiZXhwIjoxNzIwODU5MTEyfQ.iiC0PVZVK3nL-imp_h6-7nKZMyM9uHEDE7f77yzlRj8
+
+###
+
+# table 생성
+POST http://localhost:3000/table
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBlZmU0NjAxLTliMDQtNDdiOC1iZmY0LTBhNDQ5NDRkY2M4ZCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmcyQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5NjU5MTYzLCJleHAiOjE3MTk3NDU1NjN9.trg_4S__UR1ii6dHpritOAR4XjcEKVi8S0MqftOn33s
+
+{
+   "name": "table1"
+}
