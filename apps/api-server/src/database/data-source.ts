@@ -1,19 +1,15 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { SeederOptions } from 'typeorm-extension';
 
-const options: DataSourceOptions & SeederOptions = {
+const options: DataSourceOptions = {
   type: 'postgres',
   host: process.env.POSTGRES_HOST || 'localhost',
   port: Number(process.env.POSTGRES_PORT || '5434'),
   database: process.env.POSTGRES_DB || 'postgres',
   username: process.env.POSTGRES_USER || 'postgres',
   password: process.env.POSTGRES_PASSWORD || 'postgres',
-  entities: ['apps/api-server/src/**/*.entity{.ts,.js}'],
-  migrations: ['apps/api-server/src/database/migrations/{.ts,.js}'],
+  entities: ['src/**/*.entity{.ts,.js}'],
+  migrations: ['src/database/migrations/*.ts'],
   migrationsTableName: 'migrations',
-
-  seeds: ['apps/api-server/src/database/seeds/**/*{.ts,.js}'],
-  factories: ['apps/api-server/src/database/factories/**/*{.ts,.js}'],
 };
 
 export const dataSource = new DataSource(options);

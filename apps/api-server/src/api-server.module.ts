@@ -41,14 +41,14 @@ import emailConfig from './config/email.config';
           database: configService.get('postgres.database'),
           username: configService.get('postgres.username'),
           password: configService.get('postgres.password'),
-          autoLoadEntities: true,
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
           synchronize: false,
+          logging: true,
         };
         // local 환경에서만 개발 편의성을 위해 활용
         if (configService.get('STAGE') === 'local') {
           obj = Object.assign(obj, {
-            logging: true,
-            synchronize: true,
+            synchronize: false,
           });
         }
         return obj;

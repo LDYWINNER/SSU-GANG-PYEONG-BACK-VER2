@@ -5,12 +5,14 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { MaxLength } from 'class-validator';
 import { Board } from './board.entity';
+import { BoardComment } from './board-comment.entity';
 
 @Entity()
 export class BoardPost {
@@ -45,6 +47,10 @@ export class BoardPost {
   @ApiProperty({ description: '게시판' })
   @ManyToOne(() => Board)
   board: Board;
+
+  @ApiProperty({ description: '게시판 댓글' })
+  @OneToMany(() => BoardComment, (comment) => comment.id, { cascade: true })
+  comments?: BoardComment[];
 
   @ApiProperty({ description: '유저정보' })
   @ManyToOne(() => User)
