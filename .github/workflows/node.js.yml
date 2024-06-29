@@ -33,13 +33,6 @@ jobs:
 
       - run: npm install --force
 
-      - name: Wait for DB to be ready
-        run: |
-          echo "Waiting for PostgreSQL to be ready..."
-          while ! nc -z localhost 5432; do
-            sleep 1
-          done
-
       - name: Run TypeORM migrations
         run: npm run typeorm migration:run
 
