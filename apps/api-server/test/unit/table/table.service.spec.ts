@@ -45,7 +45,7 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
 
       // when
       const result = await tableService.createTable(userId, {
-        name: tableName,
+        title: tableName,
       });
 
       // then
@@ -89,7 +89,7 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
 
       // then
       expect(
-        tableService.createTable(userId, { name: tableName }),
+        tableService.createTable(userId, { title: tableName }),
       ).rejects.toThrow(NotFoundException);
     });
   });

@@ -1,35 +1,3 @@
-// import { Test, TestingModule } from '@nestjs/testing';
-// import { PersonalScheduleService } from '../../../src/routes/table/personal-schedule/personal-schedule.service';
-// import { StubPersonalScheduleRepository } from './stub/personal-schedule-repository';
-// import { getRepositoryToken } from '@nestjs/typeorm';
-// import { PersonalSchedule } from '../../../src/entity/personal-schedule.entity';
-
-// describe('시간표 테이블 개인 스케줄 관련 서비스 테스트', () => {
-//   let service: PersonalScheduleService;
-//   let personalScheduleRepository: StubPersonalScheduleRepository;
-//   const personalScheduleRepositoryToken = getRepositoryToken(PersonalSchedule);
-
-//   beforeEach(async () => {
-//     personalScheduleRepository = new StubPersonalScheduleRepository();
-
-//     const module: TestingModule = await Test.createTestingModule({
-//       providers: [
-//         PersonalScheduleService,
-//         {
-//           provide: personalScheduleRepositoryToken,
-//           useValue: personalScheduleRepository,
-//         },
-//       ],
-//     }).compile();
-
-//     service = module.get<PersonalScheduleService>(PersonalScheduleService);
-//   });
-
-//   it('should be defined', () => {
-//     expect(service).toBeDefined();
-//   });
-// });
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { PersonalScheduleService } from '../../../src/routes/table/personal-schedule/personal-schedule.service';
 import { PersonalSchedule } from '../../../src/entity/personal-schedule.entity';
@@ -163,7 +131,6 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         personalScheduleId,
         {
           courseId: 'updated_course_id',
-          table: 'test_table',
           sections: {
             section1: {
               days: [1, 3],
@@ -234,7 +201,6 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         personalScheduleId,
         {
           courseId: 'course_id',
-          table: 'test_table',
           sections: {
             section1: {
               days: [2, 4],

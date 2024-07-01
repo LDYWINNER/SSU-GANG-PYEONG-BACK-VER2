@@ -8,5 +8,5 @@ export class CreateTableDto {
     required: true,
     example: '2024-fall',
   })
-  name: string;
+  title: string;
 }

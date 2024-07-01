@@ -15,7 +15,7 @@ export class TableService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  createTable = async (userId: string, data: CreateTableDto) => {
+  createTable = async (userId: string, { title }: CreateTableDto) => {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
@@ -24,7 +24,7 @@ export class TableService {
     }
 
     const newTable = this.tableRepository.create({
-      title: data.name,
+      title,
       subjects: [],
       user,
     });
