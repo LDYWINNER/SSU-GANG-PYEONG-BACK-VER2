@@ -6,9 +6,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { User } from './user.entity';
 import { IsNotEmpty } from 'class-validator';
+import { PersonalSchedule } from './personal-schedule.entity';
 
 @Entity()
 export class Table {
@@ -21,10 +23,19 @@ export class Table {
   title: string;
 
   @ApiProperty({
-    description: '유저 시간표 항목들(학교 정규 수업 + 개인 스케줄)',
+    description: '유저 시간표 항목들(학교 정규 수업)',
   })
   @Column('simple-array')
-  subjects: string[];
+  schoolSubjects: string[];
+
+  @ApiProperty({
+    description: '유저 시간표 항목들(개인 스케줄)',
+  })
+  @OneToMany(
+    () => PersonalSchedule,
+    (personalSchedule) => personalSchedule.tableEntity,
+  )
+  personalSubjects: PersonalSchedule[];
 
   @ApiProperty({ description: '생성일' })
   @CreateDateColumn()

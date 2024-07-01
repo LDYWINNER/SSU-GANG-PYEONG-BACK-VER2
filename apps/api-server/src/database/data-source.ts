@@ -1,6 +1,9 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
-import { SsuGangPyeongReference1719681701078 } from './migrations/1719681701078-ssu-gang-pyeong-reference';
+import {
+  SsuGangPyeongReference1719681701078,
+  TablePersonalSchedule1719813960356,
+} from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
   type: 'postgres',
@@ -9,8 +12,11 @@ const options: DataSourceOptions & SeederOptions = {
   database: process.env.POSTGRES_DB || 'postgres',
   username: process.env.POSTGRES_USER || 'postgres',
   password: process.env.POSTGRES_PASSWORD || 'postgres',
-  entities: ['src/**/*.entity{.ts,.js}'],
-  migrations: [SsuGangPyeongReference1719681701078],
+  entities: ['apps/api-server/src/**/*.entity{.ts,.js}'],
+  migrations: [
+    SsuGangPyeongReference1719681701078,
+    TablePersonalSchedule1719813960356,
+  ],
   migrationsTableName: 'migrations',
 };
 
