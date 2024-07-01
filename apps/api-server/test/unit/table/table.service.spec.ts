@@ -52,7 +52,8 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'table-id',
         title: 'table_name',
-        subjects: [],
+        schoolSubjects: [],
+        personalSubjects: [],
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -68,7 +69,8 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       expect(tableRepository.tables).toContainEqual({
         id: 'table-id',
         title: 'table_name',
-        subjects: [],
+        schoolSubjects: [],
+        personalSubjects: [],
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -101,7 +103,8 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       tableRepository.tables.push({
         id: 'table_name_test_id',
         title: 'table_name',
-        subjects: ['subject1', 'subject2'],
+        schoolSubjects: [],
+        personalSubjects: [],
         user: userId,
       });
       const tableRowCount = tableRepository.tables.length;
@@ -109,87 +112,22 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       // when
       const result = await tableService.updateTable(tableId, {
         title: 'new_table_name',
-        subjects: ['subject1', 'subject2'],
       });
 
       // then
       expect(result).toEqual({
         id: 'table_name_test_id',
         title: 'new_table_name',
-        subjects: ['subject1', 'subject2'],
+        schoolSubjects: [],
+        personalSubjects: [],
         user: userId,
       });
       expect(tableRepository.tables.length).toBe(tableRowCount);
       expect(tableRepository.tables).toContainEqual({
         id: 'table_name_test_id',
         title: 'new_table_name',
-        subjects: ['subject1', 'subject2'],
-        user: userId,
-      });
-    });
-
-    it('시간표 항목 변경 시 updateTable 함수 결과값 테스트', async () => {
-      // given
-      const tableId = 'table_subjects_test_id';
-      tableRepository.tables.push({
-        id: 'table_subjects_test_id',
-        title: 'table_name',
-        subjects: ['subject1', 'subject2'],
-        user: userId,
-      });
-      const tableRowCount = tableRepository.tables.length;
-
-      // when
-      const result = await tableService.updateTable(tableId, {
-        title: 'table_name',
-        subjects: ['subject1', 'subject3'],
-      });
-
-      // then
-      expect(result).toEqual({
-        id: 'table_subjects_test_id',
-        title: 'table_name',
-        subjects: ['subject1', 'subject3'],
-        user: userId,
-      });
-      expect(tableRepository.tables.length).toBe(tableRowCount);
-      expect(tableRepository.tables).toContainEqual({
-        id: 'table_subjects_test_id',
-        title: 'table_name',
-        subjects: ['subject1', 'subject3'],
-        user: userId,
-      });
-    });
-
-    it('테이블 이름과 시간표 항목 모두 변경 시 updateTable 함수 결과값 테스트', async () => {
-      // given
-      const tableId = 'table_both_test_id';
-      tableRepository.tables.push({
-        id: 'table_both_test_id',
-        title: 'new_table_name',
-        subjects: ['subject3', 'subject1', 'subject4'],
-        user: userId,
-      });
-      const tableRowCount = tableRepository.tables.length;
-
-      // when
-      const result = await tableService.updateTable(tableId, {
-        title: 'new_table_name',
-        subjects: ['subject3', 'subject1', 'subject4'],
-      });
-
-      // then
-      expect(result).toEqual({
-        id: 'table_both_test_id',
-        title: 'new_table_name',
-        subjects: ['subject3', 'subject1', 'subject4'],
-        user: userId,
-      });
-      expect(tableRepository.tables.length).toBe(tableRowCount);
-      expect(tableRepository.tables).toContainEqual({
-        id: 'table_both_test_id',
-        title: 'new_table_name',
-        subjects: ['subject3', 'subject1', 'subject4'],
+        schoolSubjects: [],
+        personalSubjects: [],
         user: userId,
       });
     });
@@ -199,7 +137,6 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       const tableId = 'invalid-table-id';
       const newTable = {
         title: 'new_table_name',
-        subjects: ['subject1'],
       };
 
       // then
@@ -216,7 +153,8 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       tableRepository.tables.push({
         id: 'table-id',
         title: 'table_name',
-        subjects: [],
+        schoolSubjects: [],
+        personalSubjects: [],
         user: userId,
       });
       const tableRowCount = tableRepository.tables.length;
@@ -228,14 +166,16 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'table-id',
         title: 'table_name',
-        subjects: [],
+        schoolSubjects: [],
+        personalSubjects: [],
         user: userId,
       });
       expect(tableRepository.tables.length).toBe(tableRowCount - 1);
       expect(tableRepository.tables).not.toContainEqual({
         id: 'table-id',
         title: 'table_name',
-        subjects: [],
+        schoolSubjects: [],
+        personalSubjects: [],
         user: userId,
       });
     });

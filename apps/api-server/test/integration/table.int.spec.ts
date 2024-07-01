@@ -100,7 +100,8 @@ describe('Table 기능 통합 테스트', () => {
         expect.objectContaining({
           id: expect.any(String),
           title: tableName,
-          subjects: [],
+          schoolSubjects: [],
+          personalSubjects: [],
           user: expect.objectContaining({
             id: userId,
             username: 'test_user',
@@ -134,7 +135,6 @@ describe('Table 기능 통합 테스트', () => {
       await tableRepository.delete({});
       const table = tableRepository.create({
         title: 'table_to_update',
-        subjects: [],
         user: { id: userId },
       });
       const savedTable = await tableRepository.save(table);
@@ -153,48 +153,8 @@ describe('Table 기능 통합 테스트', () => {
         expect.objectContaining({
           id: tableId,
           title: newTitle,
-          subjects: [],
-          user: expect.objectContaining({
-            id: userId,
-          }),
-        }),
-      );
-    });
-
-    it('table subjects array 수정 테스트', async () => {
-      const newSubjects = ['subject3', 'subject4'];
-      const response = await request(app.getHttpServer())
-        .put(`/table/${tableId}`)
-        .set('Authorization', `Bearer ${token}`)
-        .send({ subjects: newSubjects });
-
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(
-        expect.objectContaining({
-          id: tableId,
-          title: 'table_to_update',
-          subjects: newSubjects,
-          user: expect.objectContaining({
-            id: userId,
-          }),
-        }),
-      );
-    });
-
-    it('table title & subjects array 동시 수정 테스트', async () => {
-      const newTitle = 'updated_table';
-      const newSubjects = ['subject3', 'subject4'];
-      const response = await request(app.getHttpServer())
-        .put(`/table/${tableId}`)
-        .set('Authorization', `Bearer ${token}`)
-        .send({ title: newTitle, subjects: newSubjects });
-
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(
-        expect.objectContaining({
-          id: tableId,
-          title: newTitle,
-          subjects: newSubjects,
+          schoolSubjects: [],
+          personalSubjects: [],
           user: expect.objectContaining({
             id: userId,
           }),
@@ -209,7 +169,7 @@ describe('Table 기능 통합 테스트', () => {
       const response = await request(app.getHttpServer())
         .put(`/table/${invalidTableId}`)
         .set('Authorization', `Bearer ${token}`)
-        .send({ title: newTitle, subjects: [] });
+        .send({ title: newTitle });
 
       expect(response.status).toBe(404);
     });
@@ -225,7 +185,6 @@ describe('Table 기능 통합 테스트', () => {
     beforeAll(async () => {
       const table = tableRepository.create({
         title: 'table_to_delete',
-        subjects: [],
         user: { id: userId },
       });
       const savedTable = await tableRepository.save(table);
@@ -241,7 +200,8 @@ describe('Table 기능 통합 테스트', () => {
       expect(response.body).toEqual(
         expect.objectContaining({
           title: 'table_to_delete',
-          subjects: [],
+          schoolSubjects: [],
+          personalSubjects: [],
           user: expect.objectContaining({
             id: userId,
           }),

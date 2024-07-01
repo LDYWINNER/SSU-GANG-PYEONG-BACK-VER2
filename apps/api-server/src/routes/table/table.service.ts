@@ -25,7 +25,6 @@ export class TableService {
 
     const newTable = this.tableRepository.create({
       title,
-      subjects: [],
       user,
     });
     const savedTable = await this.tableRepository.save(newTable);

@@ -8,9 +8,10 @@ import { PersonalScheduleService } from './personal-schedule/personal-schedule.s
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Table } from '../../entity/table.entity';
 import { User } from '../../entity/user.entity';
+import { PersonalSchedule } from '../../entity/personal-schedule.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Table, User])],
+  imports: [TypeOrmModule.forFeature([Table, PersonalSchedule, User])],
   controllers: [
     TableController,
     SchoolScheduleController,
