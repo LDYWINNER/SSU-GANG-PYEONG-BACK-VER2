@@ -1,4 +1,4 @@
-import { Table } from 'apps/api-server/src/entity/table.entity';
+import { Table } from '../../../../src/entity/table.entity';
 
 export class StubTableRepository {
   tables = [];

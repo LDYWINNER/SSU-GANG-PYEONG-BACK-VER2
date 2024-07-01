@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TableService } from '../../../src/routes/table/table.service';
 import { Table } from '../../../src/entity/table.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { StubTableRepository } from './stub-repository';
+import { StubTableRepository } from './stub/table-repository';
 import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
 import { User } from '../../../src/entity/user.entity';

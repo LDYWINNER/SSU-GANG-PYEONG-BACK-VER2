@@ -109,7 +109,7 @@ describe('Table 기능 통합 테스트', () => {
         }),
       );
 
-      console.log(response.body.id);
+      // console.log(response.body.id);
       // Cleanup
       await tableRepository.delete(response.body.id);
     });
