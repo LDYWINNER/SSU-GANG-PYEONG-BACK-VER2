@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  InternalServerErrorException,
   NotFoundException,
   Param,
   Post,
@@ -33,6 +34,9 @@ export class TableController {
     try {
       const userId = userInfo.id;
       const result = await this.tableService.createTable(userId, data);
+      if (!result) {
+        throw new InternalServerErrorException('Failed to create table');
+      }
       return result;
     } catch (error) {
       throw error;
