@@ -7,7 +7,10 @@ export class PersonalSchedule {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ description: '코스 아이디' })
+  @ApiProperty({
+    description:
+      '개인 스케줄의 제목을 뜻하지만 시간표의 프론트엔드 구현 패키지 특성 상 courseId 라는 속성을 사용해야 함',
+  })
   @Column()
   courseId: string;
 
