@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   InternalServerErrorException,
-  NotFoundException,
   Param,
   Post,
   Put,
@@ -48,7 +47,7 @@ export class TableController {
     try {
       const result = await this.tableService.updateTable(id, data);
       if (!result) {
-        throw new NotFoundException('Table not found');
+        throw new InternalServerErrorException('Failed to update table');
       }
       return result;
     } catch (error) {
@@ -61,7 +60,7 @@ export class TableController {
     try {
       const result = await this.tableService.deleteTable(id);
       if (!result) {
-        throw new NotFoundException('Table not found');
+        throw new InternalServerErrorException('Failed to delete table');
       }
       return result;
     } catch (error) {
