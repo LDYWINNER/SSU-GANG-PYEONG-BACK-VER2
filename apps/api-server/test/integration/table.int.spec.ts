@@ -63,7 +63,6 @@ describe('Table 기능 통합 테스트', () => {
     });
     await userRepository.save(user);
     userId = user.id;
-    console.log('User ID: ', userId);
 
     // JWT 토큰 발급
     const jwtService = moduleFixture.get<JwtService>(JwtService);
@@ -93,7 +92,6 @@ describe('Table 기능 통합 테스트', () => {
         .post('/table')
         .set('Authorization', `Bearer ${token}`)
         .send({ title: tableName });
-      console.log(response.body);
 
       expect(response.status).toBe(201);
       expect(response.body).toEqual(
@@ -108,7 +106,6 @@ describe('Table 기능 통합 테스트', () => {
         }),
       );
 
-      // console.log(response.body.id);
       // Cleanup
       await tableRepository.delete(response.body.id);
     });
@@ -213,10 +210,6 @@ describe('Table 기능 통합 테스트', () => {
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(404);
-    });
-
-    afterAll(async () => {
-      await tableRepository.delete(tableId);
     });
   });
 });
