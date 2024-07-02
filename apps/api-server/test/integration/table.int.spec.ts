@@ -92,7 +92,7 @@ describe('Table 기능 통합 테스트', () => {
       const response = await request(app.getHttpServer())
         .post('/table')
         .set('Authorization', `Bearer ${token}`)
-        .send({ name: tableName });
+        .send({ title: tableName });
       console.log(response.body);
 
       expect(response.status).toBe(201);
@@ -100,8 +100,6 @@ describe('Table 기능 통합 테스트', () => {
         expect.objectContaining({
           id: expect.any(String),
           title: tableName,
-          schoolSubjects: [],
-          personalSubjects: [],
           user: expect.objectContaining({
             id: userId,
             username: 'test_user',
@@ -153,8 +151,6 @@ describe('Table 기능 통합 테스트', () => {
         expect.objectContaining({
           id: tableId,
           title: newTitle,
-          schoolSubjects: [],
-          personalSubjects: [],
           user: expect.objectContaining({
             id: userId,
           }),
@@ -200,8 +196,6 @@ describe('Table 기능 통합 테스트', () => {
       expect(response.body).toEqual(
         expect.objectContaining({
           title: 'table_to_delete',
-          schoolSubjects: [],
-          personalSubjects: [],
           user: expect.objectContaining({
             id: userId,
           }),

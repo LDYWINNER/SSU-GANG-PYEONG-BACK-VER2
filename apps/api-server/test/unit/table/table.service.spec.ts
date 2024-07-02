@@ -52,8 +52,6 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'table-id',
         title: 'table_name',
-        schoolSubjects: [],
-        personalSubjects: [],
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -69,8 +67,6 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       expect(tableRepository.tables).toContainEqual({
         id: 'table-id',
         title: 'table_name',
-        schoolSubjects: [],
-        personalSubjects: [],
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -103,8 +99,6 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       tableRepository.tables.push({
         id: 'table_name_test_id',
         title: 'table_name',
-        schoolSubjects: [],
-        personalSubjects: [],
         user: userId,
       });
       const tableRowCount = tableRepository.tables.length;
@@ -118,16 +112,12 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'table_name_test_id',
         title: 'new_table_name',
-        schoolSubjects: [],
-        personalSubjects: [],
         user: userId,
       });
       expect(tableRepository.tables.length).toBe(tableRowCount);
       expect(tableRepository.tables).toContainEqual({
         id: 'table_name_test_id',
         title: 'new_table_name',
-        schoolSubjects: [],
-        personalSubjects: [],
         user: userId,
       });
     });
@@ -153,8 +143,6 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       tableRepository.tables.push({
         id: 'table-id',
         title: 'table_name',
-        schoolSubjects: [],
-        personalSubjects: [],
         user: userId,
       });
       const tableRowCount = tableRepository.tables.length;
@@ -166,8 +154,6 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'table-id',
         title: 'table_name',
-        schoolSubjects: [],
-        personalSubjects: [],
         user: userId,
       });
       expect(tableRepository.tables.length).toBe(tableRowCount - 1);

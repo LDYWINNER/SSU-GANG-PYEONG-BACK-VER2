@@ -19,6 +19,13 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
     personalScheduleRepository = new StubPersonalScheduleRepository();
     tableRepository = new StubTableRepository();
 
+    const userId = 'test_user_id';
+    tableRepository.tables.push({
+      id: 'test_table_id',
+      title: 'table_name',
+      user: userId,
+    });
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         PersonalScheduleService,
@@ -67,7 +74,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'personal-schedule-id',
         ...personalScheduleData,
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: 'test_user_id',
+        },
       });
       expect(personalScheduleRepository.personalSchedules.length).toBe(
         personalScheduleCount + 1,
@@ -75,7 +86,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       expect(personalScheduleRepository.personalSchedules).toContainEqual({
         id: 'personal-schedule-id',
         ...personalScheduleData,
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: 'test_user_id',
+        },
       });
     });
 

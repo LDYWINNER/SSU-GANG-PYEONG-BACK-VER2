@@ -4,7 +4,10 @@ export class StubPersonalScheduleRepository {
   personalSchedules = [];
 
   create(personalSchedule: Partial<PersonalSchedule>): PersonalSchedule {
-    return { ...personalSchedule, id: 'ps-id' } as PersonalSchedule;
+    return {
+      ...personalSchedule,
+      id: 'personal-schedule-id',
+    } as PersonalSchedule;
   }
 
   save(personalSchedule: PersonalSchedule): Promise<PersonalSchedule> {
