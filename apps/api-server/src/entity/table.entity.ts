@@ -11,6 +11,7 @@ import {
 import { User } from './user.entity';
 import { IsNotEmpty } from 'class-validator';
 import { PersonalSchedule } from './personal-schedule.entity';
+import { SchoolSchedule } from './school-schedule.entity';
 
 @Entity()
 export class Table {
@@ -25,7 +26,10 @@ export class Table {
   @ApiProperty({
     description: '유저 시간표 항목들(학교 정규 수업)',
   })
-  @Column('simple-array')
+  @OneToMany(
+    () => SchoolSchedule,
+    (schoolSchedule) => schoolSchedule.tableEntity,
+  )
   schoolSubjects: string[];
 
   @ApiProperty({

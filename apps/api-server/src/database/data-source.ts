@@ -3,6 +3,7 @@ import { SeederOptions } from 'typeorm-extension';
 import {
   SsuGangPyeongReference1719681701078,
   TablePersonalSchedule1719813960356,
+  TableSchoolSchedule1719894904035,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -16,6 +17,7 @@ const options: DataSourceOptions & SeederOptions = {
   migrations: [
     SsuGangPyeongReference1719681701078,
     TablePersonalSchedule1719813960356,
+    TableSchoolSchedule1719894904035,
   ],
   migrationsTableName: 'migrations',
 };
