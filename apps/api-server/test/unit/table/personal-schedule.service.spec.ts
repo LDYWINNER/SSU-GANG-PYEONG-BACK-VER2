@@ -13,13 +13,12 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
   let tableRepository: StubTableRepository;
   const personalScheduleRepositoryToken = getRepositoryToken(PersonalSchedule);
   const tableRepositoryToken = getRepositoryToken(Table);
-  const tableId = 'table_id';
+  const userId = 'test_user_id';
 
   beforeEach(async () => {
     personalScheduleRepository = new StubPersonalScheduleRepository();
     tableRepository = new StubTableRepository();
 
-    const userId = 'test_user_id';
     tableRepository.tables.push({
       id: 'test_table_id',
       title: 'table_name',
@@ -136,7 +135,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
             locations: ['room1'],
           },
         },
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: userId,
+        },
       });
       const personalScheduleCount =
         personalScheduleRepository.personalSchedules.length;
@@ -170,7 +173,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
             locations: ['room1'],
           },
         },
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: userId,
+        },
       });
       expect(personalScheduleRepository.personalSchedules.length).toBe(
         personalScheduleCount,
@@ -187,7 +194,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
             locations: ['room1'],
           },
         },
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: userId,
+        },
       });
     });
 
@@ -206,7 +217,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
             locations: ['room1'],
           },
         },
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: userId,
+        },
       });
       const personalScheduleCount =
         personalScheduleRepository.personalSchedules.length;
@@ -240,7 +255,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
             locations: ['room2'],
           },
         },
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: userId,
+        },
       });
       expect(personalScheduleRepository.personalSchedules.length).toBe(
         personalScheduleCount,
@@ -257,7 +276,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
             locations: ['room2'],
           },
         },
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: userId,
+        },
       });
     });
 
@@ -303,7 +326,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
             locations: ['room1'],
           },
         },
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: userId,
+        },
       });
       const personalScheduleCount =
         personalScheduleRepository.personalSchedules.length;
@@ -327,7 +354,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
             locations: ['room1'],
           },
         },
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: userId,
+        },
       });
       expect(personalScheduleRepository.personalSchedules.length).toBe(
         personalScheduleCount - 1,
@@ -344,7 +375,11 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
             locations: ['room1'],
           },
         },
-        tableEntity: tableId,
+        tableEntity: {
+          id: 'test_table_id',
+          title: 'table_name',
+          user: userId,
+        },
       });
     });
 

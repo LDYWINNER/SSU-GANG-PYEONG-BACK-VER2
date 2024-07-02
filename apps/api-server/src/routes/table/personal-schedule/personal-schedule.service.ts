@@ -28,7 +28,7 @@ export class PersonalScheduleService {
 
     const newPersonalSchedule = this.personalScheduleRepository.create({
       tableEntity: table,
-      table: tableId,
+      table: table.title,
       ...createPersonalScheduleDto,
     });
 
