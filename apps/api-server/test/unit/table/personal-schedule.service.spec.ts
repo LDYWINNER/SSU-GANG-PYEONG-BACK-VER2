@@ -14,13 +14,14 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
   const personalScheduleRepositoryToken = getRepositoryToken(PersonalSchedule);
   const tableRepositoryToken = getRepositoryToken(Table);
   const userId = 'test_user_id';
+  const tableId = 'test_table_id';
 
   beforeEach(async () => {
     personalScheduleRepository = new StubPersonalScheduleRepository();
     tableRepository = new StubTableRepository();
 
     tableRepository.tables.push({
-      id: 'test_table_id',
+      id: tableId,
       title: 'table_name',
       user: userId,
     });
@@ -47,10 +48,10 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
   describe('createPersonalSchedule 함수 테스트', () => {
     it('createPersonalSchedule 함수 결과값 테스트', async () => {
       // given
-      const tableId = 'test_table_id';
-      const personalScheduleData = {
+      const personalScheduleDto = {
+        tableId,
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [1, 3],
@@ -64,15 +65,15 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         personalScheduleRepository.personalSchedules.length;
 
       // when
-      const result = await personalScheduleService.createPersonalSchedule(
-        tableId,
-        personalScheduleData,
-      );
+      const result =
+        await personalScheduleService.createPersonalSchedule(
+          personalScheduleDto,
+        );
 
       // then
       expect(result).toEqual({
         id: 'personal-schedule-id',
-        ...personalScheduleData,
+        ...personalScheduleDto,
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
@@ -84,7 +85,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       );
       expect(personalScheduleRepository.personalSchedules).toContainEqual({
         id: 'personal-schedule-id',
-        ...personalScheduleData,
+        ...personalScheduleDto,
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
@@ -96,7 +97,8 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
     it('tableId가 존재하지 않으면 에러가 납니다', () => {
       // given
       const tableId = 'invalid-table-id';
-      const personalScheduleData = {
+      const personalScheduleDto = {
+        tableId,
         courseId: 'course_id',
         table: 'test_table',
         sections: {
@@ -111,10 +113,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
 
       // then
       expect(
-        personalScheduleService.createPersonalSchedule(
-          tableId,
-          personalScheduleData,
-        ),
+        personalScheduleService.createPersonalSchedule(personalScheduleDto),
       ).rejects.toThrow(NotFoundException);
     });
   });
@@ -126,7 +125,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       personalScheduleRepository.personalSchedules.push({
         id: 'personal_schedule_test_id',
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [1, 3],
@@ -164,7 +163,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'personal_schedule_test_id',
         courseId: 'updated_course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [1, 3],
@@ -185,7 +184,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       expect(personalScheduleRepository.personalSchedules).toContainEqual({
         id: 'personal_schedule_test_id',
         courseId: 'updated_course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [1, 3],
@@ -208,7 +207,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       personalScheduleRepository.personalSchedules.push({
         id: 'personal_schedule_test_id',
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [1, 3],
@@ -246,7 +245,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'personal_schedule_test_id',
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [2, 4],
@@ -267,7 +266,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       expect(personalScheduleRepository.personalSchedules).toContainEqual({
         id: 'personal_schedule_test_id',
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [2, 4],
@@ -289,7 +288,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       const personalScheduleId = 'invalid-personal-schedule-id';
       const newPersonalSchedule = {
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [1],
@@ -317,7 +316,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       personalScheduleRepository.personalSchedules.push({
         id: 'personal-schedule-id',
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [1],
@@ -345,7 +344,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'personal-schedule-id',
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [1],
@@ -366,7 +365,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       expect(personalScheduleRepository.personalSchedules).not.toContainEqual({
         id: 'personal-schedule-id',
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'test_table',
         sections: {
           section1: {
             days: [1],

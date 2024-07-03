@@ -16,19 +16,20 @@ export class PersonalScheduleService {
   ) {}
 
   createPersonalSchedule = async (
-    tableId: string,
     createPersonalScheduleDto: CreatePersonalScheduleDto,
   ) => {
     const table = await this.tableRepository.findOne({
-      where: { id: tableId },
+      where: { id: createPersonalScheduleDto.tableId },
     });
     if (!table) {
-      throw new NotFoundException(`Table with ID ${tableId} not found`);
+      throw new NotFoundException(
+        `Table with ID ${createPersonalScheduleDto.tableId} not found`,
+      );
     }
 
     const newPersonalSchedule = this.personalScheduleRepository.create({
       tableEntity: table,
-      table: table.title,
+      tableTitle: table.title,
       ...createPersonalScheduleDto,
     });
 
@@ -54,7 +55,7 @@ export class PersonalScheduleService {
 
     return this.personalScheduleRepository.findOne({
       where: { id: personalScheduleId },
-      relations: ['table'],
+      relations: ['tableEntity'],
     });
   };
 

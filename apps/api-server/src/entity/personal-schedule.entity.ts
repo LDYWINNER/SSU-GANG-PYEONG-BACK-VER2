@@ -16,7 +16,7 @@ export class PersonalSchedule {
 
   @ApiProperty({ description: '시간표 제목' })
   @Column()
-  table: string;
+  tableTitle: string;
 
   @ApiProperty({ description: '시간표 프론트엔드를 위한 색션 객체' })
   @Column('json')
@@ -29,6 +29,8 @@ export class PersonalSchedule {
     };
   };
 
-  @ManyToOne(() => Table, (table) => table.personalSubjects)
+  @ManyToOne(() => Table, (table) => table.personalSubjects, {
+    onDelete: 'SET NULL',
+  })
   tableEntity: Table;
 }
