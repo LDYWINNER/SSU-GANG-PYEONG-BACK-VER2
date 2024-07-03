@@ -29,8 +29,9 @@ export class Table {
   @OneToMany(
     () => SchoolSchedule,
     (schoolSchedule) => schoolSchedule.tableEntity,
+    { nullable: true, onDelete: 'CASCADE' },
   )
-  schoolSubjects: string[];
+  schoolSubjects: SchoolSchedule[];
 
   @ApiProperty({
     description: '유저 시간표 항목들(개인 스케줄)',
@@ -38,6 +39,7 @@ export class Table {
   @OneToMany(
     () => PersonalSchedule,
     (personalSchedule) => personalSchedule.tableEntity,
+    { nullable: true, onDelete: 'CASCADE' },
   )
   personalSubjects: PersonalSchedule[];
 
@@ -50,6 +52,6 @@ export class Table {
   updatedAt: Date;
 
   @ApiProperty({ description: '유저 정보' })
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.tables)
   user: User;
 }

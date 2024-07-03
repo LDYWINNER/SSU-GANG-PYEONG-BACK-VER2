@@ -60,7 +60,7 @@ content-type: application/json
 
 {
     "username": "seederUser2",
-    "email": "gildong2@stonybrook.edu",
+    "email": "gildong3@stonybrook.edu",
     "password": "Hong123456!",
     "passwordConfirm": "Hong123456!"
 }
@@ -87,6 +87,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZjIxNTRhL
 ###
 
 # table 생성
+POST http://localhost:3000/table
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBlZmU0NjAxLTliMDQtNDdiOC1iZmY0LTBhNDQ5NDRkY2M4ZCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmcyQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5NjU5MTYzLCJleHAiOjE3MTk3NDU1NjN9.trg_4S__UR1ii6dHpritOAR4XjcEKVi8S0MqftOn33s
+
+{
+   "name": "table1"
+}
+
+###
+# personal schedule 생성
 POST http://localhost:3000/table
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBlZmU0NjAxLTliMDQtNDdiOC1iZmY0LTBhNDQ5NDRkY2M4ZCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmcyQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5NjU5MTYzLCJleHAiOjE3MTk3NDU1NjN9.trg_4S__UR1ii6dHpritOAR4XjcEKVi8S0MqftOn33s
