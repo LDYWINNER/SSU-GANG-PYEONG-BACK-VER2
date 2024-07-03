@@ -18,6 +18,16 @@ import postgresConfig from './config/postgres.config';
 import jwtConfig from './config/jwt.config';
 import sentryConfig from './config/sentry.config';
 import emailConfig from './config/email.config';
+import {
+  User,
+  Table,
+  SchoolSchedule,
+  PersonalSchedule,
+  RefreshToken,
+  Board,
+  BoardPost,
+  BoardComment,
+} from '../src/entity';
 
 @Module({
   imports: [
@@ -41,7 +51,17 @@ import emailConfig from './config/email.config';
           database: configService.get('postgres.database'),
           username: configService.get('postgres.username'),
           password: configService.get('postgres.password'),
-          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          autoLoadEntities: true,
+          entities: [
+            User,
+            Table,
+            SchoolSchedule,
+            PersonalSchedule,
+            RefreshToken,
+            Board,
+            BoardPost,
+            BoardComment,
+          ],
           synchronize: false,
           logging: true,
         };
