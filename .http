@@ -89,7 +89,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZjIxNTRhL
 # table 생성
 POST http://localhost:3000/table
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBlZmU0NjAxLTliMDQtNDdiOC1iZmY0LTBhNDQ5NDRkY2M4ZCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmcyQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5NjU5MTYzLCJleHAiOjE3MTk3NDU1NjN9.trg_4S__UR1ii6dHpritOAR4XjcEKVi8S0MqftOn33s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0MmQ3MTUyLTVkZDItNDE4Zi1hYmZkLTgzODgzMmVmNTRmYSIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwMDA4MzQzLCJleHAiOjE3MjAwOTQ3NDN9.qZ9obgl7GGcLmIP2iTjwLAEU8MGg1QvGGFkRdf2EF1g
 
 {
    "title": "table1"
@@ -102,7 +102,17 @@ content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ3MWMyNmQ1LTcyYjMtNDZjYS1hZmZmLWNmMTE5MzkzZGI0ZiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5OTkzOTgxLCJleHAiOjE3MjAwODAzODF9.GHzAsLbOGnPEeD52jvYyJTP5to8B44zqsz4F6ifwgeE
 
 {
-   "tableId": "a0599dfd-4f4d-4d39-b714-d98821c4a140",
+   "tableId": "ecc82583-3ad1-4e28-b077-5d1ec8d9b56c",
    "courseId": "personal schedule",
     "sections": {}
+}
+
+###
+# personal schedule 수정
+PUT http://localhost:3000/personal-schedule/dd76b1d4-fb62-46a6-ba55-da68cb8b6cd6
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ3MWMyNmQ1LTcyYjMtNDZjYS1hZmZmLWNmMTE5MzkzZGI0ZiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5OTkzOTgxLCJleHAiOjE3MjAwODAzODF9.GHzAsLbOGnPEeD52jvYyJTP5to8B44zqsz4F6ifwgeE
+
+{
+   "courseId": "personal schedule1"
 }

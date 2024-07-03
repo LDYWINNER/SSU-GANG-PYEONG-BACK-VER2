@@ -179,9 +179,9 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
           },
         },
       });
-      const savedPersonalSchedule =
-        await personalScheduleRepository.save(personalSchedule);
-      personalScheduleId = savedPersonalSchedule.id;
+
+      await personalScheduleRepository.save(personalSchedule);
+      personalScheduleId = personalSchedule.id;
     });
 
     afterEach(async () => {

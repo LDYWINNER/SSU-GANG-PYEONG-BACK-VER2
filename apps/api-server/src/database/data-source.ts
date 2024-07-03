@@ -6,6 +6,7 @@ import {
   TableSchoolSchedule1719894904035,
   TablePersonalSchedule1719942971413,
   OnDeleteCascade1719997790967,
+  TablePsRelation1720011307364,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -22,6 +23,7 @@ const options: DataSourceOptions & SeederOptions = {
     TableSchoolSchedule1719894904035,
     TablePersonalSchedule1719942971413,
     OnDeleteCascade1719997790967,
+    TablePsRelation1720011307364,
   ],
   migrationsTableName: 'migrations',
 };
