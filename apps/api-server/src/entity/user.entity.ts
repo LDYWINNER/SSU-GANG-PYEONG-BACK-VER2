@@ -43,11 +43,13 @@ export class User {
   role: Role = Role.User;
 
   @ApiProperty({ description: '시간표 테이블' })
-  @OneToMany(() => Table, (table) => table.user)
+  @OneToMany(() => Table, (table) => table.user, { onDelete: 'CASCADE' })
   tables?: Table[];
 
   @ApiProperty({ description: '작성한 게시글' })
-  @OneToMany(() => BoardPost, (boardPost) => boardPost.user)
+  @OneToMany(() => BoardPost, (boardPost) => boardPost.user, {
+    onDelete: 'CASCADE',
+  })
   boardPosts?: BoardPost[];
 
   @Column({ select: false, nullable: true, insert: false, update: false })
