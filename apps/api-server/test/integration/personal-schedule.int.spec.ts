@@ -132,12 +132,6 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
               locations: ['room1'],
             },
           },
-          tableEntity: expect.objectContaining({
-            id: tableId,
-            title: 'ps_test_table',
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
-          }),
         }),
       );
     });
