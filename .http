@@ -102,7 +102,7 @@ content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ3MWMyNmQ1LTcyYjMtNDZjYS1hZmZmLWNmMTE5MzkzZGI0ZiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5OTkzOTgxLCJleHAiOjE3MjAwODAzODF9.GHzAsLbOGnPEeD52jvYyJTP5to8B44zqsz4F6ifwgeE
 
 {
-   "tableId": "ecc82583-3ad1-4e28-b077-5d1ec8d9b56c",
+   "tableId": "c792cfbb-9cb5-4336-a236-00bb57bf14fa",
    "courseId": "personal schedule",
     "sections": {}
 }
