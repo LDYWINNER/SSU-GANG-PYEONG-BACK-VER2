@@ -44,13 +44,13 @@ export class BoardPost {
   @UpdateDateColumn()
   updateAt: Date;
 
-  @ApiProperty({ description: '게시판' })
-  @ManyToOne(() => Board)
-  board: Board;
-
   @ApiProperty({ description: '게시판 댓글' })
   @OneToMany(() => BoardComment, (comment) => comment.id, { cascade: true })
   comments?: BoardComment[];
+
+  @ApiProperty({ description: '게시판' })
+  @ManyToOne(() => Board)
+  board: Board;
 
   @ApiProperty({ description: '유저정보' })
   @ManyToOne(() => User)
