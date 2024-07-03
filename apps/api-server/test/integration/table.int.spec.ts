@@ -3,16 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Table } from './../../src/entity/table.entity';
-import { User } from './../../src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { TableModule } from '../../src/routes/table/table.module';
 import { UserModule } from '../../src/routes/user/user.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Role } from '../../src/common/enum/user.enum';
-import { RefreshToken } from '../../src/entity/refresh-token.entity';
 import { v4 as uuidv4 } from 'uuid';
+import { User, Table, RefreshToken } from '../../src/entity';
 
 describe('Table 기능 통합 테스트', () => {
   let app: INestApplication;
@@ -53,6 +51,11 @@ describe('Table 기능 통합 테스트', () => {
       getRepositoryToken(RefreshToken),
     );
 
+    // 테스트 이전에 데이터 초기화
+    tableRepository.delete({});
+    refreshTokenRepository.delete({});
+    userRepository.delete({});
+
     // 테스트용 사용자 생성
     const user = userRepository.create({
       username: 'test_user',
@@ -86,6 +89,10 @@ describe('Table 기능 통합 테스트', () => {
   });
 
   describe('/table (POST)', () => {
+    afterEach(async () => {
+      await tableRepository.delete({});
+    });
+
     it('table 생성 테스트', async () => {
       const tableName = 'new_table';
       const response = await request(app.getHttpServer())
@@ -105,9 +112,6 @@ describe('Table 기능 통합 테스트', () => {
           }),
         }),
       );
-
-      // Cleanup
-      await tableRepository.delete(response.body.id);
     });
 
     it('유효하지 않은 토큰으로 요청을 보내는 경우 401를 반환해야 합니다', async () => {
@@ -127,13 +131,16 @@ describe('Table 기능 통합 테스트', () => {
     let tableId: string;
 
     beforeEach(async () => {
-      await tableRepository.delete({});
       const table = tableRepository.create({
         title: 'table_to_update',
         user: { id: userId },
       });
       const savedTable = await tableRepository.save(table);
       tableId = savedTable.id;
+    });
+
+    afterEach(async () => {
+      await tableRepository.delete({});
     });
 
     it('table title 수정 테스트', async () => {
@@ -166,22 +173,22 @@ describe('Table 기능 통합 테스트', () => {
 
       expect(response.status).toBe(404);
     });
-
-    afterAll(async () => {
-      await tableRepository.delete(tableId);
-    });
   });
 
   describe('/table/:id (DELETE)', () => {
     let tableId: string;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
       const table = tableRepository.create({
         title: 'table_to_delete',
         user: { id: userId },
       });
       const savedTable = await tableRepository.save(table);
       tableId = savedTable.id;
+    });
+
+    afterEach(async () => {
+      await tableRepository.delete({});
     });
 
     it('table 삭제 테스트', async () => {
