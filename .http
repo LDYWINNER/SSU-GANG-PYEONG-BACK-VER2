@@ -92,15 +92,17 @@ content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBlZmU0NjAxLTliMDQtNDdiOC1iZmY0LTBhNDQ5NDRkY2M4ZCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmcyQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5NjU5MTYzLCJleHAiOjE3MTk3NDU1NjN9.trg_4S__UR1ii6dHpritOAR4XjcEKVi8S0MqftOn33s
 
 {
-   "name": "table1"
+   "title": "table1"
 }
 
 ###
 # personal schedule 생성
-POST http://localhost:3000/table
+POST http://localhost:3000/personal-schedule
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBlZmU0NjAxLTliMDQtNDdiOC1iZmY0LTBhNDQ5NDRkY2M4ZCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmcyQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5NjU5MTYzLCJleHAiOjE3MTk3NDU1NjN9.trg_4S__UR1ii6dHpritOAR4XjcEKVi8S0MqftOn33s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ3MWMyNmQ1LTcyYjMtNDZjYS1hZmZmLWNmMTE5MzkzZGI0ZiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5OTkzOTgxLCJleHAiOjE3MjAwODAzODF9.GHzAsLbOGnPEeD52jvYyJTP5to8B44zqsz4F6ifwgeE
 
 {
-   "name": "table1"
+   "tableId": "a0599dfd-4f4d-4d39-b714-d98821c4a140",
+   "courseId": "personal schedule",
+    "sections": {}
 }

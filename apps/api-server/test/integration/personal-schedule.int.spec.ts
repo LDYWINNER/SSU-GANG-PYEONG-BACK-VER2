@@ -56,12 +56,6 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
       Repository<PersonalSchedule>
     >(getRepositoryToken(PersonalSchedule));
 
-    // 테스트 이전에 데이터 초기화
-    tableRepository.delete({});
-    refreshTokenRepository.delete({});
-    userRepository.delete({});
-    personalScheduleRepository.delete({});
-
     // 테스트용 사용자 생성
     const user = userRepository.create({
       username: 'test_ps_user',

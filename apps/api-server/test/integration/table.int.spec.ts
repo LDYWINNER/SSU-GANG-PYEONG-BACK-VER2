@@ -51,11 +51,6 @@ describe('Table 기능 통합 테스트', () => {
       getRepositoryToken(RefreshToken),
     );
 
-    // 테스트 이전에 데이터 초기화
-    tableRepository.delete({});
-    refreshTokenRepository.delete({});
-    userRepository.delete({});
-
     // 테스트용 사용자 생성
     const user = userRepository.create({
       username: 'test_user',
