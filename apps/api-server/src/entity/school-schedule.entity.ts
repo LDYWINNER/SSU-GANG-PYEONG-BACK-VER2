@@ -31,6 +31,8 @@ export class SchoolSchedule {
   @Column()
   optionsTime?: string;
 
-  @ManyToOne(() => Table, (table) => table.personalSubjects)
+  @ManyToOne(() => Table, (table) => table.personalSubjects, {
+    onDelete: 'CASCADE',
+  })
   tableEntity: Table;
 }

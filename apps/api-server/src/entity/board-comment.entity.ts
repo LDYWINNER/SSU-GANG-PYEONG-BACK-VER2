@@ -32,6 +32,8 @@ export class BoardComment {
   user: User;
 
   @ApiProperty({ description: '게시글' })
-  @ManyToOne(() => BoardPost)
+  @ManyToOne(() => BoardPost, {
+    onDelete: 'CASCADE',
+  })
   boardPost: BoardPost;
 }

@@ -43,19 +43,21 @@ export class User {
   role: Role = Role.User;
 
   @ApiProperty({ description: '시간표 테이블' })
-  @OneToMany(() => Table, (table) => table.user, { onDelete: 'CASCADE' })
+  @OneToMany(() => Table, (table) => table.user, { cascade: true })
   tables?: Table[];
 
   @ApiProperty({ description: '작성한 게시글' })
   @OneToMany(() => BoardPost, (boardPost) => boardPost.user, {
-    onDelete: 'CASCADE',
+    cascade: true,
   })
   boardPosts?: BoardPost[];
 
   @Column({ select: false, nullable: true, insert: false, update: false })
   postCount: number;
 
-  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
+  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user, {
+    cascade: true,
+  })
   refreshToken?: RefreshToken;
 
   @ApiProperty({ description: '생성일' })

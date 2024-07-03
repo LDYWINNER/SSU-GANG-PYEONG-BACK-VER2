@@ -30,7 +30,7 @@ export class PersonalSchedule {
   };
 
   @ManyToOne(() => Table, (table) => table.personalSubjects, {
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
   })
   tableEntity: Table;
 }

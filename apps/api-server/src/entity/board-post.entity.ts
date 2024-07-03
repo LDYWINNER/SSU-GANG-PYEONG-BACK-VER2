@@ -49,7 +49,9 @@ export class BoardPost {
   comments?: BoardComment[];
 
   @ApiProperty({ description: '게시판' })
-  @ManyToOne(() => Board)
+  @ManyToOne(() => Board, {
+    onDelete: 'CASCADE',
+  })
   board: Board;
 
   @ApiProperty({ description: '유저정보' })

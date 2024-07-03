@@ -23,7 +23,9 @@ export class RefreshToken {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @OneToOne(() => User, (user) => user.refreshToken)
+  @OneToOne(() => User, (user) => user.refreshToken, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
 }

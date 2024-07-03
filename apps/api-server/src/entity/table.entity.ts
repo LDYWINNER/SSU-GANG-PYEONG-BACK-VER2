@@ -29,7 +29,7 @@ export class Table {
   @OneToMany(
     () => SchoolSchedule,
     (schoolSchedule) => schoolSchedule.tableEntity,
-    { nullable: true, onDelete: 'CASCADE' },
+    { nullable: true, cascade: true },
   )
   schoolSubjects: SchoolSchedule[];
 
@@ -39,7 +39,7 @@ export class Table {
   @OneToMany(
     () => PersonalSchedule,
     (personalSchedule) => personalSchedule.tableEntity,
-    { nullable: true, onDelete: 'CASCADE' },
+    { nullable: true, cascade: true },
   )
   personalSubjects: PersonalSchedule[];
 
