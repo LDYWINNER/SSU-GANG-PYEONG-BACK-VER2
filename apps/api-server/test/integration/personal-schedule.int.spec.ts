@@ -3,17 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Table } from './../../src/entity/table.entity';
-import { User } from './../../src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { TableModule } from '../../src/routes/table/table.module';
 import { UserModule } from '../../src/routes/user/user.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Role } from '../../src/common/enum/user.enum';
-import { RefreshToken } from '../../src/entity/refresh-token.entity';
 import { v4 as uuidv4 } from 'uuid';
-import { PersonalSchedule } from '../../src/entity/personal-schedule.entity';
+import { User, Table, PersonalSchedule, RefreshToken } from '../../src/entity';
 
 describe('시간표 Personal Schedule 기능 통합 테스트', () => {
   let app: INestApplication;
@@ -59,10 +56,16 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
       Repository<PersonalSchedule>
     >(getRepositoryToken(PersonalSchedule));
 
+    // 테스트 이전에 데이터 초기화
+    tableRepository.delete({});
+    refreshTokenRepository.delete({});
+    userRepository.delete({});
+    personalScheduleRepository.delete({});
+
     // 테스트용 사용자 생성
     const user = userRepository.create({
-      username: 'test_user',
-      email: 'test_user@example.com',
+      username: 'test_ps_user',
+      email: 'test_ps_user@example.com',
       password: 'test_password',
       postCount: 0,
       role: Role.User,
@@ -84,15 +87,11 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
 
     // table 초기 설정
     const table = tableRepository.create({
-      title: 'test_table',
+      title: 'ps_test_table',
       user: { id: userId },
     });
     await tableRepository.save(table);
     tableId = table.id;
-  });
-
-  beforeEach(async () => {
-    await personalScheduleRepository.delete({});
   });
 
   afterAll(async () => {
@@ -104,10 +103,14 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
     await app.close();
   });
 
-  describe('/table/personal-schedule (POST)', () => {
+  describe('/personal-schedule (POST)', () => {
+    afterEach(async () => {
+      await personalScheduleRepository.delete({});
+    });
+
     it('personal schedule 생성 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .post('/table/personal-schedule')
+        .post('/personal-schedule')
         .set('Authorization', `Bearer ${token}`)
         .send({
           tableId,
@@ -125,9 +128,8 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
       expect(response.status).toBe(201);
       expect(response.body).toEqual(
         expect.objectContaining({
-          id: expect.any(String),
           courseId: 'course_id',
-          table: 'test_table',
+          tableTitle: 'ps_test_table',
           sections: {
             section1: {
               days: [1, 3],
@@ -138,8 +140,9 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
           },
           tableEntity: expect.objectContaining({
             id: tableId,
-            title: 'test_table',
-            user: { id: userId },
+            title: 'ps_test_table',
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
           }),
         }),
       );
@@ -147,7 +150,7 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
 
     it('유효하지 않은 토큰으로 요청을 보내는 경우 401를 반환해야 합니다', async () => {
       const response = await request(app.getHttpServer())
-        .post('/table/personal-schedule')
+        .post('/personal-schedule')
         .set('Authorization', `Bearer ${invalidToken}`)
         .send({
           tableId,
@@ -166,14 +169,13 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
     });
   });
 
-  describe('/table/personal-schedule/:id (PUT)', () => {
+  describe('/personal-schedule/:id (PUT)', () => {
     let personalScheduleId: string;
 
     beforeEach(async () => {
-      await personalScheduleRepository.delete({});
       const personalSchedule = personalScheduleRepository.create({
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'ps_test_table',
         sections: {
           section1: {
             days: [1, 3],
@@ -182,16 +184,19 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
             locations: ['room1'],
           },
         },
-        tableEntity: { id: tableId },
       });
       const savedPersonalSchedule =
         await personalScheduleRepository.save(personalSchedule);
       personalScheduleId = savedPersonalSchedule.id;
     });
 
+    afterEach(async () => {
+      await personalScheduleRepository.delete({});
+    });
+
     it('스케줄 제목(courseId) 수정 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .put(`/table/personal-schedule/${personalScheduleId}`)
+        .put(`/personal-schedule/${personalScheduleId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({ courseId: 'updated_course_id' });
 
@@ -206,7 +211,7 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
 
     it('스케줄 sections 수정 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .put(`/table/personal-schedule/${personalScheduleId}`)
+        .put(`/personal-schedule/${personalScheduleId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           sections: {
@@ -249,7 +254,7 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
 
     it('스케줄 제목(courseId) & sections 동시 수정 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .put(`/table/personal-schedule/${personalScheduleId}`)
+        .put(`/personal-schedule/${personalScheduleId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           courseId: 'updated_course_id',
@@ -296,7 +301,7 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
       const invalidPersonalScheduleId = uuidv4();
 
       const response = await request(app.getHttpServer())
-        .put(`/table/personal-schedule/${invalidPersonalScheduleId}`)
+        .put(`/personal-schedule/${invalidPersonalScheduleId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({ courseId: 'updated_course_id' });
 
@@ -304,14 +309,13 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
     });
   });
 
-  describe('/table/personal-schedule/:id (DELETE)', () => {
+  describe('/personal-schedule/:id (DELETE)', () => {
     let personalScheduleId: string;
 
     beforeEach(async () => {
-      await personalScheduleRepository.delete({});
       const personalSchedule = personalScheduleRepository.create({
         courseId: 'course_id',
-        table: 'test_table',
+        tableTitle: 'ps_test_table',
         sections: {
           section1: {
             days: [1, 3],
@@ -320,22 +324,34 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
             locations: ['room1'],
           },
         },
-        tableEntity: { id: tableId },
       });
       const savedPersonalSchedule =
         await personalScheduleRepository.save(personalSchedule);
       personalScheduleId = savedPersonalSchedule.id;
     });
 
+    afterEach(async () => {
+      await personalScheduleRepository.delete({});
+    });
+
     it('personal schedule 삭제 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .delete(`/table/personal-schedule/${personalScheduleId}`)
+        .delete(`/personal-schedule/${personalScheduleId}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual(
         expect.objectContaining({
-          id: personalScheduleId,
+          courseId: 'course_id',
+          tableTitle: 'ps_test_table',
+          sections: {
+            section1: {
+              days: [1, 3],
+              startTimes: ['10:00'],
+              endTimes: ['11:00'],
+              locations: ['room1'],
+            },
+          },
         }),
       );
       const deletedPersonalSchedule =
@@ -349,7 +365,7 @@ describe('시간표 Personal Schedule 기능 통합 테스트', () => {
       const invalidPersonalScheduleId = uuidv4();
 
       const response = await request(app.getHttpServer())
-        .delete(`/table/personal-schedule/${invalidPersonalScheduleId}`)
+        .delete(`/personal-schedule/${invalidPersonalScheduleId}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(404);
