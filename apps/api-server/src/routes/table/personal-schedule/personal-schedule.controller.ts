@@ -33,7 +33,6 @@ export class PersonalScheduleController {
       }
       return result;
     } catch (error) {
-      console.log(error.message);
       throw error;
     }
   }
@@ -56,7 +55,6 @@ export class PersonalScheduleController {
       }
       return updatedPersonalSchedule;
     } catch (error) {
-      console.log(error.message);
       throw error;
     }
   }
@@ -73,7 +71,6 @@ export class PersonalScheduleController {
       }
       return deletedPersonalSchedule;
     } catch (error) {
-      console.log(error.message);
       throw error;
     }
   }
