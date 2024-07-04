@@ -4,6 +4,25 @@ export class Initialization1720085948305 implements MigrationInterface {
   name = 'Initialization1720085948305';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    const typeExistsQuery = `
+    SELECT EXISTS (
+      SELECT 1
+      FROM pg_type
+      WHERE typname = 'user_role_enum'
+      AND typtype = 'e'
+    );
+  `;
+    const [{ exists }] = await queryRunner.query(typeExistsQuery);
+
+    if (!exists) {
+      // Create the enum type only if it does not already exist
+      await queryRunner.query(`
+      CREATE TYPE "public"."user_role_enum" AS ENUM ('USER', 'ADMIN', 'MODERATOR');
+    `);
+    }
+
+    await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
+
     await queryRunner.query(
       `CREATE TABLE "refresh_token" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "token" character varying NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "user_id" uuid, CONSTRAINT "REL_6bbe63d2fe75e7f0ba1710351d" UNIQUE ("user_id"), CONSTRAINT "PK_b575dd3c21fb0831013c909e7fe" PRIMARY KEY ("id"))`,
     );
