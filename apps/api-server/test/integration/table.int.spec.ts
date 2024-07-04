@@ -252,6 +252,30 @@ describe('Table 기능 통합 테스트', () => {
       expect(deletedPersonalSchedule).toBeNull();
     });
 
+    it('school schedule이 있는 경우 table 삭제 테스트(CASCADE)', async () => {
+      const schoolSchedule = schoolScheduleRepository.create({
+        courseId: '65ead96f50d4111ca6f57b00',
+        tableTitle: 'test_table',
+        optionsTime: '2:00 PM',
+        tableEntity: { id: tableId },
+      });
+      await schoolScheduleRepository.save(schoolSchedule);
+      const schoolScheduleId = schoolSchedule.id;
+
+      const response = await request(app.getHttpServer())
+        .delete(`/table/${tableId}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+
+      const deletedTable = await tableRepository.findOneBy({ id: tableId });
+      expect(deletedTable).toBeNull();
+      const deletedSchoolSchedule = await schoolScheduleRepository.findOneBy({
+        id: schoolScheduleId,
+      });
+      expect(deletedSchoolSchedule).toBeNull();
+    });
+
     it('유효하지 않은 테이블 아이디로 삭제 요청을 보내면 404를 반환해야 합니다', async () => {
       const invalidTableId = uuidv4();
 
