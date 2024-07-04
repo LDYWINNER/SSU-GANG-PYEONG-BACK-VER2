@@ -39,9 +39,6 @@ export class Initialization1720085948305 implements MigrationInterface {
       `CREATE TABLE "personal_schedule" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "tableTitle" character varying NOT NULL, "sections" json NOT NULL, "tableEntityId" uuid, CONSTRAINT "PK_e8ab5a72977daf90ce2d2225265" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "school_schedule" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "complicatedCourseOption" character varying NOT NULL, "twoOptionsDay" character varying NOT NULL, "optionsTime" character varying NOT NULL, "tableEntityId" uuid, CONSTRAINT "PK_9daee08f0f954c84f9fc645c6d7" PRIMARY KEY ("id"))`,
-    );
-    await queryRunner.query(
       `CREATE TABLE "table" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userId" uuid, CONSTRAINT "PK_28914b55c485fc2d7a101b1b2a4" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
@@ -68,9 +65,7 @@ export class Initialization1720085948305 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "personal_schedule" ADD CONSTRAINT "FK_f3938e59accda9216c864670627" FOREIGN KEY ("tableEntityId") REFERENCES "table"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
-    await queryRunner.query(
-      `ALTER TABLE "school_schedule" ADD CONSTRAINT "FK_90d7859003d4d1727ea62dddc9a" FOREIGN KEY ("tableEntityId") REFERENCES "table"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
-    );
+
     await queryRunner.query(
       `ALTER TABLE "table" ADD CONSTRAINT "FK_fab65d6ac3edaa21dc7e2e05bf3" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
@@ -79,9 +74,6 @@ export class Initialization1720085948305 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `ALTER TABLE "table" DROP CONSTRAINT "FK_fab65d6ac3edaa21dc7e2e05bf3"`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "school_schedule" DROP CONSTRAINT "FK_90d7859003d4d1727ea62dddc9a"`,
     );
     await queryRunner.query(
       `ALTER TABLE "personal_schedule" DROP CONSTRAINT "FK_f3938e59accda9216c864670627"`,
@@ -106,7 +98,6 @@ export class Initialization1720085948305 implements MigrationInterface {
     );
     await queryRunner.query(`DROP TABLE "user"`);
     await queryRunner.query(`DROP TABLE "table"`);
-    await queryRunner.query(`DROP TABLE "school_schedule"`);
     await queryRunner.query(`DROP TABLE "personal_schedule"`);
     await queryRunner.query(`DROP TABLE "board_post"`);
     await queryRunner.query(`DROP TABLE "board_comment"`);

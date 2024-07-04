@@ -2,7 +2,6 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
 import {
   Initialization1720085948305,
-  SchoolSchedule1720101120123,
   SchoolScheduleOptionalProp1720103658931,
   SchoolScheduleOptionalProp1720104811124,
 } from './migrations';
@@ -17,7 +16,6 @@ const options: DataSourceOptions & SeederOptions = {
   entities: ['apps/api-server/src/entity/*.entity{.ts,.js}'],
   migrations: [
     Initialization1720085948305,
-    SchoolSchedule1720101120123,
     SchoolScheduleOptionalProp1720103658931,
     SchoolScheduleOptionalProp1720104811124,
   ],
