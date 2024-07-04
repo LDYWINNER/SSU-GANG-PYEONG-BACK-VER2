@@ -28,6 +28,7 @@ export class SchoolScheduleService {
     const { tableId, ...rest } = createSchoolScheduleDto;
     const createdSchoolSchedule = this.schoolScheduleRepository.create({
       tableEntity: table,
+      tableTitle: table.title,
       ...rest,
     });
 

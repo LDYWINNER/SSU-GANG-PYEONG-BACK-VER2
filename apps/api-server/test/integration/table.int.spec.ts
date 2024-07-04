@@ -542,6 +542,7 @@ describe('Table 기능 통합 테스트', () => {
 
   describe('시간표 School Schedule 기능 통합 테스트', () => {
     let tableId: string;
+    let tableItem: Table;
 
     beforeAll(async () => {
       // table 초기 설정
@@ -551,6 +552,7 @@ describe('Table 기능 통합 테스트', () => {
       });
       await tableRepository.save(table);
       tableId = table.id;
+      tableItem = table;
     });
 
     describe('/school-schedule (POST)', () => {
@@ -598,6 +600,7 @@ describe('Table 기능 통합 테스트', () => {
       beforeEach(async () => {
         const schoolSchedule = schoolScheduleRepository.create({
           courseId: '65ead96f50d4111ca6f57b00',
+          tableTitle: 'test_table',
           optionsTime: '2:00 PM',
         });
         const savedSchoolSchedule =
@@ -639,21 +642,25 @@ describe('Table 기능 통합 테스트', () => {
       });
     });
 
-    describe('/school-schedule-all/:id (DELETE)', () => {
+    describe('/school-schedule/all/:id (DELETE)', () => {
       let schoolScheduleId1: string;
       let schoolScheduleId2: string;
 
       beforeEach(async () => {
         const schoolSchedule1 = schoolScheduleRepository.create({
           courseId: '65ead96f50d4111ca6f57b00',
+          tableTitle: 'test_table',
           optionsTime: '2:00 PM',
+          tableEntity: tableItem,
         });
         await schoolScheduleRepository.save(schoolSchedule1);
         schoolScheduleId1 = schoolSchedule1.id;
 
         const schoolSchedule2 = schoolScheduleRepository.create({
           courseId: '6436c2657efba14cf3f90000',
+          tableTitle: 'test_table',
           optionsTime: '10:30 AM',
+          tableEntity: tableItem,
         });
         await schoolScheduleRepository.save(schoolSchedule2);
         schoolScheduleId2 = schoolSchedule2.id;
@@ -663,9 +670,9 @@ describe('Table 기능 통합 테스트', () => {
         await schoolScheduleRepository.delete({});
       });
 
-      it('school schedule 삭제 테스트', async () => {
+      it('school schedule 모두 삭제 테스트', async () => {
         const response = await request(app.getHttpServer())
-          .delete(`/school-schedule/${tableId}`)
+          .delete(`/school-schedule/all/${tableId}`)
           .set('Authorization', `Bearer ${token}`);
 
         expect(response.status).toBe(200);
@@ -673,31 +680,20 @@ describe('Table 기능 통합 테스트', () => {
           expect.objectContaining({
             count: 2,
             items: [
-              {
-                id: 'school-schedule-id-1',
+              expect.objectContaining({
                 courseId: '65ead96f50d4111ca6f57b00',
                 tableTitle: 'test_table',
                 optionsTime: '2:00 PM',
-                tableEntity: {
-                  id: 'test_table_id',
-                  title: 'table_name',
-                  user: userId,
-                },
-              },
-              {
-                id: 'school-schedule-id-2',
+              }),
+              expect.objectContaining({
                 courseId: '6436c2657efba14cf3f90000',
                 tableTitle: 'test_table',
                 optionsTime: '10:30 AM',
-                tableEntity: {
-                  id: 'test_table_id',
-                  title: 'table_name',
-                  user: userId,
-                },
-              },
+              }),
             ],
           }),
         );
+
         const deletedSchoolSchedule1 = await schoolScheduleRepository.findOneBy(
           {
             id: schoolScheduleId1,
@@ -716,7 +712,7 @@ describe('Table 기능 통합 테스트', () => {
         const invalidTableId = uuidv4();
 
         const response = await request(app.getHttpServer())
-          .delete(`/school-schedule-all/${invalidTableId}`)
+          .delete(`/school-schedule/all/${invalidTableId}`)
           .set('Authorization', `Bearer ${token}`);
 
         expect(response.status).toBe(404);

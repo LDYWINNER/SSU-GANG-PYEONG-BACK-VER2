@@ -3,6 +3,8 @@ import { SeederOptions } from 'typeorm-extension';
 import {
   Initialization1720085948305,
   SchoolSchedule1720101120123,
+  SchoolScheduleOptionalProp1720103658931,
+  SchoolScheduleOptionalProp1720104811124,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -13,7 +15,12 @@ const options: DataSourceOptions & SeederOptions = {
   username: process.env.POSTGRES_USER || 'postgres',
   password: process.env.POSTGRES_PASSWORD || 'postgres',
   entities: ['apps/api-server/src/entity/*.entity{.ts,.js}'],
-  migrations: [Initialization1720085948305, SchoolSchedule1720101120123],
+  migrations: [
+    Initialization1720085948305,
+    SchoolSchedule1720101120123,
+    SchoolScheduleOptionalProp1720103658931,
+    SchoolScheduleOptionalProp1720104811124,
+  ],
   migrationsTableName: 'migrations',
 };
 
