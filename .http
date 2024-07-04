@@ -89,7 +89,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZjIxNTRhL
 # table 생성
 POST http://localhost:3000/table
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ3MzlkYjBlLWU4MmYtNGQxYS1hYjA3LTE4ZDczNWZhZDYyYiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwMDEzMjc4LCJleHAiOjE3MjAwOTk2Nzh9.rO4Q8sw-SvWyFOTUBiTZnnrQp79Z8d_hvrNgU9ytUfM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJkMWVlNGE2LWU1NzMtNDQ3OS1iMmI0LWY2NWE2ZjgyNjFkYSIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwMDg2MTk4LCJleHAiOjE3MjAxNzI1OTh9.s2UC-LzzCLcjoltDkzoWGL1PsW5-SshudBa69IZl99M
 
 {
    "title": "table1"
@@ -99,10 +99,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ3MzlkYjBlL
 # personal schedule 생성
 POST http://localhost:3000/personal-schedule
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ3MWMyNmQ1LTcyYjMtNDZjYS1hZmZmLWNmMTE5MzkzZGI0ZiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzE5OTkzOTgxLCJleHAiOjE3MjAwODAzODF9.GHzAsLbOGnPEeD52jvYyJTP5to8B44zqsz4F6ifwgeE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhhOTdkZGJmLTdkYTQtNDY1NC1iYzA2LTdlNzU1OTYyN2I0YiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwMDg0MTIxLCJleHAiOjE3MjAxNzA1MjF9.LzBYPHsB1Ya58aVFjDADvsEzwt1FiYC0ee6MMtkP59w
 
 {
-   "tableId": "c792cfbb-9cb5-4336-a236-00bb57bf14fa",
+   "tableId": "2ff587a6-71fe-4aed-a9b3-90288925660f",
    "courseId": "personal schedule",
     "sections": {}
 }
@@ -116,3 +116,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ3MWMyNmQ1L
 {
    "courseId": "personal schedule1"
 }
+
+###
+# table 삭제
+DELETE http://localhost:3000/table/2ff587a6-71fe-4aed-a9b3-90288925660f
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJkMWVlNGE2LWU1NzMtNDQ3OS1iMmI0LWY2NWE2ZjgyNjFkYSIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwMDg2MTk4LCJleHAiOjE3MjAxNzI1OTh9.s2UC-LzzCLcjoltDkzoWGL1PsW5-SshudBa69IZl99M

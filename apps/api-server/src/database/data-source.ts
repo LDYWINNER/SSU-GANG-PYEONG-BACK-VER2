@@ -1,13 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
-import {
-  SsuGangPyeongReference1719681701078,
-  TablePersonalSchedule1719813960356,
-  TableSchoolSchedule1719894904035,
-  TablePersonalSchedule1719942971413,
-  OnDeleteCascade1719997790967,
-  TablePsRelation1720011307364,
-} from './migrations';
+import { Initialization1720085948305 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
   type: 'postgres',
@@ -17,14 +10,7 @@ const options: DataSourceOptions & SeederOptions = {
   username: process.env.POSTGRES_USER || 'postgres',
   password: process.env.POSTGRES_PASSWORD || 'postgres',
   entities: ['apps/api-server/src/entity/*.entity{.ts,.js}'],
-  migrations: [
-    SsuGangPyeongReference1719681701078,
-    TablePersonalSchedule1719813960356,
-    TableSchoolSchedule1719894904035,
-    TablePersonalSchedule1719942971413,
-    OnDeleteCascade1719997790967,
-    TablePsRelation1720011307364,
-  ],
+  migrations: [Initialization1720085948305],
   migrationsTableName: 'migrations',
 };
 
