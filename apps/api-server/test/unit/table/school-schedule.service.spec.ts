@@ -49,7 +49,7 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
     it('createSchoolSchedule 함수 결과값 테스트', async () => {
       // given
       const schoolScheduleDto = {
-        tableId,
+        tableId: 'test_table_id',
         courseId: '65ead96f50d4111ca6f57b00',
         tableTitle: 'test_table',
         optionsTime: '2:00 PM',

@@ -18,6 +18,12 @@ export class StubTableRepository {
     );
   }
 
+  findOneBy(conditions: any): Promise<Table> {
+    return Promise.resolve(
+      this.tables.find((table) => table.id === conditions.id),
+    );
+  }
+
   async update(id: string, newTable: Partial<Table>): Promise<any> {
     const index = this.tables.findIndex((table) => table.id === id);
     if (index >= 0) {

@@ -6,12 +6,12 @@ import { SchoolScheduleService } from './school-schedule/school-schedule.service
 import { PersonalScheduleController } from './personal-schedule/personal-schedule.controller';
 import { PersonalScheduleService } from './personal-schedule/personal-schedule.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Table } from '../../entity/table.entity';
-import { User } from '../../entity/user.entity';
-import { PersonalSchedule } from '../../entity/personal-schedule.entity';
+import { Table, User, PersonalSchedule, SchoolSchedule } from '../../entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Table, PersonalSchedule, User])],
+  imports: [
+    TypeOrmModule.forFeature([Table, PersonalSchedule, SchoolSchedule, User]),
+  ],
   controllers: [
     TableController,
     SchoolScheduleController,

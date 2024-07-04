@@ -63,12 +63,12 @@ import {
             BoardComment,
           ],
           synchronize: false,
-          logging: true,
         };
         // local 환경에서만 개발 편의성을 위해 활용
         if (configService.get('STAGE') === 'local') {
           obj = Object.assign(obj, {
             synchronize: false,
+            logging: true,
           });
         }
         return obj;
