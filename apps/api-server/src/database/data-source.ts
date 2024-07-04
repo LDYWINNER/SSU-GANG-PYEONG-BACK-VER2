@@ -1,6 +1,9 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
-import { Initialization1720085948305 } from './migrations';
+import {
+  Initialization1720085948305,
+  SchoolSchedule1720096720732,
+} from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
   type: 'postgres',
@@ -10,7 +13,7 @@ const options: DataSourceOptions & SeederOptions = {
   username: process.env.POSTGRES_USER || 'postgres',
   password: process.env.POSTGRES_PASSWORD || 'postgres',
   entities: ['apps/api-server/src/entity/*.entity{.ts,.js}'],
-  migrations: [Initialization1720085948305],
+  migrations: [Initialization1720085948305, SchoolSchedule1720096720732],
   migrationsTableName: 'migrations',
 };
 
