@@ -51,7 +51,6 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
       const schoolScheduleDto = {
         tableId: 'test_table_id',
         courseId: '65ead96f50d4111ca6f57b00',
-        tableTitle: 'test_table',
         optionsTime: '2:00 PM',
       };
       const schoolScheduleCount =
@@ -64,7 +63,9 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
       // then
       expect(result).toEqual({
         id: 'school-schedule-id',
-        ...schoolScheduleDto,
+        tableTitle: 'table_name',
+        courseId: '65ead96f50d4111ca6f57b00',
+        optionsTime: '2:00 PM',
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
@@ -76,7 +77,9 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
       );
       expect(schoolScheduleRepository.schoolSchedules).toContainEqual({
         id: 'school-schedule-id',
-        ...schoolScheduleDto,
+        tableTitle: 'table_name',
+        courseId: '65ead96f50d4111ca6f57b00',
+        optionsTime: '2:00 PM',
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',

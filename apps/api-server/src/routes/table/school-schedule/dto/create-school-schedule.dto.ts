@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateSchoolScheduleDto {
   @ApiProperty({
@@ -21,17 +21,20 @@ export class CreateSchoolScheduleDto {
     description: '수업 시간, 요일, 장소 등이 복잡한 수업들의 분류를 위한 옵션',
   })
   @IsString()
+  @IsOptional()
   complicatedCourseOption?: string;
 
   @ApiProperty({
     description: '요일을 선택할 수 있는 수업들의 분류를 위한 옵션',
   })
   @IsString()
+  @IsOptional()
   twoOptionsDay?: string;
 
   @ApiProperty({
     description: '시간을 선택할 수 있는 수업들의 분류를 위한 옵션',
   })
   @IsString()
+  @IsOptional()
   optionsTime?: string;
 }

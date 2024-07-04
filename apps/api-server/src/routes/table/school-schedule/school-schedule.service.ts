@@ -24,10 +24,11 @@ export class SchoolScheduleService {
       );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { tableId, ...rest } = createSchoolScheduleDto;
     const createdSchoolSchedule = this.schoolScheduleRepository.create({
       tableEntity: table,
-      tableTitle: table.title,
-      ...createSchoolScheduleDto,
+      ...rest,
     });
 
     return this.schoolScheduleRepository.save(createdSchoolSchedule);

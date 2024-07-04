@@ -1,4 +1,4 @@
 import { Initialization1720085948305 } from './1720085948305-initialization';
-import { SchoolSchedule1720096720732 } from './1720096720732-school-schedule';
+import { SchoolSchedule1720101120123 } from './1720101120123-school-schedule';
 
-export { Initialization1720085948305, SchoolSchedule1720096720732 };
+export { Initialization1720085948305, SchoolSchedule1720101120123 };

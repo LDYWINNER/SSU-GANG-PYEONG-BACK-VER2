@@ -3,10 +3,15 @@ import { SchoolSchedule } from '../../../../src/entity';
 export class StubSchoolScheduleRepository {
   schoolSchedules = [];
 
-  create(schoolSchedule: Partial<SchoolSchedule>): SchoolSchedule {
+  create(
+    schoolSchedule: Partial<SchoolSchedule> & { tableId: string },
+  ): SchoolSchedule {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { tableId, ...rest } = schoolSchedule;
     return {
-      ...schoolSchedule,
+      ...rest,
       id: 'school-schedule-id',
+      tableTitle: 'table_name',
     } as SchoolSchedule;
   }
 
