@@ -120,7 +120,7 @@
 
 - [ ] user module:
   - [ ] hate user
-  - [ ]
+  - [ ] todo, table, - CASCADE testing
 
 ## 신기능 TODO
 
