@@ -4,6 +4,7 @@ import {
   Initialization1720085948305,
   SchoolScheduleOptionalProp1720103658931,
   SchoolScheduleOptionalProp1720104811124,
+  TodoCategoryTask1720176436191,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -18,6 +19,7 @@ const options: DataSourceOptions & SeederOptions = {
     Initialization1720085948305,
     SchoolScheduleOptionalProp1720103658931,
     SchoolScheduleOptionalProp1720104811124,
+    TodoCategoryTask1720176436191,
   ],
   migrationsTableName: 'migrations',
 };

@@ -12,6 +12,7 @@ import { RefreshToken } from './refresh-token.entity';
 import { Role } from '../common/enum/user.enum';
 import { BoardPost } from './board-post.entity';
 import { Table } from './table.entity';
+import { ToDoCategory } from './todo-category.entity';
 
 @Entity()
 export class User {
@@ -45,6 +46,12 @@ export class User {
   @ApiProperty({ description: '시간표 테이블' })
   @OneToMany(() => Table, (table) => table.user, { cascade: true })
   tables?: Table[];
+
+  @ApiProperty({ description: '유저가 생성한 투두 카테고리 목록' })
+  @OneToMany(() => ToDoCategory, (toDoCategory) => toDoCategory.user, {
+    cascade: true,
+  })
+  toDoCategories: ToDoCategory[];
 
   @ApiProperty({ description: '작성한 게시글' })
   @OneToMany(() => BoardPost, (boardPost) => boardPost.user, {

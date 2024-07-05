@@ -27,6 +27,8 @@ import {
   Board,
   BoardPost,
   BoardComment,
+  ToDoCategory,
+  ToDoTask,
 } from '../src/entity';
 
 @Module({
@@ -61,6 +63,8 @@ import {
             Board,
             BoardPost,
             BoardComment,
+            ToDoCategory,
+            ToDoTask,
           ],
           synchronize: false,
         };

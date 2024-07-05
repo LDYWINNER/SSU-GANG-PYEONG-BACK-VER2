@@ -1,4 +1,4 @@
 import { Controller } from '@nestjs/common';
 
-@Controller('task')
+@Controller('todo/task')
 export class TaskController {}

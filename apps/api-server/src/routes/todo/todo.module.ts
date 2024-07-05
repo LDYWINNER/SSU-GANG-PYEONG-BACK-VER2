@@ -6,6 +6,6 @@ import { TaskService } from './task/task.service';
 
 @Module({
   controllers: [CategoryController, TaskController],
-  providers: [CategoryService, TaskService]
+  providers: [CategoryService, TaskService],
 })
 export class TodoModule {}
