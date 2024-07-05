@@ -51,7 +51,13 @@ export class User {
   @OneToMany(() => ToDoCategory, (toDoCategory) => toDoCategory.user, {
     cascade: true,
   })
-  toDoCategories: ToDoCategory[];
+  toDoCategories?: ToDoCategory[];
+
+  @ApiProperty({ description: '유저가 생성한 투두 테스크 목록' })
+  @OneToMany(() => ToDoCategory, (toDoCategory) => toDoCategory.user, {
+    cascade: true,
+  })
+  toDoTasks?: ToDoCategory[];
 
   @ApiProperty({ description: '작성한 게시글' })
   @OneToMany(() => BoardPost, (boardPost) => boardPost.user, {
