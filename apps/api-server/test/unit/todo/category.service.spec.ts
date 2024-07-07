@@ -1,18 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryService } from './../../../src/routes/todo/category/category.service';
-import { ToDoCategory } from '../../../src/entity';
+import { ToDoCategory, User } from '../../../src/entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { StubCategoryRepository } from './stub/category-repository';
 import { NotFoundException } from '@nestjs/common';
+import { StubUserRepository } from '../user/stub-repository';
 
 describe('투두 카테고리 관련 서비스 테스트', () => {
   let categoryService: CategoryService;
   let categoryRepository: StubCategoryRepository;
+  let userRepository: StubUserRepository;
   const categoryRepositoryToken = getRepositoryToken(ToDoCategory);
+  const userRepositoryToken = getRepositoryToken(User);
   const userId = 'test_user_id';
 
   beforeEach(async () => {
     categoryRepository = new StubCategoryRepository();
+    userRepository = new StubUserRepository();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -20,6 +24,10 @@ describe('투두 카테고리 관련 서비스 테스트', () => {
         {
           provide: categoryRepositoryToken,
           useValue: categoryRepository,
+        },
+        {
+          provide: userRepositoryToken,
+          useValue: userRepository,
         },
       ],
     }).compile();
@@ -241,7 +249,10 @@ describe('투두 카테고리 관련 서비스 테스트', () => {
     });
 
     it('getAllCategories: userId가 존재하지 않으면 에러가 납니다', () => {
-      expect(categoryService.getAllCategories(userId)).rejects.toThrow(
+      // given
+      const invalidUserId = 'invalid-user-id';
+
+      expect(categoryService.getAllCategories(invalidUserId)).rejects.toThrow(
         NotFoundException,
       );
     });
@@ -600,7 +611,7 @@ describe('투두 카테고리 관련 서비스 테스트', () => {
           name: 'icon_name',
           symbol: '🌱',
         },
-        isEditable: false,
+        isEditable: true,
         name: 'category_name',
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
@@ -626,7 +637,7 @@ describe('투두 카테고리 관련 서비스 테스트', () => {
           name: 'icon_name',
           symbol: '🌱',
         },
-        isEditable: false,
+        isEditable: true,
         name: 'category_name',
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
@@ -693,7 +704,7 @@ describe('투두 카테고리 관련 서비스 테스트', () => {
           name: 'updated_icon_name',
           symbol: '📈',
         },
-        isEditable: false,
+        isEditable: true,
         name: 'category_name',
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
@@ -719,7 +730,7 @@ describe('투두 카테고리 관련 서비스 테스트', () => {
           name: 'updated_icon_name',
           symbol: '📈',
         },
-        isEditable: false,
+        isEditable: true,
         name: 'category_name',
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
@@ -750,9 +761,9 @@ describe('투두 카테고리 관련 서비스 테스트', () => {
   describe('deleteCategory 함수 테스트', () => {
     it('deleteCategory 함수 결과값 테스트', async () => {
       // given
-      const categoryId = 'get_id_category_test_id';
+      const categoryId = 'delete_category_test_id';
       categoryRepository.toDoCategories.push({
-        id: 'get_id_category_test_id',
+        id: 'delete_category_test_id',
         color: {
           id: 'color_id',
           code: '#000000',
@@ -783,7 +794,7 @@ describe('투두 카테고리 관련 서비스 테스트', () => {
 
       // then
       expect(result).toEqual({
-        id: 'get_id_category_test_id',
+        id: 'delete_category_test_id',
         color: {
           id: 'color_id',
           code: '#000000',
@@ -809,7 +820,7 @@ describe('투두 카테고리 관련 서비스 테스트', () => {
       });
       expect(categoryRepository.toDoCategories.length).toBe(categoryCount - 1);
       expect(categoryRepository.toDoCategories).not.toContainEqual({
-        id: 'get_id_category_test_id',
+        id: 'delete_category_test_id',
         color: {
           id: 'color_id',
           code: '#000000',
