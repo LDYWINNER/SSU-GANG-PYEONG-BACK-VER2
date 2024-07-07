@@ -28,19 +28,22 @@ export class CategoryService {
           id: userId,
         },
       },
+      relations: ['user'],
     });
   };
 
   getCategoryById = async (id: string) => {
     const category = await this.toDoCategoryRepository.findOne({
       where: { id },
-      relations: ['user'],
     });
     if (!category) {
       throw new NotFoundException('Category not found');
     }
 
-    return this.toDoCategoryRepository.findOne({ where: { id } });
+    return this.toDoCategoryRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
   };
 
   createCategory = async (
@@ -49,7 +52,6 @@ export class CategoryService {
   ) => {
     const user = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ['user'],
     });
     if (!user) {
       throw new NotFoundException('User not found');

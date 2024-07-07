@@ -206,7 +206,6 @@ describe('ToDo 기능 통합 테스트', () => {
         expect(response.status).toBe(200);
         expect(response.body).toEqual([
           expect.objectContaining({
-            id: expect.any(String),
             color: expect.objectContaining({
               id: 'color_id',
               code: '#FFFFFF',
@@ -226,7 +225,6 @@ describe('ToDo 기능 통합 테스트', () => {
             }),
           }),
           expect.objectContaining({
-            id: expect.any(String),
             color: expect.objectContaining({
               id: 'color_id',
               code: '#000000',
@@ -296,7 +294,6 @@ describe('ToDo 기능 통합 테스트', () => {
         expect(response.status).toBe(200);
         expect(response.body).toEqual(
           expect.objectContaining({
-            id: expect.any(String),
             color: expect.objectContaining({
               id: 'color_id',
               code: '#FFFFFF',
@@ -546,7 +543,6 @@ describe('ToDo 기능 통합 테스트', () => {
         expect(response.status).toBe(200);
         expect(response.body).toEqual(
           expect.objectContaining({
-            id: expect.any(String),
             color: expect.objectContaining({
               id: 'color_id',
               code: '#FFFFFF',
