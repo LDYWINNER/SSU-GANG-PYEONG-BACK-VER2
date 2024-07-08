@@ -7,6 +7,7 @@ import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
 import { StubCategoryRepository } from './stub/category-repository';
 import { StubTime } from '../../utils/stub-time';
+import { JodaTime } from '../../../src/common/time/joda-time';
 
 describe('투두 할 일 관련 서비스 테스트', () => {
   let taskService: TaskService;
@@ -67,6 +68,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
           provide: userRepositoryToken,
           useValue: userRepository,
         },
+        JodaTime,
       ],
     }).compile();
 
@@ -95,6 +97,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         isCompleted: false,
         categorySubj: 'AMS',
         completeDate: '2024-07-07T16:45:38.913Z',
+        categoryId,
         toDoCategory: {
           id: categoryId,
           color: {
@@ -138,6 +141,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         isCompleted: false,
         categorySubj: 'AMS',
         completeDate: '2024-07-07T16:45:38.913Z',
+        categoryId,
         toDoCategory: {
           id: categoryId,
           color: {
@@ -286,27 +290,40 @@ describe('투두 할 일 관련 서비스 테스트', () => {
       const result = await taskService.getAllTasks(userId);
 
       // then
-      expect(result).toEqual([
-        {
-          id: 'todo-task-id-1',
-          name: 'task_name_1',
-          isCompleted: false,
-          categorySubj: 'AMS',
-          completeDate: '2024-07-07T15:45:38.913Z',
-          toDoCategory: {
-            id: categoryId,
-            color: {
-              id: 'color_id',
-              code: '#FFFFFF',
-              name: 'white',
+      expect(result).toEqual({
+        count: 2,
+        items: [
+          {
+            id: 'todo-task-id-1',
+            name: 'task_name_1',
+            isCompleted: false,
+            categorySubj: 'AMS',
+            completeDate: '2024-07-07T15:45:38.913Z',
+            toDoCategory: {
+              id: categoryId,
+              color: {
+                id: 'color_id',
+                code: '#FFFFFF',
+                name: 'white',
+              },
+              icon: {
+                id: 'icon_id',
+                name: 'icon_name',
+                symbol: '🌱',
+              },
+              isEditable: true,
+              name: 'category_name',
+              user: {
+                createdAt: new Date('2024-06-28T18:19:29.764Z'),
+                email: 'test_email',
+                id: 'test_user_id',
+                password: 'test_password',
+                postCount: 0,
+                role: 'USER',
+                updateAt: new Date('2024-06-28T18:19:29.764Z'),
+                username: 'test_name',
+              },
             },
-            icon: {
-              id: 'icon_id',
-              name: 'icon_name',
-              symbol: '🌱',
-            },
-            isEditable: true,
-            name: 'category_name',
             user: {
               createdAt: new Date('2024-06-28T18:19:29.764Z'),
               email: 'test_email',
@@ -318,37 +335,37 @@ describe('투두 할 일 관련 서비스 테스트', () => {
               username: 'test_name',
             },
           },
-          user: {
-            createdAt: new Date('2024-06-28T18:19:29.764Z'),
-            email: 'test_email',
-            id: 'test_user_id',
-            password: 'test_password',
-            postCount: 0,
-            role: 'USER',
-            updateAt: new Date('2024-06-28T18:19:29.764Z'),
-            username: 'test_name',
-          },
-        },
-        {
-          id: 'todo-task-id-2',
-          name: 'task_name_2',
-          isCompleted: false,
-          categorySubj: 'AMS',
-          completeDate: '2024-07-08T16:45:38.913Z',
-          toDoCategory: {
-            id: categoryId,
-            color: {
-              id: 'color_id',
-              code: '#FFFFFF',
-              name: 'white',
+          {
+            id: 'todo-task-id-2',
+            name: 'task_name_2',
+            isCompleted: false,
+            categorySubj: 'AMS',
+            completeDate: '2024-07-08T16:45:38.913Z',
+            toDoCategory: {
+              id: categoryId,
+              color: {
+                id: 'color_id',
+                code: '#FFFFFF',
+                name: 'white',
+              },
+              icon: {
+                id: 'icon_id',
+                name: 'icon_name',
+                symbol: '🌱',
+              },
+              isEditable: true,
+              name: 'category_name',
+              user: {
+                createdAt: new Date('2024-06-28T18:19:29.764Z'),
+                email: 'test_email',
+                id: 'test_user_id',
+                password: 'test_password',
+                postCount: 0,
+                role: 'USER',
+                updateAt: new Date('2024-06-28T18:19:29.764Z'),
+                username: 'test_name',
+              },
             },
-            icon: {
-              id: 'icon_id',
-              name: 'icon_name',
-              symbol: '🌱',
-            },
-            isEditable: true,
-            name: 'category_name',
             user: {
               createdAt: new Date('2024-06-28T18:19:29.764Z'),
               email: 'test_email',
@@ -360,18 +377,8 @@ describe('투두 할 일 관련 서비스 테스트', () => {
               username: 'test_name',
             },
           },
-          user: {
-            createdAt: new Date('2024-06-28T18:19:29.764Z'),
-            email: 'test_email',
-            id: 'test_user_id',
-            password: 'test_password',
-            postCount: 0,
-            role: 'USER',
-            updateAt: new Date('2024-06-28T18:19:29.764Z'),
-            username: 'test_name',
-          },
-        },
-      ]);
+        ],
+      });
     });
 
     it('getAllTasks: userId가 존재하지 않으면 에러가 납니다', () => {
@@ -385,8 +392,6 @@ describe('투두 할 일 관련 서비스 테스트', () => {
 
     it('getTasksByCategory 함수 결과값 테스트', async () => {
       // given
-      const categoryId1 = 'category_test_id_1';
-      const categoryId2 = 'category_test_id_2';
       taskRepository.toDoTasks.push({
         id: 'todo-task-id-1',
         name: 'task_name_1',
@@ -394,7 +399,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-07T15:45:38.913Z',
         toDoCategory: {
-          id: categoryId1,
+          id: categoryId,
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -436,7 +441,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-08T16:45:38.913Z',
         toDoCategory: {
-          id: categoryId2,
+          id: categoryId,
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -473,93 +478,97 @@ describe('투두 할 일 관련 서비스 테스트', () => {
       });
 
       // when
-      const result1 = await taskService.getTasksByCategory(userId, categoryId1);
-      const result2 = await taskService.getTasksByCategory(userId, categoryId2);
+      const result = await taskService.getTasksByCategory(userId, categoryId);
 
       // then
-      expect(result1).toEqual({
-        id: 'todo-task-id-1',
-        name: 'task_name_1',
-        isCompleted: false,
-        categorySubj: 'AMS',
-        completeDate: '2024-07-07T15:45:38.913Z',
-        toDoCategory: {
-          id: categoryId1,
-          color: {
-            id: 'color_id',
-            code: '#FFFFFF',
-            name: 'white',
+      expect(result).toEqual({
+        count: 2,
+        items: [
+          {
+            id: 'todo-task-id-1',
+            name: 'task_name_1',
+            isCompleted: false,
+            categorySubj: 'AMS',
+            completeDate: '2024-07-07T15:45:38.913Z',
+            toDoCategory: {
+              id: categoryId,
+              color: {
+                id: 'color_id',
+                code: '#FFFFFF',
+                name: 'white',
+              },
+              icon: {
+                id: 'icon_id',
+                name: 'icon_name',
+                symbol: '🌱',
+              },
+              isEditable: true,
+              name: 'category_name',
+              user: {
+                createdAt: new Date('2024-06-28T18:19:29.764Z'),
+                email: 'test_email',
+                id: 'test_user_id',
+                password: 'test_password',
+                postCount: 0,
+                role: 'USER',
+                updateAt: new Date('2024-06-28T18:19:29.764Z'),
+                username: 'test_name',
+              },
+            },
+            user: {
+              createdAt: new Date('2024-06-28T18:19:29.764Z'),
+              email: 'test_email',
+              id: 'test_user_id',
+              password: 'test_password',
+              postCount: 0,
+              role: 'USER',
+              updateAt: new Date('2024-06-28T18:19:29.764Z'),
+              username: 'test_name',
+            },
           },
-          icon: {
-            id: 'icon_id',
-            name: 'icon_name',
-            symbol: '🌱',
+          {
+            id: 'todo-task-id-2',
+            name: 'task_name_2',
+            isCompleted: false,
+            categorySubj: 'AMS',
+            completeDate: '2024-07-08T16:45:38.913Z',
+            toDoCategory: {
+              id: categoryId,
+              color: {
+                id: 'color_id',
+                code: '#FFFFFF',
+                name: 'white',
+              },
+              icon: {
+                id: 'icon_id',
+                name: 'icon_name',
+                symbol: '🌱',
+              },
+              isEditable: true,
+              name: 'category_name',
+              user: {
+                createdAt: new Date('2024-06-28T18:19:29.764Z'),
+                email: 'test_email',
+                id: 'test_user_id',
+                password: 'test_password',
+                postCount: 0,
+                role: 'USER',
+                updateAt: new Date('2024-06-28T18:19:29.764Z'),
+                username: 'test_name',
+              },
+            },
+            user: {
+              createdAt: new Date('2024-06-28T18:19:29.764Z'),
+              email: 'test_email',
+              id: 'test_user_id',
+              password: 'test_password',
+              postCount: 0,
+              role: 'USER',
+              updateAt: new Date('2024-06-28T18:19:29.764Z'),
+              username: 'test_name',
+            },
           },
-          isEditable: true,
-          name: 'category_name',
-          user: {
-            createdAt: new Date('2024-06-28T18:19:29.764Z'),
-            email: 'test_email',
-            id: 'test_user_id',
-            password: 'test_password',
-            postCount: 0,
-            role: 'USER',
-            updateAt: new Date('2024-06-28T18:19:29.764Z'),
-            username: 'test_name',
-          },
-        },
-        user: {
-          createdAt: new Date('2024-06-28T18:19:29.764Z'),
-          email: 'test_email',
-          id: 'test_user_id',
-          password: 'test_password',
-          postCount: 0,
-          role: 'USER',
-          updateAt: new Date('2024-06-28T18:19:29.764Z'),
-          username: 'test_name',
-        },
-      });
-      expect(result2).toEqual({
-        id: 'todo-task-id-2',
-        name: 'task_name_2',
-        isCompleted: false,
-        categorySubj: 'AMS',
-        completeDate: '2024-07-08T16:45:38.913Z',
-        toDoCategory: {
-          id: categoryId2,
-          color: {
-            id: 'color_id',
-            code: '#FFFFFF',
-            name: 'white',
-          },
-          icon: {
-            id: 'icon_id',
-            name: 'icon_name',
-            symbol: '🌱',
-          },
-          isEditable: true,
-          name: 'category_name',
-          user: {
-            createdAt: new Date('2024-06-28T18:19:29.764Z'),
-            email: 'test_email',
-            id: 'test_user_id',
-            password: 'test_password',
-            postCount: 0,
-            role: 'USER',
-            updateAt: new Date('2024-06-28T18:19:29.764Z'),
-            username: 'test_name',
-          },
-        },
-        user: {
-          createdAt: new Date('2024-06-28T18:19:29.764Z'),
-          email: 'test_email',
-          id: 'test_user_id',
-          password: 'test_password',
-          postCount: 0,
-          role: 'USER',
-          updateAt: new Date('2024-06-28T18:19:29.764Z'),
-          username: 'test_name',
-        },
+        ],
       });
     });
 
@@ -661,7 +670,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
       });
 
       // when
-      const result = await taskService.getTasksByCategory(userId, categoryId);
+      const result = await taskService.getAllCompletedTasks(userId);
 
       // then
       expect(result).toEqual({
@@ -1279,7 +1288,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         },
       });
       expect(taskRepository.toDoTasks.length).toBe(taskCount);
-      expect(taskRepository.toDoTasks).not.toContainEqual({
+      expect(taskRepository.toDoTasks).toContainEqual({
         id: 'todo-task-id-1',
         name: 'task_name_1',
         isCompleted: true,
@@ -1345,7 +1354,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-07T15:45:38.913Z',
         toDoCategory: {
-          id: 'update_category_test_id',
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -1395,7 +1404,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-07T15:45:38.913Z',
         toDoCategory: {
-          id: 'update_category_test_id',
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -1438,7 +1447,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-07T15:45:38.913Z',
         toDoCategory: {
-          id: 'update_category_test_id',
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -1485,7 +1494,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-07T15:45:38.913Z',
         toDoCategory: {
-          id: 'update_category_test_id',
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -1535,7 +1544,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-08T15:45:38.913Z',
         toDoCategory: {
-          id: 'update_category_test_id',
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -1578,7 +1587,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-08T15:45:38.913Z',
         toDoCategory: {
-          id: 'update_category_test_id',
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
