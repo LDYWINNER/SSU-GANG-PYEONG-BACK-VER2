@@ -10,6 +10,13 @@ import { JodaTime } from '../../common/time/joda-time';
 @Module({
   imports: [TypeOrmModule.forFeature([ToDoCategory, ToDoTask, User])],
   controllers: [CategoryController, TaskController],
-  providers: [CategoryService, TaskService, JodaTime],
+  providers: [
+    CategoryService,
+    TaskService,
+    {
+      provide: 'Time',
+      useClass: JodaTime,
+    },
+  ],
 })
 export class TodoModule {}

@@ -7,7 +7,7 @@ import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
 import { StubCategoryRepository } from './stub/category-repository';
 import { StubTime } from '../../utils/stub-time';
-import { JodaTime } from '../../../src/common/time/joda-time';
+import { ZonedDateTime } from '@js-joda/core';
 
 describe('투두 할 일 관련 서비스 테스트', () => {
   let taskService: TaskService;
@@ -68,7 +68,12 @@ describe('투두 할 일 관련 서비스 테스트', () => {
           provide: userRepositoryToken,
           useValue: userRepository,
         },
-        JodaTime,
+        {
+          provide: 'Time',
+          useValue: new StubTime(
+            ZonedDateTime.parse('2024-07-07T00:00:00Z[UTC]'),
+          ),
+        },
       ],
     }).compile();
 
@@ -737,6 +742,8 @@ describe('투두 할 일 관련 서비스 테스트', () => {
       // given
       const timeStringValid = testTime.toString();
       const timeStringInvalid = testTime.plusDays(1).toString();
+      console.log('time valid', timeStringValid);
+      console.log('time invalid', timeStringInvalid);
       taskRepository.toDoTasks.push({
         id: 'todo-task-id-1',
         name: 'task_name_1',

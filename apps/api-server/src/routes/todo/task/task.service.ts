@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ToDoCategory, ToDoTask, User } from '../../../entity';
 import { Like, Repository } from 'typeorm';
 import { CreateToDoTaskDto } from './dto/create-todo-task.dto';
-import { JodaTime } from '../../../common/time/joda-time';
+import { Time } from '../../../common/time/time';
 import { UpdateToDoTaskDto } from './dto/update-todo-task.dto';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class TaskService {
     private readonly categoryRepository: Repository<ToDoCategory>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly time: JodaTime,
+    @Inject('Time') private readonly time: Time,
   ) {}
 
   getAllTasks = async (userId: string) => {
@@ -105,6 +105,8 @@ export class TaskService {
 
     const now = this.time.now();
     const todayString = now.toLocalDate().toString();
+
+    console.log(todayString);
 
     const tasks = await this.taskRepository.find({
       where: {
