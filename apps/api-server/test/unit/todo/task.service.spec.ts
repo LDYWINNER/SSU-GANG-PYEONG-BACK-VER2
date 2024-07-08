@@ -1184,6 +1184,156 @@ describe('투두 할 일 관련 서비스 테스트', () => {
     });
   });
 
+  describe('toggleTaskStatus 함수 테스트', () => {
+    it('toggleTaskStatus 함수 결과값 테스트', async () => {
+      // given
+      const taskId = 'todo-task-id-1';
+      taskRepository.toDoTasks.push({
+        id: 'todo-task-id-1',
+        name: 'task_name_1',
+        isCompleted: false,
+        categorySubj: 'AMS',
+        completeDate: '2024-07-07T15:45:38.913Z',
+        toDoCategory: {
+          id: 'update_category_test_id',
+          color: {
+            id: 'color_id',
+            code: '#FFFFFF',
+            name: 'white',
+          },
+          icon: {
+            id: 'icon_id',
+            name: 'icon_name',
+            symbol: '🌱',
+          },
+          isEditable: true,
+          name: 'category_name',
+          user: {
+            createdAt: new Date('2024-06-28T18:19:29.764Z'),
+            email: 'test_email',
+            id: 'test_user_id',
+            password: 'test_password',
+            postCount: 0,
+            role: 'USER',
+            updateAt: new Date('2024-06-28T18:19:29.764Z'),
+            username: 'test_name',
+          },
+        },
+        user: {
+          createdAt: new Date('2024-06-28T18:19:29.764Z'),
+          email: 'test_email',
+          id: 'test_user_id',
+          password: 'test_password',
+          postCount: 0,
+          role: 'USER',
+          updateAt: new Date('2024-06-28T18:19:29.764Z'),
+          username: 'test_name',
+        },
+      });
+      const taskCount = taskRepository.toDoTasks.length;
+
+      // when
+      const result = await taskService.toggleTaskStatus(taskId);
+
+      // then
+      expect(result).toEqual({
+        id: 'todo-task-id-1',
+        name: 'task_name_1',
+        isCompleted: true,
+        categorySubj: 'AMS',
+        completeDate: '2024-07-07T15:45:38.913Z',
+        toDoCategory: {
+          id: 'update_category_test_id',
+          color: {
+            id: 'color_id',
+            code: '#FFFFFF',
+            name: 'white',
+          },
+          icon: {
+            id: 'icon_id',
+            name: 'icon_name',
+            symbol: '🌱',
+          },
+          isEditable: true,
+          name: 'category_name',
+          user: {
+            createdAt: new Date('2024-06-28T18:19:29.764Z'),
+            email: 'test_email',
+            id: 'test_user_id',
+            password: 'test_password',
+            postCount: 0,
+            role: 'USER',
+            updateAt: new Date('2024-06-28T18:19:29.764Z'),
+            username: 'test_name',
+          },
+        },
+        user: {
+          createdAt: new Date('2024-06-28T18:19:29.764Z'),
+          email: 'test_email',
+          id: 'test_user_id',
+          password: 'test_password',
+          postCount: 0,
+          role: 'USER',
+          updateAt: new Date('2024-06-28T18:19:29.764Z'),
+          username: 'test_name',
+        },
+      });
+      expect(taskRepository.toDoTasks.length).toBe(taskCount);
+      expect(taskRepository.toDoTasks).not.toContainEqual({
+        id: 'todo-task-id-1',
+        name: 'task_name_1',
+        isCompleted: true,
+        categorySubj: 'AMS',
+        completeDate: '2024-07-07T15:45:38.913Z',
+        toDoCategory: {
+          id: 'update_category_test_id',
+          color: {
+            id: 'color_id',
+            code: '#FFFFFF',
+            name: 'white',
+          },
+          icon: {
+            id: 'icon_id',
+            name: 'icon_name',
+            symbol: '🌱',
+          },
+          isEditable: true,
+          name: 'category_name',
+          user: {
+            createdAt: new Date('2024-06-28T18:19:29.764Z'),
+            email: 'test_email',
+            id: 'test_user_id',
+            password: 'test_password',
+            postCount: 0,
+            role: 'USER',
+            updateAt: new Date('2024-06-28T18:19:29.764Z'),
+            username: 'test_name',
+          },
+        },
+        user: {
+          createdAt: new Date('2024-06-28T18:19:29.764Z'),
+          email: 'test_email',
+          id: 'test_user_id',
+          password: 'test_password',
+          postCount: 0,
+          role: 'USER',
+          updateAt: new Date('2024-06-28T18:19:29.764Z'),
+          username: 'test_name',
+        },
+      });
+    });
+
+    it('taskId가 존재하지 않으면 에러가 납니다', () => {
+      // given
+      const taskId = 'invalid-task-id';
+
+      // then
+      expect(taskService.toggleTaskStatus(taskId)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
   describe('updateTask 함수 테스트', () => {
     it('투두 할 일 이름(name) 변경 시 updateTask 함수 결과값 테스트', async () => {
       // given

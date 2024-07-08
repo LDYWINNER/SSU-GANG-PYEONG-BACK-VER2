@@ -120,7 +120,7 @@
     - [x] 특정 날짜 투두 불러오기 getTasksSpecificDay
     - [x] 월별 투두 불러오기 getMonthlyTasks
     - [x] 투두 생성
-    - [] 투두 완료/미완료 토글
+    - [x] 투두 완료/미완료 토글
     - [x] 투두 삭제
     - [x] 투두 수정
 
