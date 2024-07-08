@@ -1026,9 +1026,9 @@ describe('투두 할 일 관련 서비스 테스트', () => {
       const userId = 'invalid-user-id';
 
       // then
-      expect(taskService.getTasksSpecificDay(userId)).rejects.toThrow(
-        NotFoundException,
-      );
+      expect(
+        taskService.getTasksSpecificDay(userId, testTime.toString()),
+      ).rejects.toThrow(NotFoundException);
     });
 
     it('getMonthlyTasks 함수 결과값 테스트', async () => {
