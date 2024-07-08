@@ -1,5 +1,5 @@
-import { LocalDateTime } from '@js-joda/core';
+import { ZonedDateTime } from '@js-joda/core';
 
 export interface Time {
-  now(): LocalDateTime;
+  now(): ZonedDateTime;
 }

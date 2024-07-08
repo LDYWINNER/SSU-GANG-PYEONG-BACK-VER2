@@ -1,10 +1,10 @@
-import { LocalDateTime } from '@js-joda/core';
+import { ZonedDateTime, ZoneId } from '@js-joda/core';
 import { Time } from '../../src/common/time/time';
 
 export class StubTime implements Time {
-  private readonly currentTime: LocalDateTime;
+  private readonly currentTime: ZonedDateTime;
 
-  constructor(currentTime: LocalDateTime) {
+  constructor(currentTime: ZonedDateTime) {
     this.currentTime = currentTime;
   }
 
@@ -15,8 +15,18 @@ export class StubTime implements Time {
     hour: number,
     minute: number,
     second: number,
+    zoneId: string = ZoneId.SYSTEM.id(),
   ) {
-    return LocalDateTime.of(year, month, day, hour, minute, second);
+    return ZonedDateTime.of(
+      year,
+      month,
+      day,
+      hour,
+      minute,
+      second,
+      0,
+      ZoneId.of(zoneId),
+    );
   }
 
   plusDays(days: number) {
@@ -27,7 +37,7 @@ export class StubTime implements Time {
     return this.currentTime.plusMonths(months);
   }
 
-  now(): LocalDateTime {
+  now(): ZonedDateTime {
     return this.currentTime;
   }
 
