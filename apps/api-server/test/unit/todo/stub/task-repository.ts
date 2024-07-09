@@ -91,4 +91,47 @@ export class StubTaskRepository {
     }
     return Promise.reject(new Error('ToDo Task not found'));
   }
+
+  // query builder stub
+  parameterObject: { todayString?: string; date?: string; yearMonth?: string };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  createQueryBuilder(alias: string): StubTaskRepository {
+    return this;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  leftJoinAndSelect(relation: string, alias: string): StubTaskRepository {
+    return this;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  where(condition: string, parameters: object): StubTaskRepository {
+    return this;
+  }
+
+  andWhere(condition: string, parameters: object): StubTaskRepository {
+    this.parameterObject = parameters;
+    return this;
+  }
+
+  getMany(): Promise<ToDoTask[]> {
+    const userId = this.toDoTasks[0]?.user?.id;
+    let dateFilterString: string;
+    if (this.parameterObject.todayString !== undefined) {
+      dateFilterString = this.parameterObject.todayString;
+    } else if (this.parameterObject.date !== undefined) {
+      dateFilterString = this.parameterObject.date;
+    } else if (this.parameterObject.yearMonth !== undefined) {
+      dateFilterString = this.parameterObject.yearMonth;
+    }
+
+    const filteredTasks = this.toDoTasks.filter(
+      (task) =>
+        task.user.id === userId &&
+        task.completeDate.startsWith(dateFilterString.split('%')[0]),
+    );
+
+    return Promise.resolve(filteredTasks);
+  }
 }
