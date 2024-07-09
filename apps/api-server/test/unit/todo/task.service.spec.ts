@@ -102,7 +102,6 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         isCompleted: false,
         categorySubj: 'AMS',
         completeDate: '2024-07-07T16:45:38.913Z',
-        categoryId,
         toDoCategory: {
           id: categoryId,
           color: {
@@ -146,7 +145,6 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         isCompleted: false,
         categorySubj: 'AMS',
         completeDate: '2024-07-07T16:45:38.913Z',
-        categoryId,
         toDoCategory: {
           id: categoryId,
           color: {
@@ -742,8 +740,6 @@ describe('투두 할 일 관련 서비스 테스트', () => {
       // given
       const timeStringValid = testTime.toString();
       const timeStringInvalid = testTime.plusDays(1).toString();
-      console.log('time valid', timeStringValid);
-      console.log('time invalid', timeStringInvalid);
       taskRepository.toDoTasks.push({
         id: 'todo-task-id-1',
         name: 'task_name_1',

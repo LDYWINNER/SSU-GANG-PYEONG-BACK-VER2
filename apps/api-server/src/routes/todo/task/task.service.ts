@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ToDoCategory, ToDoTask, User } from '../../../entity';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateToDoTaskDto } from './dto/create-todo-task.dto';
 import { Time } from '../../../common/time/time';
 import { UpdateToDoTaskDto } from './dto/update-todo-task.dto';
@@ -62,7 +62,7 @@ export class TaskService {
           id: categoryId,
         },
       },
-      relations: ['toDoCategory'],
+      relations: ['toDoCategory', 'user'],
     });
 
     return {
@@ -106,15 +106,15 @@ export class TaskService {
     const now = this.time.now();
     const todayString = now.toLocalDate().toString();
 
-    const tasks = await this.taskRepository.find({
-      where: {
-        user: {
-          id: userId,
-        },
-        completeDate: Like(`${todayString}`),
-      },
-      relations: ['toDoCategory', 'user'],
-    });
+    const tasks = await this.taskRepository
+      .createQueryBuilder('task')
+      .leftJoinAndSelect('task.toDoCategory', 'toDoCategory')
+      .leftJoinAndSelect('task.user', 'user')
+      .where('task.userId = :userId', { userId })
+      .andWhere('task.completeDate LIKE :todayString', {
+        todayString: `${todayString}%`,
+      })
+      .getMany();
 
     return {
       count: tasks.length,
@@ -132,15 +132,15 @@ export class TaskService {
 
     const date = dateTime.split('T')[0];
 
-    const tasks = await this.taskRepository.find({
-      where: {
-        user: {
-          id: userId,
-        },
-        completeDate: Like(`${date}`),
-      },
-      relations: ['toDoCategory', 'user'],
-    });
+    const tasks = await this.taskRepository
+      .createQueryBuilder('task')
+      .leftJoinAndSelect('task.toDoCategory', 'toDoCategory')
+      .leftJoinAndSelect('task.user', 'user')
+      .where('task.userId = :userId', { userId })
+      .andWhere('task.completeDate LIKE :date', {
+        date: `${date}%`,
+      })
+      .getMany();
 
     return {
       count: tasks.length,
@@ -159,16 +159,17 @@ export class TaskService {
     const now = this.time.now();
     const year = now.year();
     const month = now.monthValue();
+    const yearMonth = `${year}-${month.toString().padStart(2, '0')}`;
 
-    const tasks = await this.taskRepository.find({
-      where: {
-        user: {
-          id: userId,
-        },
-        completeDate: Like(`${year}-${month.toString().padStart(2, '0')}`),
-      },
-      relations: ['toDoCategory', 'user'],
-    });
+    const tasks = await this.taskRepository
+      .createQueryBuilder('task')
+      .leftJoinAndSelect('task.toDoCategory', 'toDoCategory')
+      .leftJoinAndSelect('task.user', 'user')
+      .where('task.userId = :userId', { userId })
+      .andWhere('task.completeDate LIKE :yearMonth', {
+        yearMonth: `${yearMonth}%`,
+      })
+      .getMany();
 
     return {
       count: tasks.length,
@@ -176,7 +177,16 @@ export class TaskService {
     };
   };
 
-  createTask = async (userId: string, createToDoTaskDto: CreateToDoTaskDto) => {
+  createTask = async (
+    userId: string,
+    {
+      categoryId,
+      name,
+      isCompleted,
+      categorySubj,
+      completeDate,
+    }: CreateToDoTaskDto,
+  ) => {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
@@ -185,14 +195,17 @@ export class TaskService {
     }
 
     const category = await this.categoryRepository.findOne({
-      where: { id: createToDoTaskDto.categoryId },
+      where: { id: categoryId },
     });
     if (!category) {
       throw new NotFoundException('Category not found');
     }
 
     const newTask = this.taskRepository.create({
-      ...createToDoTaskDto,
+      name,
+      isCompleted,
+      categorySubj,
+      completeDate,
       user,
       toDoCategory: category,
     });
@@ -247,7 +260,7 @@ export class TaskService {
   deleteTask = async (taskId: string) => {
     const task = await this.taskRepository.findOne({
       where: { id: taskId },
-      relations: ['toDoCategory', 'user'],
+      relations: ['user'],
     });
     if (!task) {
       throw new NotFoundException('Task not found');
