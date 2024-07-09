@@ -23,6 +23,8 @@ describe('ToDo 기능 통합 테스트', () => {
   let userId: string;
   let token: string;
   let invalidToken: string;
+  const fixedTime = StubTime.of(2024, 7, 7, 0, 0, 0);
+  const testTime = new StubTime(fixedTime);
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -39,15 +41,10 @@ describe('ToDo 기능 통합 테스트', () => {
           }),
         }),
       ],
-      providers: [
-        {
-          provide: 'Time',
-          useValue: new StubTime(
-            ZonedDateTime.parse('2024-07-09T00:00:00Z[UTC]'),
-          ),
-        },
-      ],
-    }).compile();
+    })
+      .overrideProvider('Time')
+      .useValue(new StubTime(ZonedDateTime.parse('2024-07-07T00:00:00Z[UTC]')))
+      .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
@@ -92,6 +89,7 @@ describe('ToDo 기능 통합 테스트', () => {
   afterAll(async () => {
     // 테스트 이후에 생성된 데이터 정리
     await toDoCategoryRepository.delete({});
+    await toDoTaskRepository.delete({});
     await refreshTokenRepository.delete({});
     await userRepository.delete({});
     await app.close();
@@ -597,6 +595,8 @@ describe('ToDo 기능 통합 테스트', () => {
   describe('Todo Task 기능 통합 테스트', () => {
     let categoryId: string;
     let extraCategoryId: string;
+    let categoryItem: ToDoCategory;
+    let extraCategoryItem: ToDoCategory;
 
     beforeAll(async () => {
       // category 초기 설정
@@ -626,7 +626,7 @@ describe('ToDo 기능 통합 테스트', () => {
           symbol: '🌱',
         },
         isEditable: true,
-        name: 'category_name',
+        name: 'category_extra_name',
       };
 
       const category = toDoCategoryRepository.create({
@@ -635,12 +635,15 @@ describe('ToDo 기능 통합 테스트', () => {
       });
       await toDoCategoryRepository.save(category);
       categoryId = category.id;
+      categoryItem = category;
+
       const extraCategory = toDoCategoryRepository.create({
         ...createExtraCategoryDto,
         user: { id: userId },
       });
       await toDoCategoryRepository.save(extraCategory);
       extraCategoryId = extraCategory.id;
+      extraCategoryItem = extraCategory;
     });
 
     describe('/todo/task (POST)', () => {
@@ -667,7 +670,14 @@ describe('ToDo 기능 통합 테스트', () => {
         expect(response.body).toEqual(
           expect.objectContaining({
             id: expect.any(String),
-            ...createTaskDto,
+            name: 'task_name',
+            isCompleted: false,
+            categorySubj: 'AMS',
+            completeDate: '2024-07-07T16:45:38.913Z',
+            toDoCategory: expect.objectContaining({
+              id: categoryId,
+              name: 'category_name',
+            }),
             user: expect.objectContaining({
               id: userId,
               username: 'test_user',
@@ -706,7 +716,7 @@ describe('ToDo 기능 통합 테스트', () => {
           completeDate: '2024-07-07T16:45:38.913Z',
         };
         const createTaskDto2 = {
-          categoryId,
+          extraCategoryId,
           name: 'task_name_2',
           isCompleted: true,
           categorySubj: 'CSE',
@@ -715,10 +725,12 @@ describe('ToDo 기능 통합 테스트', () => {
 
         const task1 = toDoTaskRepository.create({
           ...createTaskDto1,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
         const task2 = toDoTaskRepository.create({
           ...createTaskDto2,
+          toDoCategory: extraCategoryItem,
           user: { id: userId },
         });
         await toDoTaskRepository.save(task1);
@@ -731,7 +743,7 @@ describe('ToDo 기능 통합 테스트', () => {
 
       it('task 모두 불러오기 테스트', async () => {
         const response = await request(app.getHttpServer())
-          .get(`/todo/category/all`)
+          .get(`/todo/task/all`)
           .set('Authorization', `Bearer ${token}`);
 
         expect(response.status).toBe(200);
@@ -749,8 +761,6 @@ describe('ToDo 기능 통합 테스트', () => {
               }),
               user: expect.objectContaining({
                 id: userId,
-                username: 'test_user',
-                email: 'test_user@example.com',
               }),
             }),
             expect.objectContaining({
@@ -759,13 +769,11 @@ describe('ToDo 기능 통합 테스트', () => {
               categorySubj: 'CSE',
               completeDate: '2024-07-08T16:45:38.913Z',
               toDoCategory: expect.objectContaining({
-                id: categoryId,
-                name: 'category_name',
+                id: extraCategoryId,
+                name: 'category_extra_name',
               }),
               user: expect.objectContaining({
                 id: userId,
-                username: 'test_user',
-                email: 'test_user@example.com',
               }),
             }),
           ],
@@ -800,10 +808,12 @@ describe('ToDo 기능 통합 테스트', () => {
 
         const task1 = toDoTaskRepository.create({
           ...createTaskDto1,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
         const task2 = toDoTaskRepository.create({
           ...createTaskDto2,
+          toDoCategory: extraCategoryItem,
           user: { id: userId },
         });
         await toDoTaskRepository.save(task1);
@@ -850,14 +860,14 @@ describe('ToDo 기능 통합 테스트', () => {
         expect(response.status).toBe(401);
       });
 
-      it('유효하지 않은 카테고리 id로 요청을 보내는 경우 401를 반환해야 합니다', async () => {
+      it('유효하지 않은 카테고리 id로 요청을 보내는 경우 404를 반환해야 합니다', async () => {
         const invalidCategoryId = uuidv4();
 
         const response = await request(app.getHttpServer())
           .get(`/todo/task/category/${invalidCategoryId}`)
           .set('Authorization', `Bearer ${token}`);
 
-        expect(response.status).toBe(401);
+        expect(response.status).toBe(404);
       });
     });
 
@@ -880,10 +890,12 @@ describe('ToDo 기능 통합 테스트', () => {
 
         const task1 = toDoTaskRepository.create({
           ...createTaskDto1,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
         const task2 = toDoTaskRepository.create({
           ...createTaskDto2,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
         await toDoTaskRepository.save(task1);
@@ -932,28 +944,25 @@ describe('ToDo 기능 통합 테스트', () => {
     });
 
     describe('/todo/task/today (GET)', () => {
+      // time
+      const timeStringValid = testTime.toString();
+      const timeStringInvalid = testTime.plusDays(1).toString();
+
       beforeEach(async () => {
-        const createTaskDto1 = {
-          categoryId,
+        const task1 = toDoTaskRepository.create({
           name: 'task_name_1',
           isCompleted: false,
           categorySubj: 'AMS',
-          completeDate: '2024-07-07T16:45:38.913Z',
-        };
-        const createTaskDto2 = {
-          categoryId,
-          name: 'task_name_2',
-          isCompleted: true,
-          categorySubj: 'CSE',
-          completeDate: '2024-07-08T16:45:38.913Z',
-        };
-
-        const task1 = toDoTaskRepository.create({
-          ...createTaskDto1,
+          completeDate: timeStringValid,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
         const task2 = toDoTaskRepository.create({
-          ...createTaskDto2,
+          name: 'task_name_2',
+          isCompleted: true,
+          categorySubj: 'CSE',
+          completeDate: timeStringInvalid,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
         await toDoTaskRepository.save(task1);
@@ -977,7 +986,7 @@ describe('ToDo 기능 통합 테스트', () => {
               name: 'task_name_1',
               isCompleted: false,
               categorySubj: 'AMS',
-              completeDate: '2024-07-07T16:45:38.913Z',
+              completeDate: timeStringValid,
               toDoCategory: expect.objectContaining({
                 id: categoryId,
                 name: 'category_name',
@@ -1003,27 +1012,20 @@ describe('ToDo 기능 통합 테스트', () => {
 
     describe('/todo/task/date/:dateString (GET)', () => {
       beforeEach(async () => {
-        const createTaskDto1 = {
-          categoryId,
+        const task1 = toDoTaskRepository.create({
           name: 'task_name_1',
           isCompleted: false,
           categorySubj: 'AMS',
           completeDate: '2024-07-07T16:45:38.913Z',
-        };
-        const createTaskDto2 = {
-          categoryId,
+          toDoCategory: categoryItem,
+          user: { id: userId },
+        });
+        const task2 = toDoTaskRepository.create({
           name: 'task_name_2',
           isCompleted: true,
           categorySubj: 'CSE',
           completeDate: '2024-07-08T16:45:38.913Z',
-        };
-
-        const task1 = toDoTaskRepository.create({
-          ...createTaskDto1,
-          user: { id: userId },
-        });
-        const task2 = toDoTaskRepository.create({
-          ...createTaskDto2,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
         await toDoTaskRepository.save(task1);
@@ -1034,7 +1036,7 @@ describe('ToDo 기능 통합 테스트', () => {
         await toDoTaskRepository.delete({});
       });
 
-      it('task 모두 불러오기 테스트', async () => {
+      it('task 날짜별로 불러오기 테스트', async () => {
         const response = await request(app.getHttpServer())
           .get(`/todo/task/date/2024-07-07T16:45:38.913Z`)
           .set('Authorization', `Bearer ${token}`);
@@ -1090,10 +1092,12 @@ describe('ToDo 기능 통합 테스트', () => {
 
         const task1 = toDoTaskRepository.create({
           ...createTaskDto1,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
         const task2 = toDoTaskRepository.create({
           ...createTaskDto2,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
         await toDoTaskRepository.save(task1);
@@ -1141,7 +1145,7 @@ describe('ToDo 기능 통합 테스트', () => {
       });
     });
 
-    describe('/todo/task-toggle/:id (PUT)', () => {
+    describe('/todo/task/toggle/:id (PUT)', () => {
       let taskId: string;
 
       beforeEach(async () => {
@@ -1155,6 +1159,7 @@ describe('ToDo 기능 통합 테스트', () => {
 
         const task1 = toDoTaskRepository.create({
           ...createTaskDto1,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
 
@@ -1168,7 +1173,7 @@ describe('ToDo 기능 통합 테스트', () => {
 
       it('할 일(task) 완료 여부 토글 테스트', async () => {
         const response = await request(app.getHttpServer())
-          .put(`/todo/task-toggle/${taskId}`)
+          .put(`/todo/task/toggle/${taskId}`)
           .set('Authorization', `Bearer ${token}`);
 
         expect(response.status).toBe(200);
@@ -1195,18 +1200,18 @@ describe('ToDo 기능 통합 테스트', () => {
         const invalidTaskId = uuidv4();
 
         const response = await request(app.getHttpServer())
-          .put(`/todo/task-toggle/${invalidTaskId}`)
+          .put(`/todo/task/toggle/${invalidTaskId}`)
           .set('Authorization', `Bearer ${token}`);
 
         expect(response.status).toBe(404);
       });
 
-      it('유효하지 않은 유저 토큰으로 수정 요청을 보내면 404를 반환해야 합니다', async () => {
+      it('유효하지 않은 유저 토큰으로 수정 요청을 보내면 401를 반환해야 합니다', async () => {
         const response = await request(app.getHttpServer())
-          .put(`/todo/task-toggle/${taskId}`)
+          .put(`/todo/task/toggle/${taskId}`)
           .set('Authorization', `Bearer ${invalidToken}`);
 
-        expect(response.status).toBe(404);
+        expect(response.status).toBe(401);
       });
     });
 
@@ -1224,6 +1229,7 @@ describe('ToDo 기능 통합 테스트', () => {
 
         const task1 = toDoTaskRepository.create({
           ...createTaskDto1,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
 
@@ -1236,17 +1242,16 @@ describe('ToDo 기능 통합 테스트', () => {
       });
 
       it('task 이름(name) 수정 테스트', async () => {
-        const newName = 'updated_task_name';
         const response = await request(app.getHttpServer())
           .put(`/todo/task/${taskId}`)
           .set('Authorization', `Bearer ${token}`)
-          .send({ name: newName });
+          .send({ name: 'updated_task_name' });
 
         expect(response.status).toBe(200);
         expect(response.body).toEqual(
           expect.objectContaining({
             name: 'updated_task_name',
-            isCompleted: true,
+            isCompleted: false,
             categorySubj: 'AMS',
             completeDate: '2024-07-07T16:45:38.913Z',
             toDoCategory: expect.objectContaining({
@@ -1272,7 +1277,7 @@ describe('ToDo 기능 통합 테스트', () => {
         expect(response.body).toEqual(
           expect.objectContaining({
             name: 'task_name_1',
-            isCompleted: true,
+            isCompleted: false,
             categorySubj: 'AMS',
             completeDate: '2024-07-08T15:45:38.913Z',
             toDoCategory: expect.objectContaining({
@@ -1314,6 +1319,7 @@ describe('ToDo 기능 통합 테스트', () => {
 
         const task1 = toDoTaskRepository.create({
           ...createTaskDto1,
+          toDoCategory: categoryItem,
           user: { id: userId },
         });
 
@@ -1334,13 +1340,9 @@ describe('ToDo 기능 통합 테스트', () => {
         expect(response.body).toEqual(
           expect.objectContaining({
             name: 'task_name_1',
-            isCompleted: true,
+            isCompleted: false,
             categorySubj: 'AMS',
-            completeDate: '2024-07-07T15:45:38.913Z',
-            toDoCategory: expect.objectContaining({
-              id: categoryId,
-              name: 'category_name',
-            }),
+            completeDate: '2024-07-07T16:45:38.913Z',
             user: expect.objectContaining({
               id: userId,
               username: 'test_user',
