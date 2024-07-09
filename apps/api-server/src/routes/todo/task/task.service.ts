@@ -106,8 +106,6 @@ export class TaskService {
     const now = this.time.now();
     const todayString = now.toLocalDate().toString();
 
-    console.log(todayString);
-
     const tasks = await this.taskRepository.find({
       where: {
         user: {
@@ -228,7 +226,6 @@ export class TaskService {
     if (!task) {
       throw new NotFoundException('Task not found');
     }
-    console.log(task);
 
     const category = await this.categoryRepository.findOne({
       where: { id: task.toDoCategory.id },

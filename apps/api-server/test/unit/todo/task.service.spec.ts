@@ -1491,7 +1491,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
       });
     });
 
-    it('투두 카테고리 수정 가능 여부(completeDate) 변경 시 updateTask 함수 결과값 테스트', async () => {
+    it('투두 할 일 완료 날짜(completeDate) 변경 시 updateTask 함수 결과값 테스트', async () => {
       // given
       const taskId = 'todo-task-id-1';
       taskRepository.toDoTasks.push({
