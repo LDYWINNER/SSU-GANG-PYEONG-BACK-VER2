@@ -113,7 +113,7 @@ describe('CreatePostHandler', () => {
     ).once();
   });
 
-  it('should rollback transaction if an error occurs', async () => {
+  it('에러가 발생하면 롤백 트랜잭션이 실행됩니다', async () => {
     const command = new CreatePostCommand(
       'user-id',
       'Test Title',
