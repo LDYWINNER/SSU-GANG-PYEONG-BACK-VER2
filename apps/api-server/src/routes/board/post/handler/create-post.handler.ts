@@ -32,7 +32,6 @@ export class CreatePostHandler implements ICommandHandler<CreatePostCommand> {
         }),
       );
 
-      await queryRunner.manager.save(post);
       await queryRunner.commitTransaction();
       this.eventBus.publish(new PostCreatedEvent(post.id));
       return post;
