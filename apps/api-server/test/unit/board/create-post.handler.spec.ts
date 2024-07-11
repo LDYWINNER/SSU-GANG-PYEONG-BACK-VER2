@@ -3,7 +3,7 @@ import { CreatePostHandler } from './../../../src/routes/board/post/handler/crea
 import { CreatePostCommand } from '../../../src/routes/board/post/command/create-post.command';
 import { EventBus } from '@nestjs/cqrs';
 import { DataSource, EntityManager, QueryRunner } from 'typeorm';
-import { User, BoardPost } from '../../../src/entity';
+import { User, BoardPost, Board } from '../../../src/entity';
 import { PostCreatedEvent } from '../../../src/routes/board/post/event/post-created.event';
 import { mock, instance, when, verify, deepEqual, anything } from 'ts-mockito';
 
@@ -23,7 +23,6 @@ describe('CreatePostHandler', () => {
     when(mockDataSource.createQueryRunner()).thenReturn(
       instance(mockQueryRunner),
     );
-
     when(mockQueryRunner.manager).thenReturn(instance(mockManager));
 
     const module: TestingModule = await Test.createTestingModule({
@@ -49,24 +48,30 @@ describe('CreatePostHandler', () => {
       'Test Title',
       'Test Contents',
       0,
-      '1',
+      'board-id',
       false,
     );
+
     const user = new User();
     user.id = 'user-id';
+    const board = new Board();
+    board.id = 'board-id';
 
     const post = new BoardPost();
     post.id = 'post-id';
     post.title = command.title;
     post.contents = command.contents;
     post.views = command.views;
-    post.board = { id: command.board } as any;
+    post.board = board;
     post.anonymity = command.anonymity;
     post.user = user;
 
-    when(mockManager.findOneBy(User, deepEqual({ id: 'user-id' }))).thenResolve(
-      user,
-    );
+    when(
+      mockManager.findOne(User, deepEqual({ where: { id: 'user-id' } })),
+    ).thenResolve(user);
+    when(
+      mockManager.findOne(Board, deepEqual({ where: { id: 'board-id' } })),
+    ).thenResolve(board);
     when(
       mockManager.create(
         BoardPost,
@@ -74,7 +79,7 @@ describe('CreatePostHandler', () => {
           title: 'Test Title',
           contents: 'Test Contents',
           views: 0,
-          board: { id: '1' },
+          board,
           anonymity: false,
           user,
         }),
@@ -90,7 +95,12 @@ describe('CreatePostHandler', () => {
     const result = await handler.execute(command);
 
     expect(result).toEqual(post);
-    verify(mockManager.findOneBy(User, deepEqual({ id: 'user-id' }))).once();
+    verify(
+      mockManager.findOne(User, deepEqual({ where: { id: 'user-id' } })),
+    ).once();
+    verify(
+      mockManager.findOne(Board, deepEqual({ where: { id: 'board-id' } })),
+    ).once();
     verify(
       mockManager.create(
         BoardPost,
@@ -98,7 +108,7 @@ describe('CreatePostHandler', () => {
           title: 'Test Title',
           contents: 'Test Contents',
           views: 0,
-          board: { id: '1' },
+          board,
           anonymity: false,
           user,
         }),
@@ -119,10 +129,16 @@ describe('CreatePostHandler', () => {
       'Test Title',
       'Test Contents',
       0,
-      '1',
+      'board-id',
       false,
     );
 
+    when(
+      mockManager.findOne(User, deepEqual({ where: { id: 'user-id' } })),
+    ).thenResolve(new User());
+    when(
+      mockManager.findOne(Board, deepEqual({ where: { id: 'board-id' } })),
+    ).thenResolve(new Board());
     when(mockManager.save(anything())).thenReject(new Error('Test Error'));
 
     when(mockQueryRunner.startTransaction()).thenResolve();

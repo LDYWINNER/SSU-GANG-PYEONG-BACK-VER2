@@ -6,7 +6,7 @@ export class CreatePostCommand implements ICommand {
     readonly title: string,
     readonly contents: string,
     readonly views: number,
-    readonly board: string,
+    readonly boardId: string,
     readonly anonymity: boolean,
   ) {}
 }
