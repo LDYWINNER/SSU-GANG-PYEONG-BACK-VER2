@@ -7,6 +7,7 @@ import { Role } from '../../../src/common/enum/user.enum';
 import { BoardPost } from '../../../src/entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { StubBoardRepository } from './stub/board-repository';
+import { BoardType } from '../../../src/common/enum/board.enum';
 
 describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () => {
   let service: PostService;
@@ -34,6 +35,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
         createdAt: undefined,
         updateAt: undefined,
       },
+      boardType: BoardType.All,
     });
 
     const module: TestingModule = await Test.createTestingModule({

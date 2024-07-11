@@ -41,6 +41,24 @@ export class StubBoardPostRepository {
     return result;
   }
 
+  async findAndCount(conditions?: any) {
+    const { order = {}, take } = conditions || {};
+    let result = [...this.boardPosts];
+
+    if (order.views === 'DESC') {
+      result.sort((a, b) => b.views - a.views);
+    }
+
+    if (take) {
+      result = result.slice(0, take);
+    }
+
+    return {
+      posts: result,
+      total: result.length,
+    };
+  }
+
   async remove(post: BoardPost): Promise<BoardPost> {
     const index = this.boardPosts.findIndex((p) => p.id === post.id);
     if (index !== -1) {

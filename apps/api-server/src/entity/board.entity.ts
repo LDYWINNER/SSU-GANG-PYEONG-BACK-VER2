@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { BoardPost } from './board-post.entity';
+import { BoardType } from '../common/enum/board.enum';
 
 @Entity()
 export class Board {
@@ -23,6 +24,10 @@ export class Board {
   @ApiProperty({ description: '게시판 설명' })
   @Column({ nullable: true })
   description: string;
+
+  @ApiProperty({ description: '작성한 게시글' })
+  @Column({ type: 'enum', enum: BoardType, default: BoardType.All })
+  boardType: BoardType = BoardType.All;
 
   @ApiProperty({ description: '생성일' })
   @CreateDateColumn()
