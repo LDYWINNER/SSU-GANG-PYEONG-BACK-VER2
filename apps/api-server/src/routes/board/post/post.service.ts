@@ -16,23 +16,6 @@ export class PostService {
     private boardPostRepository: Repository<BoardPost>,
   ) {}
 
-  async findOne(id: string) {
-    const board = await this.boardPostRepository.findOne({
-      where: {
-        id,
-      },
-      relations: {
-        user: true,
-      },
-    });
-
-    if (!board) throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
-
-    await this.boardPostRepository.update({ id }, { views: () => 'views + 1' });
-
-    return board;
-  }
-
   async findTop5Download() {
     const boards = await this.boardPostRepository.find({
       relations: {

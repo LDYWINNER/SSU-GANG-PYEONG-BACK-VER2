@@ -31,6 +31,7 @@ import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import { CreatePostCommand } from './command/create-post.command';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { FindPostsQuery } from './query/find-posts.query';
+import { FindOnePostQuery } from './query/find-one-post.query';
 
 @Controller('post')
 @ApiTags('Post')
@@ -72,10 +73,11 @@ export class PostController {
   @ApiGetResponse(FindPostResDto)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<FindPostResDto> {
-    const { contents, user } = await this.postService.findOne(id);
+    const findOneBoardQuery = new FindOnePostQuery(id);
+    const { contents, user } = await this.queryBus.execute(findOneBoardQuery);
     return {
       id,
-      contents,
+      contents: contents,
       user: {
         id: user.id,
         email: user.email,

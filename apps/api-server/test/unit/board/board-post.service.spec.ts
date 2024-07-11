@@ -1,0 +1,336 @@
+import { HttpException, UnauthorizedException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { PostService } from '../../../src/routes/board/post/post.service';
+import { UpdatePostDto } from '../../../src/routes/board/post/dto/update-post.dto';
+import { StubBoardPostRepository } from './stub/post-repository';
+import { Role } from '../../../src/common/enum/user.enum';
+import { BoardPost } from '../../../src/entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { StubBoardRepository } from './stub/board-repository';
+
+describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () => {
+  let service: PostService;
+  let boardRepository: StubBoardRepository;
+  let boardPostRepository: StubBoardPostRepository;
+  const boardPostRepositoryToken = getRepositoryToken(BoardPost);
+
+  beforeEach(async () => {
+    boardRepository = new StubBoardRepository();
+    boardPostRepository = new StubBoardPostRepository();
+
+    boardRepository.boards.push({
+      id: 'board_id',
+      title: 'board_title',
+      description: 'board_description',
+      createdAt: undefined,
+      updatedAt: undefined,
+      user: {
+        id: 'user-1',
+        username: '',
+        email: '',
+        password: '',
+        role: Role.User,
+        postCount: 0,
+        createdAt: undefined,
+        updateAt: undefined,
+      },
+    });
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        PostService,
+        {
+          provide: boardPostRepositoryToken,
+          useValue: boardPostRepository,
+        },
+      ],
+    }).compile();
+
+    service = module.get<PostService>(PostService);
+  });
+
+  describe('findTop5Download 함수 테스트', () => {
+    it('findTop5Download 함수 결과값 테스트', async () => {
+      boardPostRepository.boardPosts.push({
+        id: '1',
+        title: 'Post 1',
+        contents: 'Content 1',
+        views: 10,
+        user: {
+          id: 'user-1',
+          username: '',
+          email: '',
+          password: '',
+          role: Role.User,
+          postCount: 0,
+          createdAt: undefined,
+          updateAt: undefined,
+        },
+        anonymity: false,
+        createdAt: undefined,
+        updateAt: undefined,
+        board: boardRepository.boards[0],
+      });
+      boardPostRepository.boardPosts.push({
+        id: '2',
+        title: 'Post 2',
+        contents: 'Content 2',
+        views: 20,
+        anonymity: false,
+        createdAt: undefined,
+        updateAt: undefined,
+        board: boardRepository.boards[0],
+        user: {
+          id: 'user-1',
+          username: '',
+          email: '',
+          password: '',
+          role: Role.User,
+          postCount: 0,
+          createdAt: undefined,
+          updateAt: undefined,
+        },
+      });
+      boardPostRepository.boardPosts.push({
+        id: '3',
+        title: 'Post 3',
+        contents: 'Content 3',
+        views: 30,
+        anonymity: false,
+        createdAt: undefined,
+        updateAt: undefined,
+        board: boardRepository.boards[0],
+        user: {
+          id: 'user-1',
+          username: '',
+          email: '',
+          password: '',
+          role: Role.User,
+          postCount: 0,
+          createdAt: undefined,
+          updateAt: undefined,
+        },
+      });
+      boardPostRepository.boardPosts.push({
+        id: '4',
+        title: 'Post 4',
+        contents: 'Content 4',
+        views: 40,
+        anonymity: false,
+        createdAt: undefined,
+        updateAt: undefined,
+        board: boardRepository.boards[0],
+        user: {
+          id: 'user-1',
+          username: '',
+          email: '',
+          password: '',
+          role: Role.User,
+          postCount: 0,
+          createdAt: undefined,
+          updateAt: undefined,
+        },
+      });
+      boardPostRepository.boardPosts.push({
+        id: '5',
+        title: 'Post 5',
+        contents: 'Content 5',
+        views: 50,
+        anonymity: false,
+        createdAt: undefined,
+        updateAt: undefined,
+        board: boardRepository.boards[0],
+        user: {
+          id: 'user-1',
+          username: '',
+          email: '',
+          password: '',
+          role: Role.User,
+          postCount: 0,
+          createdAt: undefined,
+          updateAt: undefined,
+        },
+      });
+      boardPostRepository.boardPosts.push({
+        id: '6',
+        title: 'Post 6',
+        contents: 'Content 6',
+        views: 60,
+        anonymity: false,
+        createdAt: undefined,
+        updateAt: undefined,
+        board: boardRepository.boards[0],
+        user: {
+          id: 'user-1',
+          username: '',
+          email: '',
+          password: '',
+          role: Role.User,
+          postCount: 0,
+          createdAt: undefined,
+          updateAt: undefined,
+        },
+      });
+
+      const result = await service.findTop5Download();
+
+      expect(result.length).toBe(5);
+      expect(result[0].id).toBe('6');
+      expect(result[4].id).toBe('2');
+    });
+  });
+
+  describe('update 함수 테스트', () => {
+    it('update 함수 결과값 테스트', async () => {
+      const userId = 'user-1';
+      const postId = '1';
+      const updateDto: UpdatePostDto = { title: 'Updated Title' };
+
+      boardPostRepository.boardPosts = [
+        {
+          id: postId,
+          title: 'Original Title',
+          contents: 'Original Content',
+          views: 0,
+          anonymity: false,
+          createdAt: undefined,
+          updateAt: undefined,
+          board: boardRepository.boards[0],
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: Role.User,
+            postCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+        },
+      ];
+
+      const result = await service.update(userId, postId, updateDto);
+
+      expect(result).toBeDefined();
+      expect(result).toHaveProperty('title', updateDto.title);
+    });
+
+    it('postId에 해당하는 board post가 존재하지 않으면 에러가 납니다', async () => {
+      const userId = 'user-1';
+      const postId = 'non-existent-id';
+      const updateDto: UpdatePostDto = { title: 'Updated Title' };
+
+      await expect(service.update(userId, postId, updateDto)).rejects.toThrow(
+        HttpException,
+      );
+    });
+
+    it('userId에 해당하는 User가 존재하지 않으면 UnauthorizedException이 발생합니다', async () => {
+      const userId = 'unauthorized-user';
+      const postId = '1';
+      const updateDto: UpdatePostDto = { title: 'Updated Title' };
+
+      boardPostRepository.boardPosts = [
+        {
+          id: postId,
+          title: 'Original Title',
+          contents: 'Original Content',
+          views: 0,
+          anonymity: false,
+          createdAt: undefined,
+          updateAt: undefined,
+          board: boardRepository.boards[0],
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: Role.User,
+            postCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+        },
+      ];
+
+      await expect(service.update(userId, postId, updateDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+  });
+
+  describe('delete 함수 테스트', () => {
+    it('delete 함수 결과값 테스트', async () => {
+      const userId = 'user-1';
+      const postId = '1';
+
+      boardPostRepository.boardPosts = [
+        {
+          id: postId,
+          title: 'Original Title',
+          contents: 'Original Content',
+          views: 0,
+          anonymity: false,
+          createdAt: undefined,
+          updateAt: undefined,
+          board: boardRepository.boards[0],
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: Role.User,
+            postCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+        },
+      ];
+
+      const result = await service.delete(userId, postId);
+
+      expect(result).toBeDefined();
+    });
+
+    it('postId에 해당하는 board post가 존재하지 않으면 에러가 납니다', async () => {
+      const userId = 'user-1';
+      const postId = 'non-existent-id';
+
+      await expect(service.delete(userId, postId)).rejects.toThrow(
+        HttpException,
+      );
+    });
+
+    it('userId에 해당하는 User가 존재하지 않으면 UnauthorizedException이 발생합니다', async () => {
+      const userId = 'unauthorized-user';
+      const postId = '1';
+
+      boardPostRepository.boardPosts = [
+        {
+          id: postId,
+          title: 'Original Title',
+          contents: 'Original Content',
+          views: 0,
+          anonymity: false,
+          createdAt: undefined,
+          updateAt: undefined,
+          board: boardRepository.boards[0],
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: Role.User,
+            postCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+        },
+      ];
+
+      await expect(service.delete(userId, postId)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+  });
+});
