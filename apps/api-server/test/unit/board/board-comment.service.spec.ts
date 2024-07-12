@@ -7,7 +7,7 @@ import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
 import { Role } from '../../../src/common/enum/user.enum';
 
-describe('유저 게시판 댓글 관련 서비스 테스트', () => {
+describe('게시판 댓글 관련 서비스 테스트', () => {
   let boardCommentService: CommentService;
   let boardCommentRepository: StubCommentRepository;
   let userRepository: StubUserRepository;

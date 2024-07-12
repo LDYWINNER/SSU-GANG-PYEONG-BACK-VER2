@@ -59,7 +59,6 @@ export class BoardService {
       user,
     });
     const savedBoard = await this.boardRepository.save(newBoard);
-    console.log('savedBoard', { ...savedBoard });
     return { ...savedBoard };
   };
 
