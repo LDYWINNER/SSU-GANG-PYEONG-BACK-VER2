@@ -196,7 +196,7 @@ describe('유저 게시판 관련 서비스 테스트', () => {
       // then
       expect(result).toEqual({
         id: 'board_test_id',
-        title: 'new_board_title',
+        title: 'board_title',
         description: 'new_board_description',
         boardType: BoardType.Free,
         user: {
@@ -213,7 +213,7 @@ describe('유저 게시판 관련 서비스 테스트', () => {
       expect(boardRepository.boards.length).toBe(boardRowCount);
       expect(boardRepository.boards).toContainEqual({
         id: 'board_test_id',
-        title: 'new_board_title',
+        title: 'board_title',
         description: 'new_board_description',
         boardType: BoardType.Free,
         user: {

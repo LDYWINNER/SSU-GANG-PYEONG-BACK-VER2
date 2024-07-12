@@ -25,7 +25,7 @@ export class Board {
   @Column({ nullable: true })
   description: string;
 
-  @ApiProperty({ description: '작성한 게시글' })
+  @ApiProperty({ description: '게시판 유형' })
   @Column({ type: 'enum', enum: BoardType, default: BoardType.All })
   boardType: BoardType = BoardType.All;
 

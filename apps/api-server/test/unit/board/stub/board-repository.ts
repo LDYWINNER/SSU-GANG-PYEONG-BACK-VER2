@@ -3,25 +3,28 @@ import { Board } from '../../../../src/entity';
 export class StubBoardRepository {
   boards: Board[] = [];
 
-  async create(post: Partial<Board>): Promise<Board> {
+  create(board: Partial<Board>): Board {
     return {
-      ...post,
+      ...board,
       id: 'board-id',
     } as Board;
   }
 
-  async save(board: Board): Promise<Board> {
-    const existingIndex = this.boards.findIndex((b) => b.id === board.id);
-    if (existingIndex !== -1) {
-      this.boards[existingIndex] = board;
-    } else {
-      this.boards.push(board);
-    }
-    return board;
+  save(board: Board): Promise<Board> {
+    this.boards.push(board);
+    return Promise.resolve(board);
+  }
+
+  findOne(conditions: any): Promise<Board> {
+    return Promise.resolve(
+      this.boards.find((board) => board.id === conditions.where.id),
+    );
   }
 
   async findOneBy(conditions: Partial<Board>): Promise<Board | undefined> {
-    return this.boards.find((board) => board.id === conditions.id);
+    return Promise.resolve(
+      this.boards.find((board) => board.id === conditions.id),
+    );
   }
 
   async remove(board: Board): Promise<Board> {
