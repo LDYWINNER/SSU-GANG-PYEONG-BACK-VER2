@@ -8,6 +8,8 @@ import { BoardPost } from './board-post.entity';
 import { BoardComment } from './board-comment.entity';
 import { ToDoCategory } from './todo-category.entity';
 import { ToDoTask } from './todo-task.entity';
+import { Course } from './course.entity';
+import { CourseReview } from './course-review.entity';
 
 export {
   User,
@@ -20,4 +22,6 @@ export {
   BoardComment,
   ToDoCategory,
   ToDoTask,
+  Course,
+  CourseReview,
 };

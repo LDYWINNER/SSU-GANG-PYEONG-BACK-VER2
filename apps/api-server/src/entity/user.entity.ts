@@ -13,6 +13,7 @@ import { Role } from '../common/enum/user.enum';
 import { BoardPost } from './board-post.entity';
 import { Table } from './table.entity';
 import { ToDoCategory } from './todo-category.entity';
+import { CourseReview } from './course-review.entity';
 
 @Entity()
 export class User {
@@ -64,6 +65,12 @@ export class User {
     cascade: true,
   })
   boardPosts?: BoardPost[];
+
+  @ApiProperty({ description: '작성한 수강평' })
+  @OneToMany(() => CourseReview, (courseReview) => courseReview.user, {
+    cascade: true,
+  })
+  courseReviews?: CourseReview[];
 
   @Column({ select: false, nullable: true, insert: false, update: false })
   postCount: number;
