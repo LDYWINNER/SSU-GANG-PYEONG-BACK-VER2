@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReviewService } from '../../../src/routes/course/review/review.service';
-import { CourseReview, User } from '../../../src/entity';
+import { Course, CourseReview, User } from '../../../src/entity';
 import { StubCourseReviewRepository } from './stub/course-review.repository';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
@@ -42,6 +42,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
 
       // when
       const result = await courseReviewService.createCourseReview(userId, {
+        courseId: 'course-id',
         semester: '2024-spring',
         instructor: 'Jeehong Kim',
         myLetterGrade: 'A',
@@ -75,6 +76,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
         overallGrade: 3,
         overallEvaluation: '',
         anonymity: true,
+        course: new Course(),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -105,6 +107,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
         overallGrade: 3,
         overallEvaluation: '',
         anonymity: true,
+        course: new Course(),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
