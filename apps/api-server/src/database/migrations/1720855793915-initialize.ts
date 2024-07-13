@@ -4,21 +4,44 @@ export class Initialize1720855793915 implements MigrationInterface {
   name = 'Initialize1720855793915';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    const typeExistsQuery = `
-    SELECT EXISTS (
-      SELECT 1
-      FROM pg_type
-      WHERE typname = 'user_role_enum'
-      AND typtype = 'e'
+    // Check if user_role_enum type exists
+    const userRoleEnumExistsQuery = `
+   SELECT EXISTS (
+       SELECT 1
+       FROM pg_type
+       WHERE typname = 'user_role_enum'
+       AND typtype = 'e'
+   );
+`;
+    const [{ exists: userRoleEnumExists }] = await queryRunner.query(
+      userRoleEnumExistsQuery,
     );
-  `;
-    const [{ exists }] = await queryRunner.query(typeExistsQuery);
 
-    if (!exists) {
-      // Create the enum type only if it does not already exist
+    if (!userRoleEnumExists) {
+      // Create the user_role_enum type only if it does not already exist
       await queryRunner.query(`
-      CREATE TYPE "public"."user_role_enum" AS ENUM ('USER', 'ADMIN', 'MODERATOR');
-    `);
+       CREATE TYPE "public"."user_role_enum" AS ENUM ('USER', 'ADMIN', 'MODERATOR');
+   `);
+    }
+
+    // Check if board_type_enum type exists
+    const boardTypeEnumExistsQuery = `
+   SELECT EXISTS (
+       SELECT 1
+       FROM pg_type
+       WHERE typname = 'board_type_enum'
+       AND typtype = 'e'
+   );
+`;
+    const [{ exists: boardTypeEnumExists }] = await queryRunner.query(
+      boardTypeEnumExistsQuery,
+    );
+
+    if (!boardTypeEnumExists) {
+      // Create the board_type_enum type only if it does not already exist
+      await queryRunner.query(`
+       CREATE TYPE "public"."board_type_enum" AS ENUM ('ALL', 'FREE', 'COURSE', 'COURSE_REGISTER', 'SECRET', 'FRESHMEN', 'PROMOTION', 'CLUB', 'SBU');
+   `);
     }
 
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
@@ -104,6 +127,44 @@ export class Initialize1720855793915 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    // Drop board_type_enum if it exists
+    const boardTypeEnumExistsQuery = `
+    SELECT EXISTS (
+        SELECT 1
+        FROM pg_type
+        WHERE typname = 'board_type_enum'
+        AND typtype = 'e'
+    );
+`;
+    const [{ exists: boardTypeEnumExists }] = await queryRunner.query(
+      boardTypeEnumExistsQuery,
+    );
+
+    if (boardTypeEnumExists) {
+      await queryRunner.query(`
+        DROP TYPE "public"."board_type_enum";
+    `);
+    }
+
+    // Drop user_role_enum if it exists
+    const userRoleEnumExistsQuery = `
+    SELECT EXISTS (
+        SELECT 1
+        FROM pg_type
+        WHERE typname = 'user_role_enum'
+        AND typtype = 'e'
+    );
+`;
+    const [{ exists: userRoleEnumExists }] = await queryRunner.query(
+      userRoleEnumExistsQuery,
+    );
+
+    if (userRoleEnumExists) {
+      await queryRunner.query(`
+        DROP TYPE "public"."user_role_enum";
+    `);
+    }
+
     await queryRunner.query(
       `ALTER TABLE "course_review" DROP CONSTRAINT "FK_6a98c500e1ee246e073af304c5b"`,
     );
