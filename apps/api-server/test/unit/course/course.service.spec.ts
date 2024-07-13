@@ -1,21 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseService } from './../../../src/routes/course/course.service';
-import { Course, CourseReview, User } from './../../../src/entity';
+import { Course, CourseReview } from './../../../src/entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { StubCourseRepository } from './stub/course-repository';
 import { StubCourseReviewRepository } from './stub/course-review.repository';
-import { StubUserRepository } from '../user/stub-repository';
 import { NotFoundException } from '@nestjs/common';
 
-describe('수업 + 수강평 관련 서비스 테스트', () => {
+describe('수업 관련 서비스 테스트', () => {
   let courseService: CourseService;
   let courseRepository: StubCourseRepository;
   let courseReviewRepository: StubCourseReviewRepository;
-  let userRepository: StubUserRepository;
   const courseRepositoryToken = getRepositoryToken(Course);
   const courseReviewRepositoryToken = getRepositoryToken(CourseReview);
-  const userRepositoryToken = getRepositoryToken(User);
-  const userId = 'test_user_id';
   const courseId1 = 'course_id_1';
   const courseId2 = 'course_id_2';
   const courseId3 = 'course_id_3';
@@ -23,7 +19,6 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
   beforeEach(async () => {
     courseRepository = new StubCourseRepository();
     courseReviewRepository = new StubCourseReviewRepository();
-    userRepository = new StubUserRepository();
 
     courseRepository.courses.push({
       id: courseId1,
@@ -42,7 +37,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
       past_instructors: ['instructor1', 'instructor2', 'instructor3'],
       recent_two_instructors: ['instructor1', 'instructor2'],
       most_recent_instructor: 'instructor2',
-      semesters: ['2023-fall', '2024-fall'],
+      semesters: ['2023_fall', '2024_spring', '2024_fall'],
     });
     courseRepository.courses.push({
       id: courseId2,
@@ -61,7 +56,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
       past_instructors: ['instructor1', 'instructor2'],
       recent_two_instructors: ['instructor1'],
       most_recent_instructor: 'instructor2',
-      semesters: ['2023-fall'],
+      semesters: ['2023_fall', '2024_spring'],
     });
     courseRepository.courses.push({
       id: courseId3,
@@ -80,7 +75,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
       past_instructors: ['instructor1'],
       recent_two_instructors: ['instructor1'],
       most_recent_instructor: 'instructor1',
-      semesters: ['2023-fall', '2024-fall'],
+      semesters: ['2023_fall', '2024_spring', '2024_fall'],
     });
 
     const module: TestingModule = await Test.createTestingModule({
@@ -94,10 +89,6 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
           provide: courseReviewRepositoryToken,
           useValue: courseReviewRepository,
         },
-        {
-          provide: userRepositoryToken,
-          useValue: userRepository,
-        },
       ],
     }).compile();
 
@@ -107,7 +98,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
   describe('getAllCourses & getQueryCourses & getSingleCourse & getTableCourses 함수 테스트', () => {
     it('getAllCourses 함수 결과값 테스트', async () => {
       // when
-      const result = await courseService.getAllCourses(userId);
+      const result = await courseService.getAllCourses();
 
       // then
       expect(result).toEqual({
@@ -130,7 +121,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
             past_instructors: ['instructor1', 'instructor2', 'instructor3'],
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
-            semesters: ['2023-fall', '2024-fall'],
+            semesters: ['2023_fall', '2024_spring', '2024_fall'],
           },
           {
             id: courseId2,
@@ -149,7 +140,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
             past_instructors: ['instructor1', 'instructor2'],
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor2',
-            semesters: ['2023-fall'],
+            semesters: ['2023_fall', '2024_spring'],
           },
           {
             id: courseId3,
@@ -168,24 +159,15 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
             past_instructors: ['instructor1'],
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor1',
-            semesters: ['2023-fall', '2024-fall'],
+            semesters: ['2023_fall', '2024_spring', '2024_fall'],
           },
         ],
       });
     });
 
-    it('getAllCourses: userId가 존재하지 않으면 에러가 납니다', () => {
-      // given
-      const invalidUserId = 'invalid-user-id';
-
-      expect(courseService.getAllCourses(invalidUserId)).rejects.toThrow(
-        NotFoundException,
-      );
-    });
-
     it('subject와 keyword 모두 있을 때 getQueryCourses 함수 결과값 테스트', async () => {
       // when
-      const result = await courseService.getQueryCourses(userId, {
+      const result = await courseService.getQueryCourses({
         subject: 'CSE',
         keyword: 'Object',
       });
@@ -211,7 +193,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
             past_instructors: ['instructor1', 'instructor2', 'instructor3'],
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
-            semesters: ['2023-fall', '2024-fall'],
+            semesters: ['2023_fall', '2024_spring', '2024_fall'],
           },
         ],
       });
@@ -219,7 +201,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
 
     it('subject가 ALL이고 keyword가 있을 때 getQueryCourses 함수 결과값 테스트', async () => {
       // when
-      const result = await courseService.getQueryCourses(userId, {
+      const result = await courseService.getQueryCourses({
         subject: 'ALL',
         keyword: 'Object',
       });
@@ -245,15 +227,15 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
             past_instructors: ['instructor1', 'instructor2', 'instructor3'],
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
-            semesters: ['2023-fall', '2024-fall'],
+            semesters: ['2023_fall', '2024_spring', '2024_fall'],
           },
         ],
       });
     });
 
-    it('subject와 keyword 모두 없을 때 getQueryCourses 함수 결과값 테스트', async () => {
+    it('subject가 ALL이고 keyword가 없을 때 getQueryCourses 함수 결과값 테스트', async () => {
       // when
-      const result = await courseService.getQueryCourses(userId, {});
+      const result = await courseService.getQueryCourses({ subject: 'ALL' });
 
       // then
       expect(result).toEqual({
@@ -276,7 +258,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
             past_instructors: ['instructor1', 'instructor2', 'instructor3'],
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
-            semesters: ['2023-fall', '2024-fall'],
+            semesters: ['2023_fall', '2024_spring', '2024_fall'],
           },
           {
             id: courseId2,
@@ -295,7 +277,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
             past_instructors: ['instructor1', 'instructor2'],
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor2',
-            semesters: ['2023-fall'],
+            semesters: ['2023_fall', '2024_spring'],
           },
           {
             id: courseId3,
@@ -314,24 +296,15 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
             past_instructors: ['instructor1'],
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor1',
-            semesters: ['2023-fall', '2024-fall'],
+            semesters: ['2023_fall', '2024_spring', '2024_fall'],
           },
         ],
       });
     });
 
-    it('getQueryCourses: userId가 존재하지 않으면 에러가 납니다', () => {
-      // given
-      const invalidUserId = 'invalid-user-id';
-
-      expect(courseService.getQueryCourses(invalidUserId, {})).rejects.toThrow(
-        NotFoundException,
-      );
-    });
-
     it('getSingleCourse 함수 결과값 테스트', async () => {
       // when
-      const result = await courseService.getSingleCourse(userId, courseId1);
+      const result = await courseService.getSingleCourse(courseId1);
 
       // then
       expect(result).toEqual({
@@ -351,22 +324,22 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
         past_instructors: ['instructor1', 'instructor2', 'instructor3'],
         recent_two_instructors: ['instructor1', 'instructor2'],
         most_recent_instructor: 'instructor2',
-        semesters: ['2023-fall', '2024-fall'],
+        semesters: ['2023_fall', '2024_spring', '2024_fall'],
       });
     });
 
     it('getSingleCourse: courseId가 존재하지 않으면 에러가 납니다', () => {
       // given
-      const invalidCourseId = 'invalid-user-id';
+      const invalidCourseId = 'invalid-course-id';
 
-      expect(
-        courseService.getSingleCourse(userId, invalidCourseId),
-      ).rejects.toThrow(NotFoundException);
+      expect(courseService.getSingleCourse(invalidCourseId)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
-    it('subject와 keyword 모두 없을 때 getTableCourses 함수 결과값 테스트', async () => {
+    it('subject가 ALL이고 keyword기 없을 때 getTableCourses 함수 결과값 테스트', async () => {
       // when
-      const result = await courseService.getTableCourses(userId, {});
+      const result = await courseService.getTableCourses({ subject: 'ALL' });
 
       // then
       expect(result).toEqual({
@@ -389,7 +362,7 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
             past_instructors: ['instructor1', 'instructor2', 'instructor3'],
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
-            semesters: ['2023-fall', '2024-fall'],
+            semesters: ['2023_fall', '2024_spring', '2024_fall'],
           },
           {
             id: courseId2,
@@ -408,19 +381,10 @@ describe('수업 + 수강평 관련 서비스 테스트', () => {
             past_instructors: ['instructor1', 'instructor2'],
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor2',
-            semesters: ['2023-fall'],
+            semesters: ['2023_fall', '2024_spring'],
           },
         ],
       });
-    });
-
-    it('getTableCourses: userId가 존재하지 않으면 에러가 납니다', () => {
-      // given
-      const invalidUserId = 'invalid-user-id';
-
-      expect(courseService.getTableCourses(invalidUserId, {})).rejects.toThrow(
-        NotFoundException,
-      );
     });
   });
 });
