@@ -27,7 +27,7 @@ export class Initialize1720855793915 implements MigrationInterface {
     SELECT EXISTS (
       SELECT 1
       FROM pg_type
-      WHERE typname = 'board_type_enum'
+      WHERE typname = 'board_boardtype_enum'
       AND typtype = 'e'
     );
   `;
@@ -38,7 +38,7 @@ export class Initialize1720855793915 implements MigrationInterface {
     if (!boardEnumExists) {
       // Create the enum type only if it does not already exist
       await queryRunner.query(`
-      CREATE TYPE "public"."board_type_enum" AS ENUM ('ALL', 'FREE', 'COURSE', 'COURSE_REGISTER', 'SECRET', 'FRESHMEN', 'PROMOTION', 'CLUB', 'SBU');
+      CREATE TYPE "public"."board_boardtype_enum" AS ENUM ('ALL', 'FREE', 'COURSE', 'COURSE_REGISTER', 'SECRET', 'FRESHMEN', 'PROMOTION', 'CLUB', 'SBU');
     `);
     }
 
