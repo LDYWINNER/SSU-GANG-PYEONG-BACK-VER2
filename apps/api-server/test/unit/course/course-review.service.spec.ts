@@ -5,18 +5,37 @@ import { StubCourseReviewRepository } from './stub/course-review.repository';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
+import { StubCourseRepository } from './stub/course-repository';
+import { Role } from '../../../src/common/enum/user.enum';
 
 describe('유저 수강평 관련 서비스 테스트', () => {
   let courseReviewService: ReviewService;
   let courseReviewRepository: StubCourseReviewRepository;
+  let courseRepository: StubCourseRepository;
   let userRepository: StubUserRepository;
   const courseReviewRepositoryToken = getRepositoryToken(CourseReview);
+  const courseRepositoryToken = getRepositoryToken(Course);
   const userRepositoryToken = getRepositoryToken(User);
   const userId = 'user_id';
 
   beforeEach(async () => {
     courseReviewRepository = new StubCourseReviewRepository();
+    courseRepository = new StubCourseRepository();
     userRepository = new StubUserRepository();
+
+    userRepository.users.push({
+      id: 'user_id',
+      role: Role.User,
+      postCount: 0,
+      createdAt: new Date('2024-06-28T18:19:29.764Z'),
+      email: 'test_email',
+      password: 'test_password',
+      updateAt: new Date('2024-06-28T18:19:29.764Z'),
+      username: 'test_name',
+    });
+    courseRepository.courses.push({
+      id: 'course-id',
+    });
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -25,6 +44,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
           provide: courseReviewRepositoryToken,
           useValue: courseReviewRepository,
         },
+        { provide: courseRepositoryToken, useValue: courseRepository },
         {
           provide: userRepositoryToken,
           useValue: userRepository,
@@ -76,11 +96,13 @@ describe('유저 수강평 관련 서비스 테스트', () => {
         overallGrade: 3,
         overallEvaluation: '',
         anonymity: true,
-        course: new Course(),
+        course: expect.objectContaining({
+          id: 'course-id',
+        }),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
-          id: 'test_user_id',
+          id: 'user_id',
           password: 'test_password',
           postCount: 0,
           role: 'USER',
@@ -107,11 +129,13 @@ describe('유저 수강평 관련 서비스 테스트', () => {
         overallGrade: 3,
         overallEvaluation: '',
         anonymity: true,
-        course: new Course(),
+        course: expect.objectContaining({
+          id: 'course-id',
+        }),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
-          id: 'test_user_id',
+          id: 'user_id',
           password: 'test_password',
           postCount: 0,
           role: 'USER',
@@ -128,6 +152,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
       // then
       expect(
         courseReviewService.createCourseReview(invalidUserId, {
+          courseId: 'course-id',
           semester: '2024-spring',
           instructor: 'Jeehong Kim',
           myLetterGrade: 'A',
