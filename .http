@@ -122,3 +122,43 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ3MWMyNmQ1L
 DELETE http://localhost:3000/table/2ff587a6-71fe-4aed-a9b3-90288925660f
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJkMWVlNGE2LWU1NzMtNDQ3OS1iMmI0LWY2NWE2ZjgyNjFkYSIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwMDg2MTk4LCJleHAiOjE3MjAxNzI1OTh9.s2UC-LzzCLcjoltDkzoWGL1PsW5-SshudBa69IZl99M
+
+###
+# board 생성
+POST http://localhost:3000/board
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZGEzOWQ2LTIwNGYtNGY1Ni04MDk0LTQ3NjZlZmJlMjdhNiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwODY3NDk4LCJleHAiOjE3MjA5NTM4OTh9.AX2ZLLAxZmE12765p302ojYYkgOtdgqrgv1CuYZZzr4
+
+{
+    "title": "board_title",
+    "description": "board_description"
+}
+
+###
+# board get all
+GET http://localhost:3000/board
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI5OTY2NDgyLTllZjYtNGU3ZS1iMWIxLTcxMjM3YjQ4MzQ5YiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwODU2MTA0LCJleHAiOjE3MjA5NDI1MDR9.f4OfNpnD4MQwIUlP3cskZTSKSgf4cWSKFDvF9k1gR6E
+ 
+###
+# board post 생성
+POST http://localhost:3000/board/post
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZGEzOWQ2LTIwNGYtNGY1Ni04MDk0LTQ3NjZlZmJlMjdhNiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwODY3NDk4LCJleHAiOjE3MjA5NTM4OTh9.AX2ZLLAxZmE12765p302ojYYkgOtdgqrgv1CuYZZzr4
+
+{
+    "title": "post_title",
+    "contents": "post_contents",
+    "anonymity": false,
+    "boardId": "6e9cc267-99aa-4423-ab1e-be2b6c1490c0"
+}
+
+###
+# board post 수정
+PUT http://localhost:3000/board/post/428696c5-dfcb-4494-b7d4-8a138d9641d8
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZGEzOWQ2LTIwNGYtNGY1Ni04MDk0LTQ3NjZlZmJlMjdhNiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwODY3NDk4LCJleHAiOjE3MjA5NTM4OTh9.AX2ZLLAxZmE12765p302ojYYkgOtdgqrgv1CuYZZzr4
+
+{
+    "title": "updated_post_title"
+}
