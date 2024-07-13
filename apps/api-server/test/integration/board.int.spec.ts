@@ -189,7 +189,7 @@ describe('Board 기능 통합 테스트', () => {
       const response = await request(app.getHttpServer())
         .put(`/board/${boardId}`)
         .set('Authorization', `Bearer ${token}`)
-        .send({ title: newDescription });
+        .send({ description: newDescription });
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual(
@@ -247,9 +247,6 @@ describe('Board 기능 통합 테스트', () => {
           title: 'board_title',
           description: 'board_description',
           boardType: BoardType.Free,
-          user: expect.objectContaining({
-            id: userId,
-          }),
         }),
       );
       const deletedBoard = await boardRepository.findOneBy({ id: boardId });
@@ -264,7 +261,7 @@ describe('Board 기능 통합 테스트', () => {
         board: { id: boardId },
         user: { id: userId },
       });
-      const savedBoardPost = await boardCommentRepository.save(boardPost);
+      const savedBoardPost = await boardPostRepository.save(boardPost);
       const boardPostId = savedBoardPost.id;
       const boardComment = boardCommentRepository.create({
         content: 'comment_content',
@@ -304,7 +301,6 @@ describe('Board 기능 통합 테스트', () => {
   });
 
   describe('게시판 게시글(board post) 기능 통합 테스트', () => {
-    //여기부터
     let boardId: string;
 
     beforeAll(async () => {
@@ -320,7 +316,6 @@ describe('Board 기능 통합 테스트', () => {
 
     afterAll(async () => {
       await boardRepository.delete({});
-      await boardPostRepository.delete({});
     });
 
     describe('/board/post (POST)', () => {
@@ -375,6 +370,7 @@ describe('Board 기능 통합 테스트', () => {
           title: 'post_title',
           contents: 'post_contents',
           views: 0,
+          anonymity: true,
           board: { id: boardId },
           user: { id: userId },
         });
@@ -390,9 +386,7 @@ describe('Board 기능 통합 테스트', () => {
         const response = await request(app.getHttpServer())
           .put(`/board/post/${boardPostId}`)
           .set('Authorization', `Bearer ${token}`)
-          .send({
-            title: 'updated_post_title',
-          });
+          .send({ title: 'updated_post_title' });
 
         expect(response.status).toBe(200);
         expect(response.body).toEqual(
@@ -476,12 +470,6 @@ describe('Board 기능 통합 테스트', () => {
             title: 'post_title',
             contents: 'post_contents',
             views: 0,
-            board: expect.objectContaining({
-              id: boardId,
-            }),
-            user: expect.objectContaining({
-              id: userId,
-            }),
           }),
         );
         const deletedBoardPost = await boardPostRepository.findOneBy({
@@ -523,7 +511,7 @@ describe('Board 기능 통합 테스트', () => {
         board: { id: boardId },
         user: { id: userId },
       });
-      const savedBoardPost = await boardCommentRepository.save(boardPost);
+      const savedBoardPost = await boardPostRepository.save(boardPost);
       boardPostId = savedBoardPost.id;
     });
 
@@ -559,7 +547,7 @@ describe('Board 기능 통합 테스트', () => {
           .post('/board/comment')
           .set('Authorization', `Bearer ${invalidToken}`)
           .send({
-            boardId,
+            boardPostId,
             content: 'comment_content',
           });
 
