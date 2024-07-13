@@ -33,7 +33,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { FindPostsQuery } from './query/find-posts.query';
 import { FindOnePostQuery } from './query/find-one-post.query';
 
-@Controller('post')
+@Controller('board/post')
 @ApiTags('Post')
 @ApiExtraModels(CreatePostDto, PageReqDto, PageResDto, FindPostResDto)
 @UseGuards(ThrottlerBehindProxyGuard)
