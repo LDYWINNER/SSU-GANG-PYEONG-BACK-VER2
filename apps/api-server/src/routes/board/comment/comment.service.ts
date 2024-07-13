@@ -40,7 +40,6 @@ export class CommentService {
       boardPost,
       user,
     });
-    console.log('newComment', newComment);
     const savedComment = await this.boardCommentRepository.save(newComment);
     return { ...savedComment };
   };

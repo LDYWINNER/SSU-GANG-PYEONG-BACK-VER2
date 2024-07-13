@@ -80,6 +80,26 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'comment-id',
         content: 'comment_content',
+        boardPost: {
+          id: '1',
+          title: 'Post 1',
+          contents: 'Content 1',
+          views: 10,
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: Role.User,
+            postCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+          anonymity: false,
+          createdAt: undefined,
+          updateAt: undefined,
+          board: new Board(),
+        },
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -97,6 +117,26 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
       expect(boardCommentRepository.comments).toContainEqual({
         id: 'comment-id',
         content: 'comment_content',
+        boardPost: {
+          id: '1',
+          title: 'Post 1',
+          contents: 'Content 1',
+          views: 10,
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: Role.User,
+            postCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+          anonymity: false,
+          createdAt: undefined,
+          updateAt: undefined,
+          board: new Board(),
+        },
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',

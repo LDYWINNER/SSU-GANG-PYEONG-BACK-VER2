@@ -20,6 +20,12 @@ export class StubBoardPostRepository {
     return post;
   }
 
+  findOne(conditions: any): Promise<BoardPost> {
+    return Promise.resolve(
+      this.boardPosts.find((boardPost) => boardPost.id === conditions.where.id),
+    );
+  }
+
   async findOneBy(
     conditions: Partial<BoardPost>,
   ): Promise<BoardPost | undefined> {
