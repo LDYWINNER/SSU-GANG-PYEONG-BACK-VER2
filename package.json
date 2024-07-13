@@ -21,7 +21,7 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --runInBand",
     "test:specific": "jest --watch --runInBand ./apps/api-server/test/integration/board.int.spec.ts",
-    "test:unit:specific": "jest --watch --runInBand ./apps/api-server/test/unit/course/course-review.service.spec.ts",
+    "test:unit:specific": "jest --watch --runInBand ./apps/api-server/test/unit/course/course.service.spec.ts",
     "test:watch": "jest --watch --runInBand",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
