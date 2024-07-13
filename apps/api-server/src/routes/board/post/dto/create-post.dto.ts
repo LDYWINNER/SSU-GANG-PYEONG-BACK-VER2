@@ -23,23 +23,12 @@ export class CreatePostDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
-    description: '조회 수',
+    description: '게시판 id',
     required: true,
-    default: 0,
   })
-  views: number;
+  boardId: string;
 
   @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
-    description: '게시판',
-    required: true,
-    example: '자유게시판',
-  })
-  board: string;
-
-  @IsNotEmpty()
-  @IsString()
   @ApiProperty({
     description: '익명 여부',
     required: true,

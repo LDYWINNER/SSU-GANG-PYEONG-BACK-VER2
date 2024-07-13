@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BoardComment, User } from '../../../entity';
+import { BoardComment, BoardPost, User } from '../../../entity';
 import { Repository } from 'typeorm';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
@@ -9,6 +9,8 @@ export class CommentService {
   constructor(
     @InjectRepository(BoardComment)
     private boardCommentRepository: Repository<BoardComment>,
+    @InjectRepository(BoardPost)
+    private boardPostRepository: Repository<BoardPost>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
@@ -24,10 +26,21 @@ export class CommentService {
       throw new NotFoundException(`User with id ${userId} not found`);
     }
 
+    const boardPost = await this.boardPostRepository.findOne({
+      where: { id: createCommentDto.boardPostId },
+    });
+    if (!boardPost) {
+      throw new NotFoundException(
+        `Board with id ${createCommentDto.boardPostId} not found`,
+      );
+    }
+
     const newComment = this.boardCommentRepository.create({
-      ...createCommentDto,
+      content: createCommentDto.content,
+      boardPost,
       user,
     });
+    console.log('newComment', newComment);
     const savedComment = await this.boardCommentRepository.save(newComment);
     return { ...savedComment };
   };

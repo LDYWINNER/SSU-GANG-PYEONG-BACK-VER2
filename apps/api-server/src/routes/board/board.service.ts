@@ -89,7 +89,7 @@ export class BoardService {
 
     return this.boardRepository.findOne({
       where: { id },
-      relations: ['posts', 'user'],
+      relations: ['user'],
     });
   };
 }

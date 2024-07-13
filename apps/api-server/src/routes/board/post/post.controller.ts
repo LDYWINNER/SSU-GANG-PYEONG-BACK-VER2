@@ -95,18 +95,18 @@ export class PostController {
     @UserInfo() userInfo: UserAfterAuth,
     @Body(new ValidationPipe()) data: CreatePostDto,
   ) {
-    const { title, contents, board, anonymity } = data;
+    const { title, contents, boardId, anonymity } = data;
     const views = 0;
     const command = new CreatePostCommand(
       userInfo.id,
       title,
       contents,
       views,
-      board,
+      boardId,
       anonymity,
     );
-    const { id } = await this.commandBus.execute(command);
-    return { id, contents };
+    const result = await this.commandBus.execute(command);
+    return result;
   }
 
   @ApiBearerAuth()

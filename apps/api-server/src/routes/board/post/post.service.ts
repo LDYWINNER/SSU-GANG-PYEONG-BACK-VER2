@@ -31,34 +31,43 @@ export class PostService {
   }
 
   async update(userId: string, id: string, data: UpdatePostDto) {
-    const board = await this.getBoardById(id);
+    const boardPost = await this.getBoardPostById(id);
 
-    if (!board) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+    if (!boardPost) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
-    if (userId !== board.user.id) {
+    if (userId !== boardPost.user.id) {
       throw new UnauthorizedException();
     }
 
-    return this.boardPostRepository.update(id, {
+    await this.boardPostRepository.update(id, {
       ...data,
+    });
+
+    return this.boardPostRepository.findOne({
+      where: { id },
+      relations: ['user', 'board'],
     });
   }
 
   async delete(userId: string, id: string) {
-    const board = await this.getBoardById(id);
+    const boardPost = await this.getBoardPostById(id);
 
-    if (!board) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+    if (!boardPost) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
-    if (userId !== board.user.id) {
+    if (userId !== boardPost.user.id) {
       throw new UnauthorizedException();
     }
 
-    return this.boardPostRepository.remove(board);
+    await this.boardPostRepository.remove(boardPost);
+
+    return boardPost;
   }
 
-  async getBoardById(id: string) {
-    return this.boardPostRepository.findOneBy({
-      id,
+  async getBoardPostById(id: string) {
+    const result = await this.boardPostRepository.findOne({
+      where: { id },
+      relations: ['user'],
     });
+    return result;
   }
 }
