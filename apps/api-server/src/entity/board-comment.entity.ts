@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -29,11 +30,13 @@ export class BoardComment {
 
   @ApiProperty({ description: '유저 정보' })
   @ManyToOne(() => User)
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @ApiProperty({ description: '게시글' })
   @ManyToOne(() => BoardPost, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'boardPostId' })
   boardPost: BoardPost;
 }

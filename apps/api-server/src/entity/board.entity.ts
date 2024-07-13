@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { BoardPost } from './board-post.entity';
@@ -39,9 +40,10 @@ export class Board {
 
   @ApiProperty({ description: '유저 정보' })
   @ManyToOne(() => User)
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @ApiProperty({ description: '게시판 댓글' })
-  @OneToMany(() => BoardPost, (post) => post.id, { cascade: true })
+  @OneToMany(() => BoardPost, (post) => post.board, { cascade: true })
   posts?: BoardPost[];
 }

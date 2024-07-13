@@ -45,13 +45,16 @@ export class BoardPost {
   updateAt: Date;
 
   @ApiProperty({ description: '게시판 댓글' })
-  @OneToMany(() => BoardComment, (comment) => comment.id, { cascade: true })
+  @OneToMany(() => BoardComment, (comment) => comment.boardPost, {
+    cascade: true,
+  })
   comments?: BoardComment[];
 
   @ApiProperty({ description: '게시판' })
   @ManyToOne(() => Board, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'boardId' })
   board: Board;
 
   @ApiProperty({ description: '유저정보' })
