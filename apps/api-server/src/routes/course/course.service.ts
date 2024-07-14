@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from '../../entity';
-import { Brackets, In, Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 
 @Injectable()
 export class CourseService {
@@ -41,37 +41,35 @@ export class CourseService {
     keyword?: string;
   }) => {
     const semesterCondition = ['2024_spring'];
-    const upperCourseCondition = {
-      crs: {
-        $not: In([
-          '475',
-          '476',
-          '487',
-          '488',
-          '499',
-          '522',
-          '523',
-          '524',
-          '587',
-          '593',
-          '596',
-          '599',
-          '696',
-          '697',
-          '698',
-          '699',
-          '700',
-        ]),
-      },
-    };
+    const upperCourseCondition = [
+      '475',
+      '476',
+      '487',
+      '488',
+      '499',
+      '522',
+      '523',
+      '524',
+      '587',
+      '593',
+      '596',
+      '599',
+      '696',
+      '697',
+      '698',
+      '699',
+      '700',
+    ];
 
     const queryBuilder = this.courseRepository
       .createQueryBuilder('course')
       .leftJoinAndSelect('course.reviews', 'review')
-      .where('course.semesters IN (:...semesters)', {
+      .where('course.semesters && ARRAY[:...semesters]', {
         semesters: semesterCondition,
       })
-      .andWhere(upperCourseCondition);
+      .andWhere('course.crs NOT IN (:...upperCourses)', {
+        upperCourses: upperCourseCondition,
+      });
 
     if (subject !== 'ALL') {
       switch (subject) {
@@ -103,9 +101,12 @@ export class CourseService {
             .orWhere('course.courseTitle ILIKE :keyword', {
               keyword: `%${keyword}%`,
             })
-            .orWhere('course.instructor_names ILIKE :keyword', {
-              keyword: `%${keyword}%`,
-            });
+            .orWhere(
+              'course.id IN (SELECT id FROM course, UNNEST(course.recent_two_instructors) AS instructor WHERE instructor ILIKE :keyword)',
+              {
+                keyword: `%${keyword}%`,
+              },
+            );
         }),
       );
     }
@@ -159,9 +160,12 @@ export class CourseService {
             .orWhere('course.courseTitle ILIKE :keyword', {
               keyword: `%${keyword}%`,
             })
-            .orWhere('course.instructor_names ILIKE :keyword', {
-              keyword: `%${keyword}%`,
-            });
+            .orWhere(
+              'course.id IN (SELECT id FROM course, UNNEST(course.recent_two_instructors) AS instructor WHERE instructor ILIKE :keyword)',
+              {
+                keyword: `%${keyword}%`,
+              },
+            );
         }),
       );
     }
