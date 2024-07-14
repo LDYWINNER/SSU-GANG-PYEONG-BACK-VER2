@@ -8,7 +8,7 @@ export class Course {
   id: string;
 
   @ApiProperty({ description: '유저들의 수업 평가에 따른 평균 점수' })
-  @Column()
+  @Column('float')
   avgGrade: number;
 
   @ApiProperty({ description: '코스 리스트의 수업 고유 id' })
@@ -92,7 +92,7 @@ export class Course {
   semesters: string[];
 
   @ApiProperty({ description: '게시판 댓글' })
-  @OneToMany(() => CourseReview, (courseReview) => courseReview.id, {
+  @OneToMany(() => CourseReview, (courseReview) => courseReview.course, {
     cascade: true,
   })
   reviews: CourseReview[];

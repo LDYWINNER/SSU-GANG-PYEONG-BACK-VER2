@@ -88,6 +88,7 @@ export class CourseReview {
   @ManyToOne(() => Course, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'courseId' })
   course: Course;
 
   @ApiProperty({ description: '유저정보' })
