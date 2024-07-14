@@ -181,6 +181,7 @@ describe('Course 기능 통합 테스트', () => {
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            reviews: [],
           },
           {
             id: courseId2,
@@ -200,6 +201,7 @@ describe('Course 기능 통합 테스트', () => {
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring'],
+            reviews: [],
           },
           {
             id: courseId3,
@@ -219,6 +221,7 @@ describe('Course 기능 통합 테스트', () => {
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor1',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            reviews: [],
           },
         ],
       });
@@ -248,6 +251,7 @@ describe('Course 기능 통합 테스트', () => {
         recent_two_instructors: ['instructor1', 'instructor2'],
         most_recent_instructor: 'instructor2',
         semesters: ['2023_fall', '2024_spring', '2024_fall'],
+        reviews: [],
       });
     });
 
@@ -263,12 +267,8 @@ describe('Course 기능 통합 테스트', () => {
 
     it('GET /course/query - subject가 ALL이 아니고 keyword가 있을 때 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .get('/course/query')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          subject: 'CSE',
-          keyword: 'Object',
-        });
+        .get('/course/query?subject=CSE&keyword=Object')
+        .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -299,12 +299,8 @@ describe('Course 기능 통합 테스트', () => {
 
     it('GET /course/query - subject가 ALL이고 keyword가 있을 때 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .get('/course/query')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          subject: 'ALL',
-          keyword: 'Object',
-        });
+        .get('/course/query?subject=ALL&keyword=Object')
+        .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -335,11 +331,8 @@ describe('Course 기능 통합 테스트', () => {
 
     it('GET /course/query - subject가 ALL이고 keyword가 없을 때 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .get('/course/query')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          subject: 'ALL',
-        });
+        .get('/course/query?subject=ALL')
+        .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -408,11 +401,8 @@ describe('Course 기능 통합 테스트', () => {
 
     it('GET /course/table - subject가 ALL이고 keyword가 없을 때 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .get('course/table')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          subject: 'ALL',
-        });
+        .get('/course/table?subject=ALL')
+        .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -436,6 +426,7 @@ describe('Course 기능 통합 테스트', () => {
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            reviews: [],
           },
           {
             id: courseId2,
@@ -455,6 +446,7 @@ describe('Course 기능 통합 테스트', () => {
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring'],
+            reviews: [],
           },
         ],
       });

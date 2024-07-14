@@ -162,3 +162,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZGEzOWQ2L
 {
     "title": "updated_post_title"
 }
+
+###
+# course table all
+GET http://localhost:3000/course/table?subject=ALL
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI5OTY2NDgyLTllZjYtNGU3ZS1iMWIxLTcxMjM3YjQ4MzQ5YiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwODU2MTA0LCJleHAiOjE3MjA5NDI1MDR9.f4OfNpnD4MQwIUlP3cskZTSKSgf4cWSKFDvF9k1gR6E
+
