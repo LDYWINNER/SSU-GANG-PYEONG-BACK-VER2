@@ -246,4 +246,56 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
       );
     });
   });
+
+  describe('likeBoardComment & unlikeBoardComment & countLikes 함수 테스트', () => {
+    const userId = 'user-1';
+    const commentId = 'comment_test_id';
+
+    beforeAll(() => {
+      boardCommentRepository.comments = [
+        {
+          id: 'comment_test_id',
+          content: 'comment_content',
+          createdAt: undefined,
+          updatedAt: undefined,
+          user: {
+            createdAt: new Date('2024-06-28T18:19:29.764Z'),
+            email: 'test_email',
+            id: 'test_user_id',
+            password: 'test_password',
+            postCount: 0,
+            role: UserType.User,
+            updateAt: new Date('2024-06-28T18:19:29.764Z'),
+            username: 'test_name',
+          },
+          boardPost: new BoardPost(),
+          likes: 0,
+        },
+      ];
+    });
+
+    it('likeBoardComment 함수 테스트', async () => {
+      // when
+      await boardCommentService.likeBoardComment(userId, commentId);
+
+      // then
+      expect(boardCommentRepository.comments[0].likes).toBe(1);
+    });
+
+    it('countLikes 함수 테스트', async () => {
+      // when
+      const result = await boardCommentService.countLikes(commentId);
+
+      // then
+      expect(result).toBe(1);
+    });
+
+    it('unlikeBoardComment 함수 테스트', async () => {
+      // when
+      await boardCommentService.unlikeBoardComment(userId, commentId);
+
+      // then
+      expect(boardCommentRepository.comments[0].likes).toBe(0);
+    });
+  });
 });

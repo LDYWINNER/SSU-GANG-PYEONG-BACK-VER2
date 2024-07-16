@@ -345,4 +345,59 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
       );
     });
   });
+
+  describe('likeBoardPost & unlikeBoardPost & countLikes 함수 테스트', () => {
+    const userId = 'user-1';
+    const postId = '1';
+
+    beforeAll(async () => {
+      boardPostRepository.boardPosts = [
+        {
+          id: postId,
+          title: 'Original Title',
+          contents: 'Original Content',
+          views: 0,
+          anonymity: false,
+          createdAt: undefined,
+          updateAt: undefined,
+          board: boardRepository.boards[0],
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: UserType.User,
+            postCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+          likes: 0,
+        },
+      ];
+    });
+
+    it('likeBoardPost 함수 테스트', async () => {
+      // when
+      await service.likeBoardPost(userId, postId);
+
+      // then
+      expect(boardPostRepository.boardPosts[0].likes).toBe(1);
+    });
+
+    it('countLikes 함수 테스트', async () => {
+      // when
+      const result = await service.countLikes(postId);
+
+      // then
+      expect(result).toBe(1);
+    });
+
+    it('unlikeBoardPost 함수 테스트', async () => {
+      // when
+      await service.unlikeBoardPost(userId, postId);
+
+      // then
+      expect(boardPostRepository.boardPosts[0].likes).toBe(0);
+    });
+  });
 });

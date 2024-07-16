@@ -171,4 +171,55 @@ describe('유저 수강평 관련 서비스 테스트', () => {
       ).rejects.toThrow(NotFoundException);
     });
   });
+
+  describe('likeCourseReview & unlikeCourseReview & countLikes 함수 테스트', () => {
+    beforeAll(async () => {
+      courseReviewRepository.courseReviews.push({
+        id: '1',
+        courseId: 'course-id',
+        semester: '2024-spring',
+        instructor: 'Jeehong Kim',
+        myLetterGrade: 'A',
+        teamProjectPresence: false,
+        quizPresence: true,
+        testQuantity: '2',
+        testType: '2midterms-1final',
+        generosity: 'generous',
+        attendance: 'rolling-paper',
+        homeworkQuantity: 'many',
+        difficulty: 'difficult',
+        overallGrade: 3,
+        overallEvaluation: '',
+        anonymity: true,
+      });
+    });
+
+    afterAll(async () => {
+      courseReviewRepository.courseReviews = [];
+    });
+
+    it('likeCourseReview 함수 테스트', async () => {
+      // when
+      await courseReviewService.likeCourseReview(userId, '1');
+
+      // then
+      expect(courseReviewRepository.courseReviews[0].likes).toBe(1);
+    });
+
+    it('countLikes 함수 테스트', async () => {
+      // when
+      const result = await courseReviewService.countLikes('1');
+
+      // then
+      expect(result).toBe(1);
+    });
+
+    it('unlikeCourseReview 함수 테스트', async () => {
+      // when
+      await courseReviewService.unlikeCourseReview(userId, '1');
+
+      // then
+      expect(courseReviewRepository.courseReviews[0].likes).toBe(0);
+    });
+  });
 });
