@@ -100,6 +100,7 @@ describe('Course 기능 통합 테스트', () => {
       most_recent_instructor: 'instructor2',
       semesters: ['2023_fall', '2024_spring', '2024_fall'],
       likes: 0,
+      location: 'B101',
     });
     const savedCourse1 = await courseRepository.save(course1);
     courseId1 = savedCourse1.id;
@@ -121,6 +122,7 @@ describe('Course 기능 통합 테스트', () => {
       most_recent_instructor: 'instructor2',
       semesters: ['2023_fall', '2024_spring'],
       likes: 0,
+      location: 'B101',
     });
     const savedCourse2 = await courseRepository.save(course2);
     courseId2 = savedCourse2.id;
@@ -142,6 +144,7 @@ describe('Course 기능 통합 테스트', () => {
       most_recent_instructor: 'instructor1',
       semesters: ['2023_fall', '2024_spring', '2024_fall'],
       likes: 0,
+      location: 'B101',
     });
     const savedCourse3 = await courseRepository.save(course3);
     courseId3 = savedCourse3.id;
@@ -185,6 +188,7 @@ describe('Course 기능 통합 테스트', () => {
           semesters: ['2023_fall', '2024_spring', '2024_fall'],
           reviews: [],
           likes: 0,
+          location: 'B101',
         },
         {
           id: courseId2,
@@ -206,6 +210,7 @@ describe('Course 기능 통합 테스트', () => {
           semesters: ['2023_fall', '2024_spring'],
           reviews: [],
           likes: 0,
+          location: 'B101',
         },
         {
           id: courseId3,
@@ -227,6 +232,7 @@ describe('Course 기능 통합 테스트', () => {
           semesters: ['2023_fall', '2024_spring', '2024_fall'],
           reviews: [],
           likes: 0,
+          location: 'B101',
         },
       ];
 
@@ -262,6 +268,7 @@ describe('Course 기능 통합 테스트', () => {
         semesters: ['2023_fall', '2024_spring', '2024_fall'],
         reviews: [],
         likes: 0,
+        location: 'B101',
       });
     });
 
@@ -303,6 +310,7 @@ describe('Course 기능 통합 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             likes: 0,
+            location: 'B101',
           },
         ],
       });
@@ -336,6 +344,7 @@ describe('Course 기능 통합 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             likes: 0,
+            location: 'B101',
           },
         ],
       });
@@ -369,6 +378,7 @@ describe('Course 기능 통합 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             likes: 0,
+            location: 'B101',
           },
           {
             id: courseId2,
@@ -389,6 +399,7 @@ describe('Course 기능 통합 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring'],
             likes: 0,
+            location: 'B101',
           },
           {
             id: courseId3,
@@ -409,6 +420,7 @@ describe('Course 기능 통합 테스트', () => {
             most_recent_instructor: 'instructor1',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             likes: 0,
+            location: 'B101',
           },
         ],
       });
@@ -443,6 +455,7 @@ describe('Course 기능 통합 테스트', () => {
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             reviews: [],
             likes: 0,
+            location: 'B101',
           },
           {
             id: courseId2,
@@ -464,6 +477,7 @@ describe('Course 기능 통합 테스트', () => {
             semesters: ['2023_fall', '2024_spring'],
             reviews: [],
             likes: 0,
+            location: 'B101',
           },
         ],
       });
@@ -516,6 +530,7 @@ describe('Course 기능 통합 테스트', () => {
             overallEvaluation: '',
             anonymity: true,
             likes: 0,
+
             course: expect.objectContaining({
               id: courseId1,
             }),

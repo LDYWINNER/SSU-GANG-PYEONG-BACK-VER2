@@ -1,17 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseService } from './../../../src/routes/course/course.service';
-import { Course, CourseReview } from './../../../src/entity';
+import { Course, CourseReview, Table } from './../../../src/entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { StubCourseRepository } from './stub/course-repository';
 import { StubCourseReviewRepository } from './stub/course-review.repository';
 import { NotFoundException } from '@nestjs/common';
+import { StubTableRepository } from '../table/stub/table-repository';
 
 describe('수업 관련 서비스 테스트', () => {
   let courseService: CourseService;
   let courseRepository: StubCourseRepository;
   let courseReviewRepository: StubCourseReviewRepository;
+  let tableRepository: StubTableRepository;
   const courseRepositoryToken = getRepositoryToken(Course);
   const courseReviewRepositoryToken = getRepositoryToken(CourseReview);
+  const tableRepositoryToken = getRepositoryToken(Table);
   const courseId1 = 'course_id_1';
   const courseId2 = 'course_id_2';
   const courseId3 = 'course_id_3';
@@ -38,6 +41,7 @@ describe('수업 관련 서비스 테스트', () => {
       recent_two_instructors: ['instructor1', 'instructor2'],
       most_recent_instructor: 'instructor2',
       semesters: ['2023_fall', '2024_spring', '2024_fall'],
+      location: 'A302',
     });
     courseRepository.courses.push({
       id: courseId2,
@@ -57,6 +61,7 @@ describe('수업 관련 서비스 테스트', () => {
       recent_two_instructors: ['instructor1'],
       most_recent_instructor: 'instructor2',
       semesters: ['2023_fall', '2024_spring'],
+      location: 'A302',
     });
     courseRepository.courses.push({
       id: courseId3,
@@ -76,6 +81,7 @@ describe('수업 관련 서비스 테스트', () => {
       recent_two_instructors: ['instructor1'],
       most_recent_instructor: 'instructor1',
       semesters: ['2023_fall', '2024_spring', '2024_fall'],
+      location: 'A302',
     });
 
     const module: TestingModule = await Test.createTestingModule({
@@ -88,6 +94,10 @@ describe('수업 관련 서비스 테스트', () => {
         {
           provide: courseReviewRepositoryToken,
           useValue: courseReviewRepository,
+        },
+        {
+          provide: tableRepositoryToken,
+          useValue: tableRepository,
         },
       ],
     }).compile();
@@ -122,6 +132,7 @@ describe('수업 관련 서비스 테스트', () => {
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            location: 'A302',
           },
           {
             id: courseId2,
@@ -141,6 +152,7 @@ describe('수업 관련 서비스 테스트', () => {
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring'],
+            location: 'A302',
           },
           {
             id: courseId3,
@@ -160,6 +172,7 @@ describe('수업 관련 서비스 테스트', () => {
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor1',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            location: 'A302',
           },
         ],
       });
@@ -194,6 +207,7 @@ describe('수업 관련 서비스 테스트', () => {
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            location: 'A302',
           },
         ],
       });
@@ -228,6 +242,7 @@ describe('수업 관련 서비스 테스트', () => {
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            location: 'A302',
           },
         ],
       });
@@ -259,6 +274,7 @@ describe('수업 관련 서비스 테스트', () => {
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            location: 'A302',
           },
           {
             id: courseId2,
@@ -278,6 +294,7 @@ describe('수업 관련 서비스 테스트', () => {
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring'],
+            location: 'A302',
           },
           {
             id: courseId3,
@@ -297,6 +314,7 @@ describe('수업 관련 서비스 테스트', () => {
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor1',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            location: 'A302',
           },
         ],
       });
@@ -325,6 +343,7 @@ describe('수업 관련 서비스 테스트', () => {
         recent_two_instructors: ['instructor1', 'instructor2'],
         most_recent_instructor: 'instructor2',
         semesters: ['2023_fall', '2024_spring', '2024_fall'],
+        location: 'A302',
       });
     });
 
@@ -363,6 +382,7 @@ describe('수업 관련 서비스 테스트', () => {
             recent_two_instructors: ['instructor1', 'instructor2'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            location: 'A302',
           },
           {
             id: courseId2,
@@ -382,6 +402,7 @@ describe('수업 관련 서비스 테스트', () => {
             recent_two_instructors: ['instructor1'],
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring'],
+            location: 'A302',
           },
         ],
       });
