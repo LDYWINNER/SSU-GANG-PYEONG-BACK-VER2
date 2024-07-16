@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from '../common/decorators/public.decorator';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../routes/user/user.service';
-import { Role } from '../common/enum/user.enum';
+import { UserType } from '../common/enum/user.enum';
 import { ROLES_KEY } from '../common/decorators/role.decorator';
 
 @Injectable()
@@ -45,10 +45,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException();
     }
 
-    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const requiredRoles = this.reflector.getAllAndOverride<UserType[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
     if (requiredRoles) {
       const userId = decoded['id'];
       return this.userService.checkUserIsAdmin(userId);

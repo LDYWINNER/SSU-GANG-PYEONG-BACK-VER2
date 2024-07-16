@@ -9,11 +9,16 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { RefreshToken } from './refresh-token.entity';
-import { Role } from '../common/enum/user.enum';
+import { UserType } from '../common/enum/user.enum';
 import { BoardPost } from './board-post.entity';
 import { Table } from './table.entity';
 import { ToDoCategory } from './todo-category.entity';
 import { CourseReview } from './course-review.entity';
+
+const UserTypeTransformer = {
+  to: (userType: UserType): string => userType.text,
+  from: (text: string): UserType => UserType.valueOf(text),
+};
 
 @Entity()
 export class User {
@@ -41,8 +46,8 @@ export class User {
   password: string;
 
   @ApiProperty({ description: '작성한 게시글' })
-  @Column({ type: 'enum', enum: Role, default: Role.User })
-  role: Role = Role.User;
+  @Column({ type: 'varchar', transformer: UserTypeTransformer })
+  role: UserType = UserType.User;
 
   @ApiProperty({ description: '시간표 테이블' })
   @OneToMany(() => Table, (table) => table.user, { cascade: true })

@@ -4,7 +4,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { ApiGetItemsResponse } from '../../common/decorators/swagger.decorator';
 import { FindUserResDto } from './dto/res.dto';
 import { Roles } from '../../common/decorators/role.decorator';
-import { Role } from '../../common/enum/user.enum';
+import { UserType } from '../../common/enum/user.enum';
 import { PageReqDto } from '../../common/dto/page-request.dto';
 
 @Controller('user')
@@ -13,7 +13,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiGetItemsResponse(FindUserResDto)
-  @Roles(Role.Admin)
+  @Roles(UserType.Admin)
   @Get()
   async getUsers(
     @Query() { page, size }: PageReqDto,

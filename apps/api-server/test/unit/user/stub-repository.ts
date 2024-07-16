@@ -1,5 +1,5 @@
-import { Role } from '../../../src/common/enum/user.enum';
 import { User } from '../../../src/entity/user.entity';
+import { UserType } from '../../../src/common/enum/user.enum';
 
 export class StubUserRepository {
   users: User[] = [
@@ -8,7 +8,7 @@ export class StubUserRepository {
       username: 'test_name',
       email: 'test_email',
       password: 'test_password',
-      role: Role.User,
+      role: UserType.User,
       postCount: 0,
       createdAt: new Date('2024-06-28T18:19:29.764Z'),
       updateAt: new Date('2024-06-28T18:19:29.764Z'),

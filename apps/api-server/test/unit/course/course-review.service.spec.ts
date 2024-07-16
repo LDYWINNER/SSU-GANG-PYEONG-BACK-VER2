@@ -6,7 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
 import { StubCourseRepository } from './stub/course-repository';
-import { Role } from '../../../src/common/enum/user.enum';
+import { UserType } from '../../../src/common/enum/user.enum';
 
 describe('유저 수강평 관련 서비스 테스트', () => {
   let courseReviewService: ReviewService;
@@ -25,7 +25,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
 
     userRepository.users.push({
       id: 'user_id',
-      role: Role.User,
+      role: UserType.User,
       postCount: 0,
       createdAt: new Date('2024-06-28T18:19:29.764Z'),
       email: 'test_email',
@@ -105,7 +105,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
           id: 'user_id',
           password: 'test_password',
           postCount: 0,
-          role: 'USER',
+          role: UserType.User,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },
@@ -138,7 +138,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
           id: 'user_id',
           password: 'test_password',
           postCount: 0,
-          role: 'USER',
+          role: UserType.User,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },

@@ -5,7 +5,7 @@ import { Board, BoardComment, BoardPost, User } from '../../../src/entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
-import { Role } from '../../../src/common/enum/user.enum';
+import { UserType } from '../../../src/common/enum/user.enum';
 import { StubBoardPostRepository } from './stub/post-repository';
 
 describe('게시판 댓글 관련 서비스 테스트', () => {
@@ -50,7 +50,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
         username: '',
         email: '',
         password: '',
-        role: Role.User,
+        role: UserType.User,
         postCount: 0,
         createdAt: undefined,
         updateAt: undefined,
@@ -91,7 +91,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
             username: '',
             email: '',
             password: '',
-            role: Role.User,
+            role: UserType.User,
             postCount: 0,
             createdAt: undefined,
             updateAt: undefined,
@@ -108,7 +108,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
           id: 'test_user_id',
           password: 'test_password',
           postCount: 0,
-          role: 'USER',
+          role: UserType.User,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },
@@ -129,7 +129,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
             username: '',
             email: '',
             password: '',
-            role: Role.User,
+            role: UserType.User,
             postCount: 0,
             createdAt: undefined,
             updateAt: undefined,
@@ -146,7 +146,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
           id: 'test_user_id',
           password: 'test_password',
           postCount: 0,
-          role: 'USER',
+          role: UserType.User,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },
@@ -182,7 +182,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
           id: 'test_user_id',
           password: 'test_password',
           postCount: 0,
-          role: Role.User,
+          role: UserType.User,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },
@@ -206,7 +206,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
           id: 'test_user_id',
           password: 'test_password',
           postCount: 0,
-          role: Role.User,
+          role: UserType.User,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },
@@ -227,7 +227,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
           id: 'test_user_id',
           password: 'test_password',
           postCount: 0,
-          role: Role.User,
+          role: UserType.User,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },

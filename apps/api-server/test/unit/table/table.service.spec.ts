@@ -6,6 +6,7 @@ import { StubTableRepository } from './stub/table-repository';
 import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
 import { User } from '../../../src/entity/user.entity';
+import { UserType } from '../../../src/common/enum/user.enum';
 
 describe('유저 시간표 테이블 관련 서비스 테스트', () => {
   let tableService: TableService;
@@ -58,7 +59,7 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
           id: 'test_user_id',
           password: 'test_password',
           postCount: 0,
-          role: 'USER',
+          role: UserType.User,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },
@@ -73,7 +74,7 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
           id: 'test_user_id',
           password: 'test_password',
           postCount: 0,
-          role: 'USER',
+          role: UserType.User,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },

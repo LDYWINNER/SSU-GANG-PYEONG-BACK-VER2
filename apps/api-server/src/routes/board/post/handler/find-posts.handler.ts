@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BoardPost } from '../../../../entity/board-post.entity';
 import { Repository, Like } from 'typeorm';
 import { Board } from '../../../../entity/board.entity';
+import { BoardType } from '../../../../common/enum/board.enum';
 
 @QueryHandler(FindPostsQuery)
 export class FindPostsQueryHandler implements IQueryHandler<FindPostsQuery> {
@@ -26,7 +27,7 @@ export class FindPostsQueryHandler implements IQueryHandler<FindPostsQuery> {
       whereConditions.contents = Like(`%${search}%`);
     }
 
-    if (board && board !== 'ALL') {
+    if (board && board !== BoardType.All) {
       const boardEntity = await this.boardRepository.findOne({
         where: { boardType: board },
       });

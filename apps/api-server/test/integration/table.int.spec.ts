@@ -8,7 +8,7 @@ import { TableModule } from '../../src/routes/table/table.module';
 import { UserModule } from '../../src/routes/user/user.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Role } from '../../src/common/enum/user.enum';
+import { UserType } from '../../src/common/enum/user.enum';
 import { v4 as uuidv4 } from 'uuid';
 import {
   User,
@@ -71,7 +71,7 @@ describe('Table 기능 통합 테스트', () => {
       email: 'test_user@example.com',
       password: 'test_password',
       postCount: 0,
-      role: Role.User,
+      role: UserType.User,
     });
     await userRepository.save(user);
     userId = user.id;

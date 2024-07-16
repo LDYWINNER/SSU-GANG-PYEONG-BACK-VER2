@@ -13,6 +13,11 @@ import { User } from './user.entity';
 import { BoardPost } from './board-post.entity';
 import { BoardType } from '../common/enum/board.enum';
 
+const BoardTypeTransformer = {
+  to: (boardType: BoardType): string => boardType.text,
+  from: (text: string): BoardType => BoardType.valueOf(text),
+};
+
 @Entity()
 export class Board {
   @PrimaryGeneratedColumn('uuid')
@@ -27,7 +32,7 @@ export class Board {
   description: string;
 
   @ApiProperty({ description: '게시판 유형' })
-  @Column({ type: 'enum', enum: BoardType, default: BoardType.All })
+  @Column({ type: 'varchar', transformer: BoardTypeTransformer })
   boardType: BoardType = BoardType.All;
 
   @ApiProperty({ description: '생성일' })

@@ -73,7 +73,7 @@ POST http://localhost:3000/auth/login
 content-type: application/json
 
 {
-    "email": "gildong2@stonybrook.edu",
+    "email": "gildong3@stonybrook.edu",
     "password": "Hong123456!"
 }
 
@@ -82,7 +82,7 @@ content-type: application/json
 # 유저 ME
 GET http://localhost:3000/me
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZjIxNTRhLWQyYjAtNDE1ZS05YzZhLTMyZTUxOTVjMjdmMCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjEwIiwiZW1haWwiOiJnaWxkb25nMkBzdG9ueWJyb29rLmVkdSIsImlhdCI6MTcxODI2NzExMiwiZXhwIjoxNzIwODU5MTEyfQ.iiC0PVZVK3nL-imp_h6-7nKZMyM9uHEDE7f77yzlRj8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJiMGJlZDUzLTAzZjktNDBmMC05ZWRmLTlmNDlhMTQ1OGVmNiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIxMTM2Mzk1LCJleHAiOjE3MjEyMjI3OTV9.075J_xv2wydB6qgkKr3HKRLPzIumS4oVSX4itGP_Y_c
 
 ###
 
