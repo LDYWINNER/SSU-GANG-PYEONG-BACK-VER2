@@ -7,16 +7,18 @@ import {
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BoardPost } from '../../../entity/board-post.entity';
+import { BoardPost, BoardPostLike } from '../../../entity';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(BoardPost)
     private boardPostRepository: Repository<BoardPost>,
+    @InjectRepository(BoardPostLike)
+    private boardPostLikeRepository: Repository<BoardPostLike>,
   ) {}
 
-  async findTop5Download() {
+  findTop5Download = async () => {
     const boards = await this.boardPostRepository.find({
       relations: {
         user: true,
@@ -28,9 +30,9 @@ export class PostService {
     });
 
     return boards;
-  }
+  };
 
-  async update(userId: string, id: string, data: UpdatePostDto) {
+  update = async (userId: string, id: string, data: UpdatePostDto) => {
     const boardPost = await this.getBoardPostById(id);
 
     if (!boardPost) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -47,9 +49,9 @@ export class PostService {
       where: { id },
       relations: ['user', 'board'],
     });
-  }
+  };
 
-  async delete(userId: string, id: string) {
+  delete = async (userId: string, id: string) => {
     const boardPost = await this.getBoardPostById(id);
 
     if (!boardPost) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -61,13 +63,42 @@ export class PostService {
     await this.boardPostRepository.remove(boardPost);
 
     return boardPost;
-  }
+  };
 
-  async getBoardPostById(id: string) {
+  getBoardPostById = async (id: string) => {
     const result = await this.boardPostRepository.findOne({
       where: { id },
       relations: ['user'],
     });
     return result;
-  }
+  };
+
+  likeBoardPost = async (userId: string, boardPostId: string) => {
+    await this.boardPostRepository.update(boardPostId, {
+      likes: () => 'likes + 1',
+    });
+
+    const boardPostLike = this.boardPostLikeRepository.create({
+      fk_user_id: userId,
+      fk_board_post_id: boardPostId,
+    });
+    return await this.boardPostLikeRepository.save(boardPostLike);
+  };
+
+  unlikeBoardPost = async (userId: string, boardPostId: string) => {
+    await this.boardPostRepository.update(boardPostId, {
+      likes: () => 'likes - 1',
+    });
+
+    return await this.boardPostLikeRepository.delete({
+      fk_user_id: userId,
+      fk_board_post_id: boardPostId,
+    });
+  };
+
+  countLikes = async (boardPostId: string) => {
+    return await this.boardPostLikeRepository.count({
+      where: { fk_board_post_id: boardPostId },
+    });
+  };
 }

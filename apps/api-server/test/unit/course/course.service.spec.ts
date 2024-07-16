@@ -1,6 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseService } from './../../../src/routes/course/course.service';
-import { Course, CourseReview, Table, User } from './../../../src/entity';
+import {
+  Course,
+  CourseLike,
+  CourseReview,
+  Table,
+  User,
+} from './../../../src/entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { StubCourseRepository } from './stub/course-repository';
 import { StubCourseReviewRepository } from './stub/course-review.repository';
@@ -8,6 +14,7 @@ import { NotFoundException } from '@nestjs/common';
 import { StubTableRepository } from '../table/stub/table-repository';
 import { StubUserRepository } from '../user/stub-repository';
 import { UserType } from '../../../src/common/enum/user.enum';
+import { StubCourseLikeRepository } from './stub/course-like-repository';
 
 describe('수업 관련 서비스 테스트', () => {
   let courseService: CourseService;
@@ -15,9 +22,11 @@ describe('수업 관련 서비스 테스트', () => {
   let courseReviewRepository: StubCourseReviewRepository;
   let tableRepository: StubTableRepository;
   let userRepository: StubUserRepository;
+  let courseLikeRepository: StubCourseLikeRepository;
   const courseRepositoryToken = getRepositoryToken(Course);
   const courseReviewRepositoryToken = getRepositoryToken(CourseReview);
   const tableRepositoryToken = getRepositoryToken(Table);
+  const courseLikeRepositoryToken = getRepositoryToken(CourseLike);
   const courseId1 = 'course_id_1';
   const courseId2 = 'course_id_2';
   const courseId3 = 'course_id_3';
@@ -27,6 +36,7 @@ describe('수업 관련 서비스 테스트', () => {
   beforeEach(async () => {
     courseRepository = new StubCourseRepository();
     courseReviewRepository = new StubCourseReviewRepository();
+    courseLikeRepository = new StubCourseLikeRepository();
     userRepository = new StubUserRepository();
 
     userRepository.users.push({
@@ -115,6 +125,7 @@ describe('수업 관련 서비스 테스트', () => {
           provide: courseReviewRepositoryToken,
           useValue: courseReviewRepository,
         },
+        { provide: courseLikeRepositoryToken, useValue: courseLikeRepository },
         {
           provide: tableRepositoryToken,
           useValue: tableRepository,
@@ -447,13 +458,23 @@ describe('수업 관련 서비스 테스트', () => {
   describe('likeCourse & unlikeCourse & countLikes 함수 테스트', () => {
     it('likeCourse 함수 테스트', async () => {
       // when
-      await courseService.likeCourse(userId, courseId1);
+      const result = await courseService.likeCourse(userId, courseId1);
 
       // then
+      expect(result).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_course_id: courseId1,
+        }),
+      );
+      expect(courseLikeRepository.courseLikes.length).toBe(1);
       expect(courseRepository.courses[0].likes).toBe(1);
     });
 
     it('countLikes 함수 테스트', async () => {
+      // given
+      await courseService.likeCourse(userId, courseId1);
+
       // when
       const result = await courseService.countLikes(courseId1);
 
@@ -462,10 +483,20 @@ describe('수업 관련 서비스 테스트', () => {
     });
 
     it('unlikeCourse 함수 테스트', async () => {
+      // given
+      await courseService.likeCourse(userId, courseId1);
+
       // when
-      await courseService.unlikeCourse(userId, courseId1);
+      const result = await courseService.unlikeCourse(userId, courseId1);
 
       // then
+      expect(result).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_course_id: courseId1,
+        }),
+      );
+      expect(courseRepository.courses[0].likes).toBe(0);
       expect(courseRepository.courses[0].likes).toBe(0);
     });
   });

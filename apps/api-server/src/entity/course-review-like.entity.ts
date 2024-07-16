@@ -13,7 +13,7 @@ import { CourseReview } from './course-review.entity';
 
 @Entity('course_review_likes')
 @Index(['fk_course_review_id', 'fk_user_id'], { unique: true })
-export default class CourseReviewLike {
+export class CourseReviewLike {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

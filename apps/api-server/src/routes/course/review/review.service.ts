@@ -1,6 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course, CourseReview, User } from '../../../../src/entity';
+import {
+  Course,
+  CourseReview,
+  CourseReviewLike,
+  User,
+} from '../../../../src/entity';
 import { Repository } from 'typeorm';
 import { CreateCourseReviewDto } from './dto/create-course-review.dto';
 
@@ -11,6 +16,8 @@ export class ReviewService {
     private readonly courseReviewRepository: Repository<CourseReview>,
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
+    @InjectRepository(CourseReviewLike)
+    private readonly courseReviewLikeRepository: Repository<CourseReviewLike>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
@@ -41,5 +48,34 @@ export class ReviewService {
     const savedCourseReview =
       await this.courseReviewRepository.save(newCourseReview);
     return { ...savedCourseReview };
+  };
+
+  likeCourseReview = async (userId: string, courseReviewId: string) => {
+    await this.courseReviewRepository.update(courseReviewId, {
+      likes: () => 'likes + 1',
+    });
+
+    const courseReviewLike = this.courseReviewLikeRepository.create({
+      fk_user_id: userId,
+      fk_course_review_id: courseReviewId,
+    });
+    return await this.courseReviewLikeRepository.save(courseReviewLike);
+  };
+
+  unlikeCourseReview = async (userId: string, courseReviewId: string) => {
+    await this.courseReviewRepository.update(courseReviewId, {
+      likes: () => 'likes - 1',
+    });
+
+    return await this.courseReviewLikeRepository.delete({
+      fk_user_id: userId,
+      fk_course_review_id: courseReviewId,
+    });
+  };
+
+  countLikes = async (courseReviewId: string) => {
+    return await this.courseReviewLikeRepository.count({
+      where: { fk_course_review_id: courseReviewId },
+    });
   };
 }

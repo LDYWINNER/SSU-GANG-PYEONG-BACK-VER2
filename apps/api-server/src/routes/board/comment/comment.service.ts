@@ -1,6 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BoardComment, BoardPost, User } from '../../../entity';
+import {
+  BoardComment,
+  BoardCommentLike,
+  BoardPost,
+  User,
+} from '../../../entity';
 import { Repository } from 'typeorm';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
@@ -8,9 +13,11 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 export class CommentService {
   constructor(
     @InjectRepository(BoardComment)
-    private boardCommentRepository: Repository<BoardComment>,
+    private readonly boardCommentRepository: Repository<BoardComment>,
     @InjectRepository(BoardPost)
-    private boardPostRepository: Repository<BoardPost>,
+    private readonly boardPostRepository: Repository<BoardPost>,
+    @InjectRepository(BoardCommentLike)
+    private readonly boardCommentLikeRepository: Repository<BoardCommentLike>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
@@ -55,5 +62,34 @@ export class CommentService {
     await this.boardCommentRepository.remove(comment);
 
     return comment;
+  };
+
+  likeBoardComment = async (userId: string, boardCommentId: string) => {
+    await this.boardCommentRepository.update(boardCommentId, {
+      likes: () => 'likes + 1',
+    });
+
+    const boardCommentLike = this.boardCommentLikeRepository.create({
+      fk_user_id: userId,
+      fk_board_comment_id: boardCommentId,
+    });
+    return await this.boardCommentLikeRepository.save(boardCommentLike);
+  };
+
+  unlikeBoardComment = async (userId: string, boardCommentId: string) => {
+    await this.boardCommentRepository.update(boardCommentId, {
+      likes: () => 'likes - 1',
+    });
+
+    return await this.boardCommentLikeRepository.delete({
+      fk_user_id: userId,
+      fk_board_comment_id: boardCommentId,
+    });
+  };
+
+  countLikes = async (boardCommentId: string) => {
+    return await this.boardCommentLikeRepository.count({
+      where: { fk_board_comment_id: boardCommentId },
+    });
   };
 }

@@ -38,4 +38,25 @@ export class StubCourseReviewRepository {
       ),
     );
   }
+
+  async update(id: string, newCourseReview: any): Promise<any> {
+    const index = this.courseReviews.findIndex((cr) => cr.id === id);
+    console.log(newCourseReview.likes(), 'newCourseReview');
+    if (index >= 0) {
+      if (newCourseReview.likes() === 'likes + 1') {
+        this.courseReviews[index] = {
+          ...this.courseReviews[index],
+          likes: this.courseReviews[index].likes + 1,
+        };
+        return this.courseReviews[index];
+      } else {
+        this.courseReviews[index] = {
+          ...this.courseReviews[index],
+          likes: this.courseReviews[index].likes - 1,
+        };
+        return this.courseReviews[index];
+      }
+    }
+    return Promise.reject(new Error('Course Review not found'));
+  }
 }

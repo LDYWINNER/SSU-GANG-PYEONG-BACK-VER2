@@ -73,15 +73,28 @@ export class StubBoardPostRepository {
     return post;
   }
 
-  async update(id: string, newBoardPost: Partial<BoardPost>) {
-    const index = this.boardPosts.findIndex((b) => b.id === id);
-    if (index >= 0) {
+  async update(id: string, partialEntity: any) {
+    const index = this.boardPosts.findIndex((bp) => bp.id === id);
+    if (typeof partialEntity.likes === 'function') {
+      if (partialEntity.likes() === 'likes + 1') {
+        this.boardPosts[index] = {
+          ...this.boardPosts[index],
+          likes: this.boardPosts[index].likes + 1,
+        };
+        return this.boardPosts[index];
+      } else if (partialEntity.likes() === 'likes - 1') {
+        this.boardPosts[index] = {
+          ...this.boardPosts[index],
+          likes: this.boardPosts[index].likes - 1,
+        };
+        return this.boardPosts[index];
+      }
+    } else {
       this.boardPosts[index] = {
         ...this.boardPosts[index],
-        ...newBoardPost,
+        ...partialEntity,
       };
       return this.boardPosts[index];
     }
-    return Promise.reject(new Error('Board Post not found'));
   }
 }

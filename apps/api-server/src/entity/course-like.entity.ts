@@ -13,7 +13,7 @@ import { Course } from './course.entity';
 
 @Entity('course_likes')
 @Index(['fk_course_id', 'fk_user_id'], { unique: true })
-export default class CourseLike {
+export class CourseLike {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

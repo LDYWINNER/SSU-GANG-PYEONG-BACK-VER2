@@ -111,4 +111,24 @@ export class StubCourseRepository {
 
     return Promise.resolve([filteredCourses, filteredCourses.length]);
   }
+
+  async update(id: string, newCourse: any): Promise<any> {
+    const index = this.courses.findIndex((c) => c.id === id);
+    if (index >= 0) {
+      if (newCourse.likes() === 'likes + 1') {
+        this.courses[index] = {
+          ...this.courses[index],
+          likes: this.courses[index].likes + 1,
+        };
+        return this.courses[index];
+      } else {
+        this.courses[index] = {
+          ...this.courses[index],
+          likes: this.courses[index].likes - 1,
+        };
+        return this.courses[index];
+      }
+    }
+    return Promise.reject(new Error('Course Review not found'));
+  }
 }

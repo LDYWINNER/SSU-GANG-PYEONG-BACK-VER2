@@ -13,7 +13,7 @@ import { BoardComment } from './board-comment.entity';
 
 @Entity('board_comment_likes')
 @Index(['fk_board_comment_id', 'fk_user_id'], { unique: true })
-export default class BoardCommentLike {
+export class BoardCommentLike {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

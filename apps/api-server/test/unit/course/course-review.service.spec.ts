@@ -1,26 +1,35 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReviewService } from '../../../src/routes/course/review/review.service';
-import { Course, CourseReview, User } from '../../../src/entity';
+import {
+  Course,
+  CourseReview,
+  CourseReviewLike,
+  User,
+} from '../../../src/entity';
 import { StubCourseReviewRepository } from './stub/course-review.repository';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
 import { StubCourseRepository } from './stub/course-repository';
 import { UserType } from '../../../src/common/enum/user.enum';
+import { StubCourseReviewLikeRepository } from './stub/course-review-like-repository';
 
 describe('유저 수강평 관련 서비스 테스트', () => {
   let courseReviewService: ReviewService;
   let courseReviewRepository: StubCourseReviewRepository;
   let courseRepository: StubCourseRepository;
+  let courseReviewLikeRepository: StubCourseReviewLikeRepository;
   let userRepository: StubUserRepository;
   const courseReviewRepositoryToken = getRepositoryToken(CourseReview);
   const courseRepositoryToken = getRepositoryToken(Course);
+  const courseReviewLikeRepositoryToken = getRepositoryToken(CourseReviewLike);
   const userRepositoryToken = getRepositoryToken(User);
   const userId = 'user_id';
 
   beforeEach(async () => {
     courseReviewRepository = new StubCourseReviewRepository();
     courseRepository = new StubCourseRepository();
+    courseReviewLikeRepository = new StubCourseReviewLikeRepository();
     userRepository = new StubUserRepository();
 
     userRepository.users.push({
@@ -45,6 +54,10 @@ describe('유저 수강평 관련 서비스 테스트', () => {
           useValue: courseReviewRepository,
         },
         { provide: courseRepositoryToken, useValue: courseRepository },
+        {
+          provide: courseReviewLikeRepositoryToken,
+          useValue: courseReviewLikeRepository,
+        },
         {
           provide: userRepositoryToken,
           useValue: userRepository,
@@ -173,7 +186,8 @@ describe('유저 수강평 관련 서비스 테스트', () => {
   });
 
   describe('likeCourseReview & unlikeCourseReview & countLikes 함수 테스트', () => {
-    beforeAll(async () => {
+    it('likeCourseReview 함수 테스트', async () => {
+      // given
       courseReviewRepository.courseReviews.push({
         id: '1',
         courseId: 'course-id',
@@ -191,22 +205,46 @@ describe('유저 수강평 관련 서비스 테스트', () => {
         overallGrade: 3,
         overallEvaluation: '',
         anonymity: true,
+        likes: 0,
       });
-    });
 
-    afterAll(async () => {
-      courseReviewRepository.courseReviews = [];
-    });
-
-    it('likeCourseReview 함수 테스트', async () => {
       // when
-      await courseReviewService.likeCourseReview(userId, '1');
+      const result = await courseReviewService.likeCourseReview(userId, '1');
 
       // then
+      expect(result).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_course_review_id: '1',
+        }),
+      );
+      expect(courseReviewLikeRepository.courseReviewLikes.length).toBe(1);
       expect(courseReviewRepository.courseReviews[0].likes).toBe(1);
     });
 
     it('countLikes 함수 테스트', async () => {
+      // given
+      courseReviewRepository.courseReviews.push({
+        id: '1',
+        courseId: 'course-id',
+        semester: '2024-spring',
+        instructor: 'Jeehong Kim',
+        myLetterGrade: 'A',
+        teamProjectPresence: false,
+        quizPresence: true,
+        testQuantity: '2',
+        testType: '2midterms-1final',
+        generosity: 'generous',
+        attendance: 'rolling-paper',
+        homeworkQuantity: 'many',
+        difficulty: 'difficult',
+        overallGrade: 3,
+        overallEvaluation: '',
+        anonymity: true,
+        likes: 0,
+      });
+      await courseReviewService.likeCourseReview(userId, '1');
+
       // when
       const result = await courseReviewService.countLikes('1');
 
@@ -215,10 +253,39 @@ describe('유저 수강평 관련 서비스 테스트', () => {
     });
 
     it('unlikeCourseReview 함수 테스트', async () => {
+      // given
+      courseReviewRepository.courseReviews.push({
+        id: '1',
+        courseId: 'course-id',
+        semester: '2024-spring',
+        instructor: 'Jeehong Kim',
+        myLetterGrade: 'A',
+        teamProjectPresence: false,
+        quizPresence: true,
+        testQuantity: '2',
+        testType: '2midterms-1final',
+        generosity: 'generous',
+        attendance: 'rolling-paper',
+        homeworkQuantity: 'many',
+        difficulty: 'difficult',
+        overallGrade: 3,
+        overallEvaluation: '',
+        anonymity: true,
+        likes: 0,
+      });
+      await courseReviewService.likeCourseReview(userId, '1');
+
       // when
-      await courseReviewService.unlikeCourseReview(userId, '1');
+      const result = await courseReviewService.unlikeCourseReview(userId, '1');
 
       // then
+      expect(result).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_course_review_id: '1',
+        }),
+      );
+      expect(courseReviewLikeRepository.courseReviewLikes.length).toBe(0);
       expect(courseReviewRepository.courseReviews[0].likes).toBe(0);
     });
   });

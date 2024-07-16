@@ -4,20 +4,24 @@ import { PostService } from '../../../src/routes/board/post/post.service';
 import { UpdatePostDto } from '../../../src/routes/board/post/dto/update-post.dto';
 import { StubBoardPostRepository } from './stub/post-repository';
 import { UserType } from '../../../src/common/enum/user.enum';
-import { BoardPost } from '../../../src/entity';
+import { BoardPost, BoardPostLike } from '../../../src/entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { StubBoardRepository } from './stub/board-repository';
 import { BoardType } from '../../../src/common/enum/board.enum';
+import { StubBoardPostLikeRepository } from './stub/board-post-like-repository';
 
 describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () => {
   let service: PostService;
   let boardRepository: StubBoardRepository;
   let boardPostRepository: StubBoardPostRepository;
+  let boardPostLikeRepository: StubBoardPostLikeRepository;
   const boardPostRepositoryToken = getRepositoryToken(BoardPost);
+  const boardPostLikeRepositoryToken = getRepositoryToken(BoardPostLike);
 
   beforeEach(async () => {
     boardRepository = new StubBoardRepository();
     boardPostRepository = new StubBoardPostRepository();
+    boardPostLikeRepository = new StubBoardPostLikeRepository();
 
     boardRepository.boards.push({
       id: 'board_id',
@@ -44,6 +48,10 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
         {
           provide: boardPostRepositoryToken,
           useValue: boardPostRepository,
+        },
+        {
+          provide: boardPostLikeRepositoryToken,
+          useValue: boardPostLikeRepository,
         },
       ],
     }).compile();
@@ -350,7 +358,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
     const userId = 'user-1';
     const postId = '1';
 
-    beforeAll(async () => {
+    beforeEach(async () => {
       boardPostRepository.boardPosts = [
         {
           id: postId,
@@ -378,13 +386,23 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
 
     it('likeBoardPost 함수 테스트', async () => {
       // when
-      await service.likeBoardPost(userId, postId);
+      const res = await service.likeBoardPost(userId, postId);
 
       // then
+      expect(res).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_board_post_id: postId,
+        }),
+      );
+      expect(boardPostLikeRepository.boardPostLikes.length).toBe(1);
       expect(boardPostRepository.boardPosts[0].likes).toBe(1);
     });
 
     it('countLikes 함수 테스트', async () => {
+      // given
+      await service.likeBoardPost(userId, postId);
+
       // when
       const result = await service.countLikes(postId);
 
@@ -393,10 +411,20 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
     });
 
     it('unlikeBoardPost 함수 테스트', async () => {
+      // given
+      await service.likeBoardPost(userId, postId);
+
       // when
-      await service.unlikeBoardPost(userId, postId);
+      const res = await service.unlikeBoardPost(userId, postId);
 
       // then
+      expect(res).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_board_post_id: postId,
+        }),
+      );
+      expect(boardPostLikeRepository.boardPostLikes.length).toBe(0);
       expect(boardPostRepository.boardPosts[0].likes).toBe(0);
     });
   });

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course, Table } from '../../entity';
+import { Course, CourseLike, Table } from '../../entity';
 import { Brackets, Repository } from 'typeorm';
 
 @Injectable()
@@ -8,6 +8,8 @@ export class CourseService {
   constructor(
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
+    @InjectRepository(CourseLike)
+    private readonly courseLikeRepository: Repository<CourseLike>,
     @InjectRepository(Table)
     private readonly tableRepository: Repository<Table>,
   ) {}
@@ -180,6 +182,35 @@ export class CourseService {
 
     const [items, count] = await queryBuilder.getManyAndCount();
     return { items, count };
+  };
+
+  likeCourse = async (userId: string, courseId: string) => {
+    await this.courseRepository.update(courseId, {
+      likes: () => 'likes + 1',
+    });
+
+    const courseLike = this.courseLikeRepository.create({
+      fk_user_id: userId,
+      fk_course_id: courseId,
+    });
+    return await this.courseLikeRepository.save(courseLike);
+  };
+
+  unlikeCourse = async (userId: string, courseId: string) => {
+    await this.courseRepository.update(courseId, {
+      likes: () => 'likes - 1',
+    });
+
+    return await this.courseLikeRepository.delete({
+      fk_user_id: userId,
+      fk_course_id: courseId,
+    });
+  };
+
+  countLikes = async (courseId: string) => {
+    return await this.courseLikeRepository.count({
+      where: { fk_course_id: courseId },
+    });
   };
 
   formatTableCourses = async (tableId: string) => {

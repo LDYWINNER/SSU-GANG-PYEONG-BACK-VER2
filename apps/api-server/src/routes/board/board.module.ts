@@ -9,12 +9,26 @@ import { FindPostsQueryHandler } from './post/handler/find-posts.handler';
 import { PostController } from './post/post.controller';
 import { CommentController } from './comment/comment.controller';
 import { PostService } from './post/post.service';
-import { Board, BoardPost, User, BoardComment } from '../../entity';
+import {
+  Board,
+  BoardPost,
+  User,
+  BoardComment,
+  BoardPostLike,
+  BoardCommentLike,
+} from '../../entity';
 import { CommentService } from './comment/comment.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Board, BoardPost, BoardComment, User]),
+    TypeOrmModule.forFeature([
+      Board,
+      BoardPost,
+      BoardComment,
+      BoardPostLike,
+      BoardCommentLike,
+      User,
+    ]),
     CqrsModule,
   ],
   controllers: [BoardController, PostController, CommentController],

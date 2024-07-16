@@ -1,25 +1,35 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { StubCommentRepository } from './stub/comment-repository';
 import { CommentService } from '../../../src/routes/board/comment/comment.service';
-import { Board, BoardComment, BoardPost, User } from '../../../src/entity';
+import {
+  Board,
+  BoardComment,
+  BoardCommentLike,
+  BoardPost,
+  User,
+} from '../../../src/entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
 import { UserType } from '../../../src/common/enum/user.enum';
 import { StubBoardPostRepository } from './stub/post-repository';
+import { StubBoardCommentLikeRepository } from './stub/board-comment-like-repository';
 
 describe('게시판 댓글 관련 서비스 테스트', () => {
   let boardCommentService: CommentService;
   let boardCommentRepository: StubCommentRepository;
   let boardPostRepository: StubBoardPostRepository;
+  let boardCommentLikeRepository: StubBoardCommentLikeRepository;
   let userRepository: StubUserRepository;
   const boardCommentRepositoryToken = getRepositoryToken(BoardComment);
   const boardPostRepositoryToken = getRepositoryToken(BoardPost);
+  const boardCommentLikeRepositoryToken = getRepositoryToken(BoardCommentLike);
   const userRepositoryToken = getRepositoryToken(User);
 
   beforeEach(async () => {
     boardCommentRepository = new StubCommentRepository();
     boardPostRepository = new StubBoardPostRepository();
+    boardCommentLikeRepository = new StubBoardCommentLikeRepository();
     userRepository = new StubUserRepository();
 
     const module: TestingModule = await Test.createTestingModule({
@@ -32,6 +42,10 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
         {
           provide: boardPostRepositoryToken,
           useValue: boardPostRepository,
+        },
+        {
+          provide: boardCommentLikeRepositoryToken,
+          useValue: boardCommentLikeRepository,
         },
         {
           provide: userRepositoryToken,
@@ -251,7 +265,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
     const userId = 'user-1';
     const commentId = 'comment_test_id';
 
-    beforeAll(() => {
+    beforeEach(() => {
       boardCommentRepository.comments = [
         {
           id: 'comment_test_id',
@@ -276,13 +290,23 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
 
     it('likeBoardComment 함수 테스트', async () => {
       // when
-      await boardCommentService.likeBoardComment(userId, commentId);
+      const res = await boardCommentService.likeBoardComment(userId, commentId);
 
       // then
+      expect(res).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_board_comment_id: commentId,
+        }),
+      );
+      expect(boardCommentLikeRepository.boardCommentLikes.length).toBe(1);
       expect(boardCommentRepository.comments[0].likes).toBe(1);
     });
 
     it('countLikes 함수 테스트', async () => {
+      // given
+      await boardCommentService.likeBoardComment(userId, commentId);
+
       // when
       const result = await boardCommentService.countLikes(commentId);
 
@@ -291,6 +315,9 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
     });
 
     it('unlikeBoardComment 함수 테스트', async () => {
+      // given
+      await boardCommentService.likeBoardComment(userId, commentId);
+
       // when
       await boardCommentService.unlikeBoardComment(userId, commentId);
 

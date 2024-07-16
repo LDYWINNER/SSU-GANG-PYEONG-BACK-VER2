@@ -13,7 +13,7 @@ import { BoardPost } from './board-post.entity';
 
 @Entity('board_post_likes')
 @Index(['fk_board_post_id', 'fk_user_id'], { unique: true })
-export default class BoardPostLike {
+export class BoardPostLike {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

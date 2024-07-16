@@ -10,6 +10,10 @@ import { ToDoCategory } from './todo-category.entity';
 import { ToDoTask } from './todo-task.entity';
 import { Course } from './course.entity';
 import { CourseReview } from './course-review.entity';
+import { CourseLike } from './course-like.entity';
+import { CourseReviewLike } from './course-review-like.entity';
+import { BoardPostLike } from './board-post-like.entity';
+import { BoardCommentLike } from './board-comment-like.entity';
 
 export {
   User,
@@ -24,4 +28,8 @@ export {
   ToDoTask,
   Course,
   CourseReview,
+  CourseLike,
+  CourseReviewLike,
+  BoardPostLike,
+  BoardCommentLike,
 };

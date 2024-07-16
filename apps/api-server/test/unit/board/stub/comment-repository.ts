@@ -37,13 +37,28 @@ export class StubCommentRepository {
     return comment;
   }
 
-  async update(
-    id: string,
-    partialEntity: Partial<BoardComment>,
-  ): Promise<void> {
-    const comment = this.comments.find((c) => c.id === id);
-    if (comment) {
-      Object.assign(comment, partialEntity);
+  async update(id: string, partialEntity: any) {
+    const index = this.comments.findIndex((bc) => bc.id === id);
+    if (typeof partialEntity.likes === 'function') {
+      if (partialEntity.likes() === 'likes + 1') {
+        this.comments[index] = {
+          ...this.comments[index],
+          likes: this.comments[index].likes + 1,
+        };
+        return this.comments[index];
+      } else if (partialEntity.likes() === 'likes - 1') {
+        this.comments[index] = {
+          ...this.comments[index],
+          likes: this.comments[index].likes - 1,
+        };
+        return this.comments[index];
+      }
+    } else {
+      this.comments[index] = {
+        ...this.comments[index],
+        ...partialEntity,
+      };
+      return this.comments[index];
     }
   }
 }
