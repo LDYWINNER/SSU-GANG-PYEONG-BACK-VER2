@@ -61,6 +61,10 @@ export class Course {
   @Column()
   endTime: string;
 
+  @ApiProperty({ description: '수업 장소', example: 'A302' })
+  @Column()
+  location: string;
+
   @ApiProperty({
     description: '역대 수업을 담당한 교수님들 목록("instructor" from ver.1)',
     example: '["John Doe", "Jane Doe"]',

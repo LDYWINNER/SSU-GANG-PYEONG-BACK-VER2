@@ -4,6 +4,7 @@ import {
   Initialize1720855793915,
   CourseAvgGrade1720937829565,
   LikeFeature1721126104287,
+  CourseLocation1721130117933,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -18,6 +19,7 @@ const options: DataSourceOptions & SeederOptions = {
     Initialize1720855793915,
     CourseAvgGrade1720937829565,
     LikeFeature1721126104287,
+    CourseLocation1721130117933,
   ],
   migrationsTableName: 'migrations',
 };

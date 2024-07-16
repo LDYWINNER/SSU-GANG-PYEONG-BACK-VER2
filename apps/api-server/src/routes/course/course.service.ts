@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course } from '../../entity';
+import { Course, Table } from '../../entity';
 import { Brackets, Repository } from 'typeorm';
 
 @Injectable()
@@ -8,6 +8,8 @@ export class CourseService {
   constructor(
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
+    @InjectRepository(Table)
+    private readonly tableRepository: Repository<Table>,
   ) {}
 
   getAllCourses = async () => {
@@ -179,4 +181,243 @@ export class CourseService {
     const [items, count] = await queryBuilder.getManyAndCount();
     return { items, count };
   };
+
+  findAndFormatCourses = async (tableId: string) => {
+    // 초기 설정
+    const table = await this.tableRepository.findOne({
+      where: { id: tableId },
+      relations: ['schoolSubjects'],
+    });
+
+    if (!table) {
+      throw new NotFoundException(`Table not found with id: ${tableId}`);
+    }
+
+    // 데이터 가공
+    const courses = table.schoolSubjects.map(async (schoolSubject) => {
+      const course = await this.courseRepository.findOne({
+        where: { id: schoolSubject.courseId },
+      });
+      if (!course) {
+        throw new NotFoundException(
+          `Course not found with id: ${schoolSubject.courseId}`,
+        );
+      }
+
+      if (course.subj === 'CHI' && course.crs === '111') {
+        return CourseService.formatComplicatedCourse(
+          course,
+          schoolSubject.complicatedCourseOption,
+        );
+      } else if (schoolSubject.twoOptionsDay !== undefined) {
+        return CourseService.formatTwoOptionsDayCourse(
+          course,
+          schoolSubject.twoOptionsDay,
+        );
+      } else if (schoolSubject.optionsTime !== undefined) {
+        return CourseService.formatOptionsTimeCourse(
+          course,
+          schoolSubject.optionsTime,
+        );
+      } else {
+        return course;
+      }
+    });
+
+    return courses;
+  };
+
+  private static formatComplicatedCourse(
+    course: Course,
+    courseInfo: any,
+  ): Course {
+    const complicatedCourseOption =
+      courseInfo.complicatedCourseOption as string;
+    const selectedOptions = complicatedCourseOption.split('  ');
+
+    course.day = this.updateStringList(course.day, selectedOptions[0]);
+    course.startTime = this.updateStringList(
+      course.startTime,
+      selectedOptions[1],
+    );
+    course.endTime = this.updateStringList(course.endTime, selectedOptions[3]);
+
+    return course;
+  }
+
+  private static formatTwoOptionsDayCourse(
+    course: Course,
+    courseInfo: any,
+  ): Course {
+    const selectedDay = courseInfo.twoOptionsDay as string;
+    const tempDays = course.day.split(', ');
+    const tempLocation = course.location.split(', ');
+    const tempStartTime = course.startTime.split(', ');
+    const tempEndTime = course.endTime.split(', ');
+
+    tempDays.pop();
+    tempDays.push(selectedDay);
+    course.day = tempDays.join(', ');
+
+    const [lastTwoDaysArray, recDays] = this.extractDaysAndRecDays(tempDays);
+    this.updateLocationTimeInstructor(
+      course,
+      tempLocation,
+      tempStartTime,
+      tempEndTime,
+      selectedDay,
+      lastTwoDaysArray,
+      recDays,
+    );
+
+    return course;
+  }
+
+  private static formatOptionsTimeCourse(
+    course: Course,
+    courseInfo: any,
+  ): Course {
+    const selectedTime = courseInfo.optionsTime as string;
+    const tempStartTime = course.startTime.split(', ');
+    const tempEndTime = course.endTime.split(', ');
+
+    tempStartTime.pop();
+    tempEndTime.pop();
+
+    const startTimeArray = tempStartTime.pop()!.split('/');
+    const endTimeArray = tempEndTime.pop()!.split('/');
+
+    const matchedIndex = startTimeArray.findIndex(
+      (time) => time === selectedTime,
+    );
+    const newStartTime = startTimeArray[matchedIndex];
+    const newEndTime = endTimeArray[matchedIndex];
+
+    tempStartTime.push(newStartTime);
+    tempEndTime.push(newEndTime);
+
+    course.startTime = tempStartTime.join(', ');
+    course.endTime = tempEndTime.join(', ');
+
+    return course;
+  }
+
+  private static updateStringList(list: string, newItem: string): string {
+    const tempList = list.split(', ');
+    tempList.pop();
+    tempList.push(newItem);
+    return tempList.join(', ');
+  }
+
+  private static extractDaysAndRecDays(tempDays: string[]): [string[], string] {
+    const lastTwoDays = tempDays.pop()!;
+    const lastTwoDaysArray = lastTwoDays.split('/');
+    let recDays = '';
+    if (lastTwoDaysArray[1].includes('(')) {
+      recDays = lastTwoDaysArray[1].split('(')[1];
+    }
+    return [lastTwoDaysArray, recDays];
+  }
+
+  private static updateLocationTimeInstructor(
+    course: Course,
+    tempLocation: string[],
+    tempStartTime: string[],
+    tempEndTime: string[],
+    selectedDay: string,
+    lastTwoDaysArray: string[],
+    recDays: string,
+  ) {
+    const lastLocation = tempLocation.at(-1);
+    const lastStartTimes = tempStartTime.at(-1);
+    const lastInstructors = course.past_instructors.at(-1);
+
+    if (lastLocation?.includes('/')) {
+      this.updateLocation(course, tempLocation, selectedDay, lastTwoDaysArray);
+    }
+
+    if (lastStartTimes?.includes('/')) {
+      this.updateTime(
+        course,
+        tempStartTime,
+        tempEndTime,
+        selectedDay,
+        lastTwoDaysArray,
+        recDays,
+      );
+    }
+
+    if (lastInstructors?.includes('/')) {
+      this.updateInstructor(course, selectedDay, lastTwoDaysArray);
+    }
+  }
+
+  private static updateLocation(
+    course: Course,
+    tempLocation: string[],
+    selectedDay: string,
+    lastTwoDaysArray: string[],
+  ) {
+    const lastTwoLocations = tempLocation.pop()!;
+    const lastTwoLocationsArray = lastTwoLocations.split('/');
+    const newLocation =
+      selectedDay === lastTwoDaysArray[0]
+        ? lastTwoLocationsArray[0]
+        : lastTwoLocationsArray[1];
+    tempLocation.push(newLocation);
+    course.location = tempLocation.join(', ');
+  }
+
+  private static updateTime(
+    course: Course,
+    tempStartTime: string[],
+    tempEndTime: string[],
+    selectedDay: string,
+    lastTwoDaysArray: string[],
+    recDays: string,
+  ) {
+    let lastTwoStartTimes = tempStartTime.pop()!;
+    let lastTwoEndTimes = tempEndTime.pop()!;
+
+    if (recDays !== '') {
+      lastTwoStartTimes = lastTwoStartTimes.split('(')[0];
+      lastTwoEndTimes = lastTwoEndTimes.split('(')[0];
+    }
+
+    const lastTwoStartTimesArray = lastTwoStartTimes.split('/');
+    const lastTwoEndTimesArray = lastTwoEndTimes.split('/');
+    const newStartTime =
+      selectedDay === lastTwoDaysArray[0]
+        ? lastTwoStartTimesArray[0]
+        : lastTwoStartTimesArray[1];
+    const newEndTime =
+      selectedDay === lastTwoDaysArray[0]
+        ? lastTwoEndTimesArray[0]
+        : lastTwoEndTimesArray[1];
+
+    if (recDays !== '') {
+      tempStartTime.push(newStartTime + '(' + recDays);
+      tempEndTime.push(newEndTime + '(' + recDays);
+    } else {
+      tempStartTime.push(newStartTime);
+      tempEndTime.push(newEndTime);
+    }
+
+    course.startTime = tempStartTime.join(', ');
+    course.endTime = tempEndTime.join(', ');
+  }
+
+  private static updateInstructor(
+    course: Course,
+    selectedDay: string,
+    lastTwoDaysArray: string[],
+  ) {
+    const lastTwoInstructors = course.past_instructors.pop()!;
+    const lastTwoInstructorsArray = lastTwoInstructors.split('/');
+    const newInstructor =
+      selectedDay === lastTwoDaysArray[0]
+        ? lastTwoInstructorsArray[0]
+        : lastTwoInstructorsArray[1];
+    course.past_instructors.push(newInstructor);
+  }
 }
