@@ -91,6 +91,9 @@ export class Course {
   @Column('text', { array: true })
   semesters: string[];
 
+  @Column({ default: 0 })
+  likes: number;
+
   @ApiProperty({ description: '게시판 댓글' })
   @OneToMany(() => CourseReview, (courseReview) => courseReview.course, {
     cascade: true,

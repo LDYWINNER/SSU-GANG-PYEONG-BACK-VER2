@@ -84,6 +84,9 @@ export class CourseReview {
   @UpdateDateColumn()
   updateAt: Date;
 
+  @Column({ default: 0 })
+  likes: number;
+
   @ApiProperty({ description: '수업' })
   @ManyToOne(() => Course, {
     onDelete: 'CASCADE',

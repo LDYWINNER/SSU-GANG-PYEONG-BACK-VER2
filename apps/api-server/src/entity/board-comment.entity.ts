@@ -33,6 +33,9 @@ export class BoardComment {
   @JoinColumn({ name: 'userId' })
   user: User;
 
+  @Column({ default: 0 })
+  likes: number;
+
   @ApiProperty({ description: '게시글' })
   @ManyToOne(() => BoardPost, {
     onDelete: 'CASCADE',

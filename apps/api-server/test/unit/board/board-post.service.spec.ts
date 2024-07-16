@@ -72,6 +72,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
         createdAt: undefined,
         updateAt: undefined,
         board: boardRepository.boards[0],
+        likes: 0,
       });
       boardPostRepository.boardPosts.push({
         id: '2',
@@ -92,6 +93,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
           createdAt: undefined,
           updateAt: undefined,
         },
+        likes: 0,
       });
       boardPostRepository.boardPosts.push({
         id: '3',
@@ -112,6 +114,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
           createdAt: undefined,
           updateAt: undefined,
         },
+        likes: 0,
       });
       boardPostRepository.boardPosts.push({
         id: '4',
@@ -132,6 +135,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
           createdAt: undefined,
           updateAt: undefined,
         },
+        likes: 0,
       });
       boardPostRepository.boardPosts.push({
         id: '5',
@@ -152,6 +156,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
           createdAt: undefined,
           updateAt: undefined,
         },
+        likes: 0,
       });
       boardPostRepository.boardPosts.push({
         id: '6',
@@ -172,6 +177,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
           createdAt: undefined,
           updateAt: undefined,
         },
+        likes: 0,
       });
 
       const result = await service.findTop5Download();
@@ -208,6 +214,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
             createdAt: undefined,
             updateAt: undefined,
           },
+          likes: 0,
         },
       ];
 
@@ -252,6 +259,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
             createdAt: undefined,
             updateAt: undefined,
           },
+          likes: 0,
         },
       ];
 
@@ -286,6 +294,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
             createdAt: undefined,
             updateAt: undefined,
           },
+          likes: 0,
         },
       ];
 
@@ -327,6 +336,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
             createdAt: undefined,
             updateAt: undefined,
           },
+          likes: 0,
         },
       ];
 

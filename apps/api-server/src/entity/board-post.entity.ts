@@ -57,6 +57,9 @@ export class BoardPost {
   @JoinColumn({ name: 'boardId' })
   board: Board;
 
+  @Column({ default: 0 })
+  likes: number;
+
   @ApiProperty({ description: '유저정보' })
   @ManyToOne(() => User)
   @JoinColumn({ name: 'userId' })

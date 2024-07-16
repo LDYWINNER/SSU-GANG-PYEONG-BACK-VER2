@@ -59,6 +59,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
       createdAt: undefined,
       updateAt: undefined,
       board: new Board(),
+      likes: 0,
     });
 
     boardCommentService = module.get<CommentService>(CommentService);
@@ -99,6 +100,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
           createdAt: undefined,
           updateAt: undefined,
           board: new Board(),
+          likes: 0,
         },
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
@@ -136,6 +138,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
           createdAt: undefined,
           updateAt: undefined,
           board: new Board(),
+          likes: 0,
         },
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
@@ -184,6 +187,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
           username: 'test_name',
         },
         boardPost: new BoardPost(),
+        likes: 0,
       });
       const boardCommentRowCount = boardCommentRepository.comments.length;
 
@@ -207,6 +211,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
           username: 'test_name',
         },
         boardPost: new BoardPost(),
+        likes: 0,
       });
       expect(boardCommentRepository.comments.length).toBe(
         boardCommentRowCount - 1,
@@ -227,6 +232,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
           username: 'test_name',
         },
         boardPost: new BoardPost(),
+        likes: 0,
       });
     });
 
