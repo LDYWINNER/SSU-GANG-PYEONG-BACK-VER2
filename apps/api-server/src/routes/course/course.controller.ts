@@ -35,9 +35,9 @@ export class CourseController {
     }
   }
 
-  @Get('/table')
+  @Get('table')
   @Public()
-  async getForTable(
+  async getForTableSelect(
     @Query('subject') subject?: string,
     @Query('keyword') keyword?: string,
   ) {
@@ -46,6 +46,24 @@ export class CourseController {
         subject,
         keyword,
       });
+      if (!courses) {
+        return {
+          count: 0,
+          items: [],
+        };
+      }
+
+      return courses;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('table/:id')
+  @Public()
+  async getForTableSchoolItem(@Param('id') id: string) {
+    try {
+      const courses = await this.courseService.formatTableCourses(id);
       if (!courses) {
         return {
           count: 0,

@@ -182,7 +182,7 @@ export class CourseService {
     return { items, count };
   };
 
-  findAndFormatCourses = async (tableId: string) => {
+  formatTableCourses = async (tableId: string) => {
     // 초기 설정
     const table = await this.tableRepository.findOne({
       where: { id: tableId },
