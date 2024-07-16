@@ -42,6 +42,7 @@ describe('수업 관련 서비스 테스트', () => {
       most_recent_instructor: 'instructor2',
       semesters: ['2023_fall', '2024_spring', '2024_fall'],
       location: 'A302',
+      likes: 0,
     });
     courseRepository.courses.push({
       id: courseId2,
@@ -62,6 +63,7 @@ describe('수업 관련 서비스 테스트', () => {
       most_recent_instructor: 'instructor2',
       semesters: ['2023_fall', '2024_spring'],
       location: 'A302',
+      likes: 0,
     });
     courseRepository.courses.push({
       id: courseId3,
@@ -82,6 +84,7 @@ describe('수업 관련 서비스 테스트', () => {
       most_recent_instructor: 'instructor1',
       semesters: ['2023_fall', '2024_spring', '2024_fall'],
       location: 'A302',
+      likes: 0,
     });
 
     const module: TestingModule = await Test.createTestingModule({
@@ -133,6 +136,7 @@ describe('수업 관련 서비스 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             location: 'A302',
+            likes: 0,
           },
           {
             id: courseId2,
@@ -153,6 +157,7 @@ describe('수업 관련 서비스 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring'],
             location: 'A302',
+            likes: 0,
           },
           {
             id: courseId3,
@@ -173,6 +178,7 @@ describe('수업 관련 서비스 테스트', () => {
             most_recent_instructor: 'instructor1',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             location: 'A302',
+            likes: 0,
           },
         ],
       });
@@ -208,6 +214,7 @@ describe('수업 관련 서비스 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             location: 'A302',
+            likes: 0,
           },
         ],
       });
@@ -243,6 +250,7 @@ describe('수업 관련 서비스 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             location: 'A302',
+            likes: 0,
           },
         ],
       });
@@ -275,6 +283,7 @@ describe('수업 관련 서비스 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             location: 'A302',
+            likes: 0,
           },
           {
             id: courseId2,
@@ -295,6 +304,7 @@ describe('수업 관련 서비스 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring'],
             location: 'A302',
+            likes: 0,
           },
           {
             id: courseId3,
@@ -315,6 +325,7 @@ describe('수업 관련 서비스 테스트', () => {
             most_recent_instructor: 'instructor1',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             location: 'A302',
+            likes: 0,
           },
         ],
       });
@@ -344,6 +355,7 @@ describe('수업 관련 서비스 테스트', () => {
         most_recent_instructor: 'instructor2',
         semesters: ['2023_fall', '2024_spring', '2024_fall'],
         location: 'A302',
+        likes: 0,
       });
     });
 
@@ -383,6 +395,7 @@ describe('수업 관련 서비스 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring', '2024_fall'],
             location: 'A302',
+            likes: 0,
           },
           {
             id: courseId2,
@@ -403,9 +416,12 @@ describe('수업 관련 서비스 테스트', () => {
             most_recent_instructor: 'instructor2',
             semesters: ['2023_fall', '2024_spring'],
             location: 'A302',
+            likes: 0,
           },
         ],
       });
     });
   });
+
+  describe('likeCourse & unlikeCourse & countLikes 함수 테스트', () => {});
 });
