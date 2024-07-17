@@ -568,4 +568,120 @@ describe('Course 기능 통합 테스트', () => {
       });
     });
   });
+
+  describe('course 좋아요 기능 통합 테스트', () => {
+    it('POST /course/like - course 좋아요 테스트', async () => {
+      const response = await request(app.getHttpServer())
+        .post(`/course/like/${courseId1}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_course_id: courseId1,
+        }),
+      );
+    });
+
+    it('GET /course/like/:id - course 좋아요 수 조회 테스트', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/course/like/count/${courseId1}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        count: 1,
+      });
+    });
+
+    it('DELETE /course/like - course 좋아요 취소 테스트', async () => {
+      await request(app.getHttpServer())
+        .delete(`/course/like/${courseId1}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      const response = await request(app.getHttpServer())
+        .delete(`/course/like/${courseId1}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_course_id: courseId1,
+        }),
+      );
+    });
+  });
+
+  describe('course review 좋아요 기능 통합 테스트', () => {
+    let courseReviewId: string;
+
+    beforeAll(async () => {
+      const courseReview = courseReviewRepository.create({
+        semester: '2024-spring',
+        instructor: 'Jeehong Kim',
+        myLetterGrade: 'A',
+        teamProjectPresence: false,
+        quizPresence: true,
+        testQuantity: '2',
+        testType: '2midterms-1final',
+        generosity: 'generous',
+        attendance: 'rolling-paper',
+        homeworkQuantity: 'many',
+        difficulty: 'difficult',
+        overallGrade: 3,
+        overallEvaluation: '',
+        anonymity: true,
+        likes: 0,
+        course: {
+          id: courseId1,
+        },
+        user: {
+          id: userId,
+        },
+      });
+      const savedCourseReview = await courseReviewRepository.save(courseReview);
+      courseReviewId = savedCourseReview.id;
+    });
+
+    it('POST /course/review/like - course review 좋아요 테스트', async () => {
+      const response = await request(app.getHttpServer())
+        .post(`/course/review/like/${courseReviewId}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_course_review_id: courseReviewId,
+        }),
+      );
+    });
+
+    it('GET /course/review/like/:id - course review 좋아요 수 조회 테스트', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/course/review/like/${courseReviewId}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        count: 1,
+      });
+    });
+
+    it('DELETE /course/review/like/:id - course review 좋아요 취소 테스트', async () => {
+      const response = await request(app.getHttpServer())
+        .delete(`/course/review/like/${courseId1}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          fk_user_id: userId,
+          fk_course_review_id: courseId1,
+        }),
+      );
+    });
+  });
 });

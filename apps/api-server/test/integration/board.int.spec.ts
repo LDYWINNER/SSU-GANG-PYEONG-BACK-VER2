@@ -488,6 +488,65 @@ describe('Board 기능 통합 테스트', () => {
         expect(response.status).toBe(404);
       });
     });
+
+    describe('board post 좋아요 기능', () => {
+      let boardPostId: string;
+
+      beforeEach(async () => {
+        const boardPost = boardPostRepository.create({
+          title: 'post_title',
+          contents: 'post_contents',
+          views: 0,
+          board: { id: boardId },
+          user: { id: userId },
+        });
+        const savedBoardPost = await boardPostRepository.save(boardPost);
+        boardPostId = savedBoardPost.id;
+      });
+
+      afterEach(async () => {
+        await boardPostRepository.delete({});
+      });
+
+      it('POST /board/post/like - board post 좋아요 테스트', async () => {
+        const response = await request(app.getHttpServer())
+          .post(`/board/post/like/${boardPostId}`)
+          .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(201);
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            fk_user_id: userId,
+            fk_board_post_id: boardPostId,
+          }),
+        );
+      });
+
+      it('GET /board/post/like/:id - board post 좋아요 수 조회 테스트', async () => {
+        const response = await request(app.getHttpServer())
+          .get(`/board/post/like/${boardPostId}`)
+          .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual({
+          count: 1,
+        });
+      });
+
+      it('DELETE /board/post/like/:id - board post 좋아요 취소 테스트', async () => {
+        const response = await request(app.getHttpServer())
+          .delete(`/board/post/like/${boardPostId}`)
+          .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            fk_user_id: userId,
+            fk_board_post_id: boardPostId,
+          }),
+        );
+      });
+    });
   });
 
   describe('게시판 게시글 댓글(board comment) 기능 통합 테스트', () => {
@@ -598,6 +657,64 @@ describe('Board 기능 통합 테스트', () => {
           .set('Authorization', `Bearer ${token}`);
 
         expect(response.status).toBe(404);
+      });
+    });
+
+    describe('board comment 좋아요 기능', () => {
+      let boardCommentId: string;
+
+      beforeEach(async () => {
+        const boardComment = boardCommentRepository.create({
+          content: 'comment_content',
+          boardPost: { id: boardPostId },
+          user: { id: userId },
+        });
+        const savedBoardComment =
+          await boardCommentRepository.save(boardComment);
+        boardCommentId = savedBoardComment.id;
+      });
+
+      afterEach(async () => {
+        await boardCommentRepository.delete({});
+      });
+
+      it('POST /board/comment/like - board comment 좋아요 테스트', async () => {
+        const response = await request(app.getHttpServer())
+          .post(`/board/comment/like/${boardCommentId}`)
+          .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(201);
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            fk_user_id: userId,
+            fk_board_comment_id: boardCommentId,
+          }),
+        );
+      });
+
+      it('GET /board/comment/like/:id - board comment 좋아요 수 조회 테스트', async () => {
+        const response = await request(app.getHttpServer())
+          .get(`/board/comment/like/${boardCommentId}`)
+          .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual({
+          count: 1,
+        });
+      });
+
+      it('DELETE /board/comment/like/:id - board comment 좋아요 취소 테스트', async () => {
+        const response = await request(app.getHttpServer())
+          .delete(`/board/comment/like/${boardCommentId}`)
+          .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            fk_user_id: userId,
+            fk_board_comment_id: boardCommentId,
+          }),
+        );
       });
     });
   });
