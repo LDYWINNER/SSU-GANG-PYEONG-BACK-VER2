@@ -70,69 +70,48 @@ describe('유저 서비스 테스트', () => {
         id: 'follow-id',
         fk_leader_id: leaderId,
         fk_follower_id: followerId,
-        user: {
-          createdAt: new Date('2024-06-28T18:19:29.764Z'),
-          email: 'test_email',
-          id: 'test_leader_id',
-          password: 'test_password',
-          postCount: 0,
-          role: UserType.User,
-          updateAt: new Date('2024-06-28T18:19:29.764Z'),
-          username: 'test_name',
-        },
       });
       expect(followRepository.follows.length).toBe(followRowCount + 1);
       expect(followRepository.follows).toContainEqual({
         id: 'follow-id',
         fk_leader_id: leaderId,
         fk_follower_id: followerId,
-        user: {
-          createdAt: new Date('2024-06-28T18:19:29.764Z'),
-          email: 'test_email',
-          id: 'test_leader_id',
-          password: 'test_password',
-          postCount: 0,
-          role: UserType.User,
-          updateAt: new Date('2024-06-28T18:19:29.764Z'),
-          username: 'test_name',
-        },
       });
     });
 
-    it('leaderId가 존재하지 않으면 에러가 납니다', () => {
+    it('leaderId 혹은 followerId가 존재하지 않으면 에러가 납니다', () => {
+      // given
+      const invalidLeaderId = 'invalid_leader_id';
+      const invalidFollowerId = 'invalid_follower_id';
+
       // then
-      expect(userService.createFollow(leaderId, followerId)).rejects.toThrow(
-        NotFoundException,
-      );
+      expect(
+        userService.createFollow(invalidLeaderId, invalidFollowerId),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('getFollower 함수 테스트', () => {
     it('getFollower 함수 결과값 테스트', async () => {
+      // given
+      await userService.createFollow(leaderId, followerId);
+
       // when
       const result = await userService.getFollower(leaderId);
 
       // then
       expect(result).toEqual({
         count: 1,
-        followers: [
-          {
-            id: 'test_follower_id',
-            email: 'test_email',
-            password: 'test_password',
-            role: UserType.User,
-            username: 'test_name',
-            createdAt: new Date('2024-06-28T18:19:29.764Z'),
-            updateAt: new Date('2024-06-28T18:19:29.764Z'),
-            postCount: 0,
-          },
-        ],
+        followers: ['test_follower_id'],
       });
     });
 
     it('leaderId가 존재하지 않으면 에러가 납니다', () => {
+      // given
+      const invalidLeaderId = 'invalid_leader_id';
+
       // then
-      expect(userService.deleteFollow(leaderId, followerId)).rejects.toThrow(
+      expect(userService.getFollower(invalidLeaderId)).rejects.toThrow(
         NotFoundException,
       );
     });
@@ -141,50 +120,35 @@ describe('유저 서비스 테스트', () => {
   describe('deleteFollow 함수 테스트', () => {
     it('deleteFollow 함수 결과값 테스트', async () => {
       // given
+      await userService.createFollow(leaderId, followerId);
       const followRowCount = followRepository.follows.length;
 
       // when
-      const result = await userService.deleteFollow(leaderId, followerId);
+      const result = await userService.removeFollow(leaderId, followerId);
 
       // then
       expect(result).toEqual({
         id: 'follow-id',
         fk_leader_id: leaderId,
         fk_follower_id: followerId,
-        user: {
-          createdAt: new Date('2024-06-28T18:19:29.764Z'),
-          email: 'test_email',
-          id: 'test_leader_id',
-          password: 'test_password',
-          postCount: 0,
-          role: UserType.User,
-          updateAt: new Date('2024-06-28T18:19:29.764Z'),
-          username: 'test_name',
-        },
       });
       expect(followRepository.follows.length).toBe(followRowCount - 1);
-      expect(followRepository.follows).toContainEqual({
+      expect(followRepository.follows).not.toContainEqual({
         id: 'follow-id',
         fk_leader_id: leaderId,
         fk_follower_id: followerId,
-        user: {
-          createdAt: new Date('2024-06-28T18:19:29.764Z'),
-          email: 'test_email',
-          id: 'test_leader_id',
-          password: 'test_password',
-          postCount: 0,
-          role: UserType.User,
-          updateAt: new Date('2024-06-28T18:19:29.764Z'),
-          username: 'test_name',
-        },
       });
     });
 
-    it('leaderId가 존재하지 않으면 에러가 납니다', () => {
+    it('leaderId 혹은 followerId가 존재하지 않으면 에러가 납니다', () => {
+      // given
+      const invalidLeaderId = 'invalid_leader_id';
+      const invalidFollowerId = 'invalid_follower_id';
+
       // then
-      expect(userService.deleteFollow(leaderId, followerId)).rejects.toThrow(
-        NotFoundException,
-      );
+      expect(
+        userService.removeFollow(invalidLeaderId, invalidFollowerId),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });

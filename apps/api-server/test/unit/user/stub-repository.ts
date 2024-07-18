@@ -20,4 +20,10 @@ export class StubUserRepository {
       this.users.find((user) => user.id === conditions.where.id),
     );
   }
+
+  findOneBy(conditions: any): Promise<User> {
+    return Promise.resolve(
+      this.users.find((follow) => follow.id === conditions.id),
+    );
+  }
 }

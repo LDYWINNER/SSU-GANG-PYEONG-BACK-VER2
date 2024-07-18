@@ -22,15 +22,25 @@ export class StubFollowRepository {
   }
 
   findOneBy(conditions: any): Promise<Follow> {
-    return Promise.resolve(
-      this.follows.find((follow) => follow.id === conditions.id),
-    );
+    if (conditions.id !== undefined) {
+      return Promise.resolve(
+        this.follows.find((follow) => follow.id === conditions.id),
+      );
+    } else {
+      return Promise.resolve(
+        this.follows.find(
+          (follow) =>
+            follow.fk_leader_id === conditions.fk_leader_id &&
+            follow.fk_follower_id === conditions.fk_follower_id,
+        ),
+      );
+    }
   }
 
   find(conditions: any): Promise<Follow[]> {
     return Promise.resolve(
       this.follows.filter(
-        (follow) => follow.user.id === conditions.where.user.id,
+        (follow) => follow.fk_leader_id.id === conditions.where.fk_leader_id.id,
       ),
     );
   }
