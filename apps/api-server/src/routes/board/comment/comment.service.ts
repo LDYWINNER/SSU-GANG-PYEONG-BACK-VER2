@@ -81,15 +81,25 @@ export class CommentService {
       likes: () => 'likes - 1',
     });
 
-    return await this.boardCommentLikeRepository.delete({
-      fk_user_id: userId,
-      fk_board_comment_id: boardCommentId,
+    const boardCommentLike = await this.boardCommentLikeRepository.findOne({
+      where: { fk_user_id: userId, fk_board_comment_id: boardCommentId },
     });
+    if (!boardCommentLike) {
+      throw new NotFoundException(
+        `Board comment like with id ${boardCommentId} not found`,
+      );
+    }
+
+    await this.boardCommentLikeRepository.remove(boardCommentLike);
+
+    return boardCommentLike;
   };
 
   countLikes = async (boardCommentId: string) => {
-    return await this.boardCommentLikeRepository.count({
+    const count = await this.boardCommentLikeRepository.count({
       where: { fk_board_comment_id: boardCommentId },
     });
+
+    return { count };
   };
 }

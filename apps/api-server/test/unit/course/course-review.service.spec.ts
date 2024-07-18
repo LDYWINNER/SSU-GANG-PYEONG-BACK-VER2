@@ -249,7 +249,9 @@ describe('유저 수강평 관련 서비스 테스트', () => {
       const result = await courseReviewService.countLikes('1');
 
       // then
-      expect(result).toBe(1);
+      expect(result).toEqual({
+        count: 1,
+      });
     });
 
     it('unlikeCourseReview 함수 테스트', async () => {

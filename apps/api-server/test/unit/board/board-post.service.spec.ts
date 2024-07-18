@@ -407,7 +407,9 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
       const result = await service.countLikes(postId);
 
       // then
-      expect(result).toBe(1);
+      expect(result).toEqual({
+        count: 1,
+      });
     });
 
     it('unlikeBoardPost 함수 테스트', async () => {

@@ -311,7 +311,9 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
       const result = await boardCommentService.countLikes(commentId);
 
       // then
-      expect(result).toBe(1);
+      expect(result).toEqual({
+        count: 1,
+      });
     });
 
     it('unlikeBoardComment 함수 테스트', async () => {

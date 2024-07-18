@@ -67,15 +67,25 @@ export class ReviewService {
       likes: () => 'likes - 1',
     });
 
-    return await this.courseReviewLikeRepository.delete({
-      fk_user_id: userId,
-      fk_course_review_id: courseReviewId,
+    const courseReviewLike = await this.courseReviewLikeRepository.findOne({
+      where: { fk_user_id: userId, fk_course_review_id: courseReviewId },
     });
+    if (!courseReviewLike) {
+      throw new NotFoundException(
+        `Course review like not found: ${courseReviewId}`,
+      );
+    }
+
+    await this.courseReviewLikeRepository.remove(courseReviewLike);
+
+    return courseReviewLike;
   };
 
   countLikes = async (courseReviewId: string) => {
-    return await this.courseReviewLikeRepository.count({
+    const count = await this.courseReviewLikeRepository.count({
       where: { fk_course_review_id: courseReviewId },
     });
+
+    return { count };
   };
 }

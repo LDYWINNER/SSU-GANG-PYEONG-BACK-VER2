@@ -201,16 +201,24 @@ export class CourseService {
       likes: () => 'likes - 1',
     });
 
-    return await this.courseLikeRepository.delete({
-      fk_user_id: userId,
-      fk_course_id: courseId,
+    const courseLike = await this.courseLikeRepository.findOne({
+      where: { fk_user_id: userId, fk_course_id: courseId },
     });
+    if (!courseLike) {
+      throw new NotFoundException(`Course like not found with id: ${courseId}`);
+    }
+
+    await this.courseLikeRepository.remove(courseLike);
+
+    return courseLike;
   };
 
   countLikes = async (courseId: string) => {
-    return await this.courseLikeRepository.count({
+    const count = await this.courseLikeRepository.count({
       where: { fk_course_id: courseId },
     });
+
+    return { count };
   };
 
   formatTableCourses = async (tableId: string) => {

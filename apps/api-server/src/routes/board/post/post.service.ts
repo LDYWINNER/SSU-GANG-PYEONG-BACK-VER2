@@ -2,6 +2,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -90,15 +91,25 @@ export class PostService {
       likes: () => 'likes - 1',
     });
 
-    return await this.boardPostLikeRepository.delete({
-      fk_user_id: userId,
-      fk_board_post_id: boardPostId,
+    const boardPostLike = await this.boardPostLikeRepository.findOne({
+      where: { fk_user_id: userId, fk_board_post_id: boardPostId },
     });
+    if (!boardPostLike) {
+      throw new NotFoundException(
+        `Board post like with id ${boardPostId} not found`,
+      );
+    }
+
+    await this.boardPostLikeRepository.remove(boardPostLike);
+
+    return boardPostLike;
   };
 
   countLikes = async (boardPostId: string) => {
-    return await this.boardPostLikeRepository.count({
+    const count = await this.boardPostLikeRepository.count({
       where: { fk_board_post_id: boardPostId },
     });
+
+    return { count };
   };
 }
