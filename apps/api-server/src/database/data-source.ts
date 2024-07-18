@@ -7,6 +7,7 @@ import {
   CourseLocation1721130117933,
   LikeEntityDeleteCascade1721280155092,
   FollowEntity1721317720001,
+  FollowEntity1721322858204,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -24,6 +25,7 @@ const options: DataSourceOptions & SeederOptions = {
     CourseLocation1721130117933,
     LikeEntityDeleteCascade1721280155092,
     FollowEntity1721317720001,
+    FollowEntity1721322858204,
   ],
   migrationsTableName: 'migrations',
 };
