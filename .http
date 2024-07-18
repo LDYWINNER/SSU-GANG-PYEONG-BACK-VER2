@@ -59,8 +59,8 @@ POST http://localhost:3000/auth
 content-type: application/json
 
 {
-    "username": "seederUser2",
-    "email": "gildong3@stonybrook.edu",
+    "username": "seederUser",
+    "email": "gildong4@stonybrook.edu",
     "password": "Hong123456!",
     "passwordConfirm": "Hong123456!"
 }
@@ -76,6 +76,13 @@ content-type: application/json
     "email": "gildong3@stonybrook.edu",
     "password": "Hong123456!"
 }
+
+###
+# 유저 follow
+
+POST http://localhost:3000/user/follow/bbc18655-55c0-4d53-9af1-aae1718f95f9
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU3NWYyN2M3LTdmZDctNDdhNC1hY2ZmLTgxNGY0NjUyNjE1OCIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIxMzMxNzI4LCJleHAiOjE3MjE0MTgxMjh9.oy2Ng8lvACzq3cJpt7Tdi6mwxpbi4ZFlTkaHCFtUnKg
 
 ###
 

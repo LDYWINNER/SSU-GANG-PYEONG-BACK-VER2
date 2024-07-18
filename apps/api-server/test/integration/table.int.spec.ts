@@ -80,9 +80,9 @@ describe('Table 기능 통합 테스트', () => {
     const jwtService = moduleFixture.get<JwtService>(JwtService);
     token = jwtService.sign({ id: userId, username: user.username });
     // Invalid JWT 토큰 발급
-    const invalidSecret = 'some-invalid-secret'; // Different from your actual secret
+    const invalidSecret = 'some-invalid-secret';
     const invalidPayload = {
-      id: 'invalid-uuid', // Simulate an invalid user id
+      id: 'invalid-uuid',
       username: 'invalidUser',
       email: 'invalid@example.com',
     };
