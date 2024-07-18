@@ -14,6 +14,7 @@ import { CourseLike } from './course-like.entity';
 import { CourseReviewLike } from './course-review-like.entity';
 import { BoardPostLike } from './board-post-like.entity';
 import { BoardCommentLike } from './board-comment-like.entity';
+import { Follow } from './follow.entity';
 
 export {
   User,
@@ -32,4 +33,5 @@ export {
   CourseReviewLike,
   BoardPostLike,
   BoardCommentLike,
+  Follow,
 };
