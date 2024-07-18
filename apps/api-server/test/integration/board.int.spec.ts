@@ -16,6 +16,8 @@ import {
   BoardPost,
   BoardComment,
   RefreshToken,
+  BoardCommentLike,
+  BoardPostLike,
 } from '../../src/entity';
 import { BoardType } from '../../src/common/enum/board.enum';
 
@@ -26,6 +28,8 @@ describe('Board 기능 통합 테스트', () => {
   let boardRepository: Repository<Board>;
   let boardPostRepository: Repository<BoardPost>;
   let boardCommentRepository: Repository<BoardComment>;
+  let boardCommentLikeRepository: Repository<BoardCommentLike>;
+  let boardPostLikeRepository: Repository<BoardPostLike>;
   let userId: string;
   let token: string;
   let invalidToken: string;
@@ -65,6 +69,12 @@ describe('Board 기능 통합 테스트', () => {
     boardCommentRepository = moduleFixture.get<Repository<BoardComment>>(
       getRepositoryToken(BoardComment),
     );
+    boardCommentLikeRepository = moduleFixture.get<
+      Repository<BoardCommentLike>
+    >(getRepositoryToken(BoardCommentLike));
+    boardPostLikeRepository = moduleFixture.get<Repository<BoardPostLike>>(
+      getRepositoryToken(BoardPostLike),
+    );
 
     // 테스트용 사용자 생성
     const user = userRepository.create({
@@ -95,6 +105,8 @@ describe('Board 기능 통합 테스트', () => {
     await boardRepository.delete({});
     await boardPostRepository.delete({});
     await boardCommentRepository.delete({});
+    await boardPostLikeRepository.delete({});
+    await boardCommentLikeRepository.delete({});
     await refreshTokenRepository.delete({});
     await userRepository.delete({});
     await app.close();
@@ -492,7 +504,7 @@ describe('Board 기능 통합 테스트', () => {
     describe('board post 좋아요 기능', () => {
       let boardPostId: string;
 
-      beforeEach(async () => {
+      beforeAll(async () => {
         const boardPost = boardPostRepository.create({
           title: 'post_title',
           contents: 'post_contents',
@@ -504,11 +516,7 @@ describe('Board 기능 통합 테스트', () => {
         boardPostId = savedBoardPost.id;
       });
 
-      afterEach(async () => {
-        await boardPostRepository.delete({});
-      });
-
-      it('POST /board/post/like - board post 좋아요 테스트', async () => {
+      it('POST /board/post/like/:id - board post 좋아요 테스트', async () => {
         const response = await request(app.getHttpServer())
           .post(`/board/post/like/${boardPostId}`)
           .set('Authorization', `Bearer ${token}`);
@@ -577,6 +585,7 @@ describe('Board 기능 통합 테스트', () => {
     afterAll(async () => {
       await boardRepository.delete({});
       await boardPostRepository.delete({});
+      await boardPostLikeRepository.delete({});
     });
 
     describe('/board/comment (POST)', () => {
@@ -663,7 +672,7 @@ describe('Board 기능 통합 테스트', () => {
     describe('board comment 좋아요 기능', () => {
       let boardCommentId: string;
 
-      beforeEach(async () => {
+      beforeAll(async () => {
         const boardComment = boardCommentRepository.create({
           content: 'comment_content',
           boardPost: { id: boardPostId },
@@ -674,11 +683,7 @@ describe('Board 기능 통합 테스트', () => {
         boardCommentId = savedBoardComment.id;
       });
 
-      afterEach(async () => {
-        await boardCommentRepository.delete({});
-      });
-
-      it('POST /board/comment/like - board comment 좋아요 테스트', async () => {
+      it('POST /board/comment/like/:id - board comment 좋아요 테스트', async () => {
         const response = await request(app.getHttpServer())
           .post(`/board/comment/like/${boardCommentId}`)
           .set('Authorization', `Bearer ${token}`);

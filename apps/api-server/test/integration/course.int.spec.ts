@@ -586,7 +586,7 @@ describe('Course 기능 통합 테스트', () => {
 
     it('GET /course/like/:id - course 좋아요 수 조회 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .get(`/course/like/count/${courseId1}`)
+        .get(`/course/like/${courseId1}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(200);
@@ -596,10 +596,6 @@ describe('Course 기능 통합 테스트', () => {
     });
 
     it('DELETE /course/like - course 좋아요 취소 테스트', async () => {
-      await request(app.getHttpServer())
-        .delete(`/course/like/${courseId1}`)
-        .set('Authorization', `Bearer ${token}`);
-
       const response = await request(app.getHttpServer())
         .delete(`/course/like/${courseId1}`)
         .set('Authorization', `Bearer ${token}`);
@@ -672,14 +668,14 @@ describe('Course 기능 통합 테스트', () => {
 
     it('DELETE /course/review/like/:id - course review 좋아요 취소 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .delete(`/course/review/like/${courseId1}`)
+        .delete(`/course/review/like/${courseReviewId}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual(
         expect.objectContaining({
           fk_user_id: userId,
-          fk_course_review_id: courseId1,
+          fk_course_review_id: courseReviewId,
         }),
       );
     });
