@@ -32,7 +32,11 @@ export class BoardPostLike {
   @UpdateDateColumn()
   updated_at!: Date;
 
-  @ManyToOne(() => BoardPost, { cascade: true, eager: true })
+  @ManyToOne(() => BoardPost, {
+    onDelete: 'CASCADE',
+    cascade: true,
+    eager: true,
+  })
   @JoinColumn({ name: 'fk_board_post_id' })
   board_post!: BoardPost;
 

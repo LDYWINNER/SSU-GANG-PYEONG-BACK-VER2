@@ -32,7 +32,11 @@ export class BoardCommentLike {
   @UpdateDateColumn()
   updated_at!: Date;
 
-  @ManyToOne(() => BoardComment, { cascade: true, eager: true })
+  @ManyToOne(() => BoardComment, {
+    onDelete: 'CASCADE',
+    cascade: true,
+    eager: true,
+  })
   @JoinColumn({ name: 'fk_board_comment_id' })
   board_comment!: BoardComment;
 

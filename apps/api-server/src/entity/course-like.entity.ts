@@ -36,7 +36,7 @@ export class CourseLike {
   @JoinColumn({ name: 'fk_course_id' })
   course!: Course;
 
-  @ManyToOne(() => User, { cascade: true, eager: true })
+  @ManyToOne(() => User, { onDelete: 'CASCADE', cascade: true, eager: true })
   @JoinColumn({ name: 'fk_user_id' })
   user!: User;
 }

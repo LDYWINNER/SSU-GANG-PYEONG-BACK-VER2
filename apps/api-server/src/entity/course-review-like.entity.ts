@@ -32,7 +32,11 @@ export class CourseReviewLike {
   @UpdateDateColumn()
   updated_at!: Date;
 
-  @ManyToOne(() => CourseReview, { cascade: true, eager: true })
+  @ManyToOne(() => CourseReview, {
+    onDelete: 'CASCADE',
+    cascade: true,
+    eager: true,
+  })
   @JoinColumn({ name: 'fk_course_review_id' })
   course_review!: CourseReview;
 

@@ -5,6 +5,7 @@ import {
   CourseAvgGrade1720937829565,
   LikeFeature1721126104287,
   CourseLocation1721130117933,
+  LikeEntityDeleteCascade1721280155092,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -20,6 +21,7 @@ const options: DataSourceOptions & SeederOptions = {
     CourseAvgGrade1720937829565,
     LikeFeature1721126104287,
     CourseLocation1721130117933,
+    LikeEntityDeleteCascade1721280155092,
   ],
   migrationsTableName: 'migrations',
 };
