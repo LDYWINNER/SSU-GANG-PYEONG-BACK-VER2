@@ -127,7 +127,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJkMWVlNGE2L
 # board 생성
 POST http://localhost:3000/board
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZGEzOWQ2LTIwNGYtNGY1Ni04MDk0LTQ3NjZlZmJlMjdhNiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwODY3NDk4LCJleHAiOjE3MjA5NTM4OTh9.AX2ZLLAxZmE12765p302ojYYkgOtdgqrgv1CuYZZzr4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ODhkODI4LThkZTktNGQ2NS1hZGMyLTZjOTE1NzlhMWFkMyIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIxMjgwOTY2LCJleHAiOjE3MjEzNjczNjZ9.IPC7VU8gp2MBZGRPOMcNcEDMTsJJhJh0LrRTH28tA6E
 
 {
     "title": "board_title",
@@ -144,14 +144,32 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI5OTY2NDgyL
 # board post 생성
 POST http://localhost:3000/board/post
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZGEzOWQ2LTIwNGYtNGY1Ni04MDk0LTQ3NjZlZmJlMjdhNiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwODY3NDk4LCJleHAiOjE3MjA5NTM4OTh9.AX2ZLLAxZmE12765p302ojYYkgOtdgqrgv1CuYZZzr4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ODhkODI4LThkZTktNGQ2NS1hZGMyLTZjOTE1NzlhMWFkMyIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIxMjgwOTY2LCJleHAiOjE3MjEzNjczNjZ9.IPC7VU8gp2MBZGRPOMcNcEDMTsJJhJh0LrRTH28tA6E
 
 {
     "title": "post_title",
     "contents": "post_contents",
     "anonymity": false,
-    "boardId": "6e9cc267-99aa-4423-ab1e-be2b6c1490c0"
+    "boardId": "fc9e848a-8fc7-44b6-9071-43596785ac35"
 }
+
+###
+# board like 생성
+POST http://localhost:3000/board/post/like/2cc955fa-86c3-4729-9ac4-5c33096401e5
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ODhkODI4LThkZTktNGQ2NS1hZGMyLTZjOTE1NzlhMWFkMyIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIxMjgwOTY2LCJleHAiOjE3MjEzNjczNjZ9.IPC7VU8gp2MBZGRPOMcNcEDMTsJJhJh0LrRTH28tA6E
+
+###
+# board like count
+GET http://localhost:3000/board/post/like/2cc955fa-86c3-4729-9ac4-5c33096401e5
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ODhkODI4LThkZTktNGQ2NS1hZGMyLTZjOTE1NzlhMWFkMyIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIxMjgwOTY2LCJleHAiOjE3MjEzNjczNjZ9.IPC7VU8gp2MBZGRPOMcNcEDMTsJJhJh0LrRTH28tA6E
+
+###
+# board unlike
+DELETE http://localhost:3000/board/post/like/2cc955fa-86c3-4729-9ac4-5c33096401e5
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ODhkODI4LThkZTktNGQ2NS1hZGMyLTZjOTE1NzlhMWFkMyIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIxMjgwOTY2LCJleHAiOjE3MjEzNjczNjZ9.IPC7VU8gp2MBZGRPOMcNcEDMTsJJhJh0LrRTH28tA6E
 
 ###
 # board post 수정

@@ -9,6 +9,7 @@ import {
   ValidationPipe,
   Query,
   UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { ApiBearerAuth, ApiExtraModels, ApiTags } from '@nestjs/swagger';
@@ -123,5 +124,58 @@ export class PostController {
   @Delete(':id')
   remove(@UserInfo() userInfo: UserAfterAuth, @Param('id') id: string) {
     return this.postService.delete(userInfo.id, id);
+  }
+
+  @Post('like/:id')
+  async createPostLike(
+    @UserInfo() userInfo: UserAfterAuth,
+    @Param('id') id: string,
+  ) {
+    try {
+      const userId = userInfo.id;
+      const result = await this.postService.likeBoardPost(userId, id);
+      if (!result) {
+        throw new InternalServerErrorException(
+          `Failed to create post like for post id ${id}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('like/:id')
+  async countPostLike(@Param('id') id: string) {
+    try {
+      const result = await this.postService.countLikes(id);
+      if (!result) {
+        throw new InternalServerErrorException(
+          `Failed to count likes for post id ${id}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Delete('like/:id')
+  async deletePostLike(
+    @UserInfo() userInfo: UserAfterAuth,
+    @Param('id') id: string,
+  ) {
+    try {
+      const userId = userInfo.id;
+      const result = await this.postService.unlikeBoardPost(userId, id);
+      if (!result) {
+        throw new InternalServerErrorException(
+          `Failed to delete like for post id ${id}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 }

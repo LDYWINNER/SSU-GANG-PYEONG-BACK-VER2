@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   InternalServerErrorException,
   Param,
   Post,
@@ -45,6 +46,59 @@ export class CommentController {
       const result = await this.commentService.deleteComment(id);
       if (!result) {
         throw new InternalServerErrorException('Failed to delete comment');
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Post('like/:id')
+  async createCommentLike(
+    @UserInfo() userInfo: UserAfterAuth,
+    @Param('id') id: string,
+  ) {
+    try {
+      const userId = userInfo.id;
+      const result = await this.commentService.likeBoardComment(userId, id);
+      if (!result) {
+        throw new InternalServerErrorException(
+          `Failed to create comment like for comment id ${id}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('like/:id')
+  async countCommentLike(@Param('id') id: string) {
+    try {
+      const result = await this.commentService.countLikes(id);
+      if (!result) {
+        throw new InternalServerErrorException(
+          `Failed to count likes for comment id ${id}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Delete('like/:id')
+  async deleteCommentLike(
+    @UserInfo() userInfo: UserAfterAuth,
+    @Param('id') id: string,
+  ) {
+    try {
+      const userId = userInfo.id;
+      const result = await this.commentService.unlikeBoardComment(userId, id);
+      if (!result) {
+        throw new InternalServerErrorException(
+          `Failed to delete like for comment id ${id}`,
+        );
       }
       return result;
     } catch (error) {
