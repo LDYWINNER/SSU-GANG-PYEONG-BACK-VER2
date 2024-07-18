@@ -15,6 +15,28 @@ export class StubCourseReviewLikeRepository {
     return Promise.resolve(courseReviewLike);
   }
 
+  findOne(conditions: any): Promise<CourseReviewLike> {
+    return this.courseReviewLikes.find(
+      (crl) =>
+        crl.fk_user_id === conditions.where.fk_user_id &&
+        crl.fk_course_review_id === conditions.where.fk_course_review_id,
+    );
+  }
+
+  remove(courseReviewLike: CourseReviewLike): Promise<CourseReviewLike> {
+    const index = this.courseReviewLikes.findIndex(
+      (crl) =>
+        crl.fk_user_id === courseReviewLike.fk_user_id &&
+        crl.fk_course_review_id === courseReviewLike.fk_course_review_id,
+    );
+    if (index >= 0) {
+      const result = this.courseReviewLikes[index];
+      this.courseReviewLikes.splice(index, 1);
+      return result;
+    }
+    return Promise.reject(new Error('Course Review Like not found'));
+  }
+
   async delete({
     fk_user_id: userId,
     fk_course_review_id: courseReviewId,

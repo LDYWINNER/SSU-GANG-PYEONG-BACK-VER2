@@ -15,6 +15,28 @@ export class StubBoardPostLikeRepository {
     return Promise.resolve(boardPostLike);
   }
 
+  findOne(conditions: any): Promise<BoardPostLike> {
+    return this.boardPostLikes.find(
+      (bpl) =>
+        bpl.fk_user_id === conditions.where.fk_user_id &&
+        bpl.fk_board_post_id === conditions.where.fk_board_post_id,
+    );
+  }
+
+  remove(boardPostLike: BoardPostLike): Promise<BoardPostLike> {
+    const index = this.boardPostLikes.findIndex(
+      (bpl) =>
+        bpl.fk_user_id === boardPostLike.fk_user_id &&
+        bpl.fk_board_post_id === boardPostLike.fk_board_post_id,
+    );
+    if (index >= 0) {
+      const result = this.boardPostLikes[index];
+      this.boardPostLikes.splice(index, 1);
+      return result;
+    }
+    return Promise.reject(new Error('Board Post Like not found'));
+  }
+
   async delete({
     fk_user_id: userId,
     fk_board_post_id: boardPostId,
