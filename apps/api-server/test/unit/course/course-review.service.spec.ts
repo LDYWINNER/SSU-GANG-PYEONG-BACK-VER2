@@ -13,6 +13,7 @@ import { StubUserRepository } from '../user/stub-repository';
 import { StubCourseRepository } from './stub/course-repository';
 import { UserType } from '../../../src/common/enum/user.enum';
 import { StubCourseReviewLikeRepository } from './stub/course-review-like-repository';
+import { CourseReviewReactionType } from '../../../src/common/enum/course-review-reaction.enum';
 
 describe('유저 수강평 관련 서비스 테스트', () => {
   let courseReviewService: ReviewService;
@@ -185,7 +186,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
     });
   });
 
-  describe('likeCourseReview & unlikeCourseReview & countLikes 함수 테스트', () => {
+  describe('createCourseReviewReaction & removeCourseReviewReaction & getCourseReviewReaction 함수 테스트', () => {
     it('likeCourseReview 함수 테스트', async () => {
       // given
       courseReviewRepository.courseReviews.push({
@@ -209,20 +210,27 @@ describe('유저 수강평 관련 서비스 테스트', () => {
       });
 
       // when
-      const result = await courseReviewService.likeCourseReview(userId, '1');
+      const result = await courseReviewService.createCourseReviewReaction(
+        userId,
+        {
+          courseReviewId: '1',
+          reactionType: CourseReviewReactionType.Like.text,
+        },
+      );
 
       // then
       expect(result).toEqual(
         expect.objectContaining({
           fk_user_id: userId,
           fk_course_review_id: '1',
+          reaction: 'LIKE',
         }),
       );
       expect(courseReviewLikeRepository.courseReviewLikes.length).toBe(1);
       expect(courseReviewRepository.courseReviews[0].likes).toBe(1);
     });
 
-    it('countLikes 함수 테스트', async () => {
+    it('getCourseReviewReaction 함수 테스트', async () => {
       // given
       courseReviewRepository.courseReviews.push({
         id: '1',
@@ -243,19 +251,28 @@ describe('유저 수강평 관련 서비스 테스트', () => {
         anonymity: true,
         likes: 0,
       });
-      await courseReviewService.likeCourseReview(userId, '1');
+      await courseReviewService.createCourseReviewReaction(userId, {
+        courseReviewId: '1',
+        reactionType: CourseReviewReactionType.Like.text,
+      });
 
       // when
-      const result = await courseReviewService.countLikes('1');
+      const result = await courseReviewService.getCourseReviewReaction('1');
 
       // then
       expect(result).toEqual({
-        count: 1,
-        likers: [userId],
+        totalCount: 1,
+        items: [
+          expect.objectContaining({
+            fk_user_id: userId,
+            fk_course_review_id: '1',
+            reaction: 'LIKE',
+          }),
+        ],
       });
     });
 
-    it('unlikeCourseReview 함수 테스트', async () => {
+    it('removeCourseReviewReaction 함수 테스트', async () => {
       // given
       courseReviewRepository.courseReviews.push({
         id: '1',
@@ -276,16 +293,26 @@ describe('유저 수강평 관련 서비스 테스트', () => {
         anonymity: true,
         likes: 0,
       });
-      await courseReviewService.likeCourseReview(userId, '1');
+      await courseReviewService.createCourseReviewReaction(userId, {
+        courseReviewId: '1',
+        reactionType: CourseReviewReactionType.Like.text,
+      });
 
       // when
-      const result = await courseReviewService.unlikeCourseReview(userId, '1');
+      const result = await courseReviewService.removeCourseReviewReaction(
+        userId,
+        {
+          courseReviewId: '1',
+          reactionType: CourseReviewReactionType.Like.text,
+        },
+      );
 
       // then
       expect(result).toEqual(
         expect.objectContaining({
           fk_user_id: userId,
           fk_course_review_id: '1',
+          reaction: CourseReviewReactionType.Like.text,
         }),
       );
       expect(courseReviewLikeRepository.courseReviewLikes.length).toBe(0);

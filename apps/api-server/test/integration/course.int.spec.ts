@@ -11,6 +11,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserType } from '../../src/common/enum/user.enum';
 import { v4 as uuidv4 } from 'uuid';
 import { User, RefreshToken, Course, CourseReview } from '../../src/entity';
+import { CourseReviewReactionType } from '../../src/common/enum/course-review-reaction.enum';
 
 describe('Course 기능 통합 테스트', () => {
   let app: INestApplication;
@@ -570,7 +571,7 @@ describe('Course 기능 통합 테스트', () => {
   });
 
   describe('course 좋아요 기능 통합 테스트', () => {
-    it('POST /course/like - course 좋아요 테스트', async () => {
+    it('POST /course/reaction - course 좋아요 테스트', async () => {
       const response = await request(app.getHttpServer())
         .post(`/course/like/${courseId1}`)
         .set('Authorization', `Bearer ${token}`);
@@ -642,42 +643,58 @@ describe('Course 기능 통합 테스트', () => {
       courseReviewId = savedCourseReview.id;
     });
 
-    it('POST /course/review/like - course review 좋아요 테스트', async () => {
+    it('POST /course/review/reaction - course review 좋아요 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .post(`/course/review/like/${courseReviewId}`)
-        .set('Authorization', `Bearer ${token}`);
+        .post(`/course/review/reaction`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          courseReviewId,
+          reactionType: CourseReviewReactionType.Fire.text,
+        });
 
       expect(response.status).toBe(201);
       expect(response.body).toEqual(
         expect.objectContaining({
           fk_user_id: userId,
           fk_course_review_id: courseReviewId,
+          reaction: 'FIRE',
         }),
       );
     });
 
-    it('GET /course/review/like/:id - course review 좋아요 수 조회 테스트', async () => {
+    it('GET /course/review/reaction/:id - course review 좋아요 수 조회 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .get(`/course/review/like/${courseReviewId}`)
+        .get(`/course/review/reaction/${courseReviewId}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
-        count: 1,
-        likers: [userId],
+        totalCount: 1,
+        items: [
+          expect.objectContaining({
+            fk_user_id: userId,
+            fk_course_review_id: courseReviewId,
+            reaction: 'FIRE',
+          }),
+        ],
       });
     });
 
-    it('DELETE /course/review/like/:id - course review 좋아요 취소 테스트', async () => {
+    it('DELETE /course/review/reaction - course review 좋아요 취소 테스트', async () => {
       const response = await request(app.getHttpServer())
-        .delete(`/course/review/like/${courseReviewId}`)
-        .set('Authorization', `Bearer ${token}`);
+        .delete(`/course/review/reaction`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          courseReviewId,
+          reactionType: CourseReviewReactionType.Fire.text,
+        });
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual(
         expect.objectContaining({
           fk_user_id: userId,
           fk_course_review_id: courseReviewId,
+          reaction: 'FIRE',
         }),
       );
     });
