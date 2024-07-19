@@ -538,6 +538,7 @@ describe('Board 기능 통합 테스트', () => {
         expect(response.status).toBe(200);
         expect(response.body).toEqual({
           count: 1,
+          likers: [userId],
         });
       });
 
@@ -705,6 +706,7 @@ describe('Board 기능 통합 테스트', () => {
         expect(response.status).toBe(200);
         expect(response.body).toEqual({
           count: 1,
+          likers: [userId],
         });
       });
 

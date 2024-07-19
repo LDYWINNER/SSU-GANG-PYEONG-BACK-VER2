@@ -23,6 +23,14 @@ export class StubCourseLikeRepository {
     );
   }
 
+  find(conditions: any): Promise<CourseLike[]> {
+    return Promise.resolve(
+      this.courseLikes.filter(
+        (cl) => cl.fk_course_id.id === conditions.where.fk_course_id.id,
+      ),
+    );
+  }
+
   remove(courseLike: CourseLike): Promise<CourseLike> {
     const index = this.courseLikes.findIndex(
       (cl) =>

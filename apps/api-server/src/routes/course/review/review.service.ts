@@ -82,10 +82,13 @@ export class ReviewService {
   };
 
   countLikes = async (courseReviewId: string) => {
-    const count = await this.courseReviewLikeRepository.count({
+    const likes = await this.courseReviewLikeRepository.find({
       where: { fk_course_review_id: courseReviewId },
     });
 
-    return { count };
+    return {
+      count: likes.length,
+      likers: [...likes.map((like) => like.fk_user_id)],
+    };
   };
 }

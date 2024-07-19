@@ -23,6 +23,16 @@ export class StubCourseReviewLikeRepository {
     );
   }
 
+  find(conditions: any): Promise<CourseReviewLike[]> {
+    return Promise.resolve(
+      this.courseReviewLikes.filter(
+        (crl) =>
+          crl.fk_course_review_id.id ===
+          conditions.where.fk_course_review_id.id,
+      ),
+    );
+  }
+
   remove(courseReviewLike: CourseReviewLike): Promise<CourseReviewLike> {
     const index = this.courseReviewLikes.findIndex(
       (crl) =>

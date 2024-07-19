@@ -17,9 +17,19 @@ export class StubBoardCommentLikeRepository {
 
   findOne(conditions: any): Promise<BoardCommentLike> {
     return this.boardCommentLikes.find(
-      (bpl) =>
-        bpl.fk_user_id === conditions.where.fk_user_id &&
-        bpl.fk_board_comment_id === conditions.where.fk_board_comment_id,
+      (bcl) =>
+        bcl.fk_user_id === conditions.where.fk_user_id &&
+        bcl.fk_board_comment_id === conditions.where.fk_board_comment_id,
+    );
+  }
+
+  find(conditions: any): Promise<BoardCommentLike[]> {
+    return Promise.resolve(
+      this.boardCommentLikes.filter(
+        (bcl) =>
+          bcl.fk_board_comment_id.id ===
+          conditions.where.fk_board_comment_id.id,
+      ),
     );
   }
 

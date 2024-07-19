@@ -313,6 +313,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
       // then
       expect(result).toEqual({
         count: 1,
+        likers: [userId],
       });
     });
 

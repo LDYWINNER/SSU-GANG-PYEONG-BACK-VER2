@@ -214,11 +214,14 @@ export class CourseService {
   };
 
   countLikes = async (courseId: string) => {
-    const count = await this.courseLikeRepository.count({
+    const likes = await this.courseLikeRepository.find({
       where: { fk_course_id: courseId },
     });
 
-    return { count };
+    return {
+      count: likes.length,
+      likers: [...likes.map((like) => like.fk_user_id)],
+    };
   };
 
   formatTableCourses = async (tableId: string) => {

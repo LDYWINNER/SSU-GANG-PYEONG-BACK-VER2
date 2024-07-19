@@ -251,6 +251,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
       // then
       expect(result).toEqual({
         count: 1,
+        likers: [userId],
       });
     });
 

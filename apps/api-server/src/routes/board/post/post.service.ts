@@ -106,10 +106,13 @@ export class PostService {
   };
 
   countLikes = async (boardPostId: string) => {
-    const count = await this.boardPostLikeRepository.count({
+    const likes = await this.boardPostLikeRepository.find({
       where: { fk_board_post_id: boardPostId },
     });
 
-    return { count };
+    return {
+      count: likes.length,
+      likers: [...likes.map((like) => like.fk_user_id)],
+    };
   };
 }

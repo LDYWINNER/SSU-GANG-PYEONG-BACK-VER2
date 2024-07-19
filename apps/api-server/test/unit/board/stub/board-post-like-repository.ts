@@ -23,6 +23,15 @@ export class StubBoardPostLikeRepository {
     );
   }
 
+  find(conditions: any): Promise<BoardPostLike[]> {
+    return Promise.resolve(
+      this.boardPostLikes.filter(
+        (bpl) =>
+          bpl.fk_board_post_id.id === conditions.where.fk_board_post_id.id,
+      ),
+    );
+  }
+
   remove(boardPostLike: BoardPostLike): Promise<BoardPostLike> {
     const index = this.boardPostLikes.findIndex(
       (bpl) =>

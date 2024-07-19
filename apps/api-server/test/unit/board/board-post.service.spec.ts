@@ -409,6 +409,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
       // then
       expect(result).toEqual({
         count: 1,
+        likers: [userId],
       });
     });
 
