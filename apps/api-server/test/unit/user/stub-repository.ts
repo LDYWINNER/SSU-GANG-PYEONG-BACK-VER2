@@ -15,6 +15,11 @@ export class StubUserRepository {
     },
   ];
 
+  save(user: User): Promise<User> {
+    this.users.push(user);
+    return Promise.resolve(user);
+  }
+
   findOne(conditions: any): Promise<User> {
     return Promise.resolve(
       this.users.find((user) => user.id === conditions.where.id),

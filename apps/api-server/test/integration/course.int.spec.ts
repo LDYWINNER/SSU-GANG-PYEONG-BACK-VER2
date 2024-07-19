@@ -531,12 +531,12 @@ describe('Course 기능 통합 테스트', () => {
             overallEvaluation: '',
             anonymity: true,
             likes: 0,
-
             course: expect.objectContaining({
               id: courseId1,
             }),
             user: expect.objectContaining({
               id: userId,
+              postCount: 1,
             }),
           }),
         );

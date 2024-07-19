@@ -26,7 +26,7 @@ export class ReviewService {
   createCourseReview = async (
     userId: string,
     { courseId, ...rest }: CreateCourseReviewDto,
-  ) => {
+  ): Promise<CourseReview> => {
     const [user, course] = await Promise.all([
       this.userRepository.findOne({ where: { id: userId } }),
       this.courseRepository.findOne({ where: { id: courseId } }),
@@ -40,9 +40,8 @@ export class ReviewService {
       throw new NotFoundException(`Course not found: ${courseId}`);
     }
 
-    await this.userRepository.update(userId, {
-      postCount: () => 'postCount + 1',
-    });
+    user.postCount += 1;
+    await this.userRepository.save(user);
 
     const newCourseReview = this.courseReviewRepository.create({
       ...rest,
@@ -51,7 +50,8 @@ export class ReviewService {
     });
     const savedCourseReview =
       await this.courseReviewRepository.save(newCourseReview);
-    return { ...savedCourseReview };
+
+    return savedCourseReview;
   };
 
   createCourseReviewReaction = async (
