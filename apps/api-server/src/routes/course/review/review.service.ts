@@ -27,19 +27,22 @@ export class ReviewService {
     userId: string,
     { courseId, ...rest }: CreateCourseReviewDto,
   ) => {
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-    });
+    const [user, course] = await Promise.all([
+      this.userRepository.findOne({ where: { id: userId } }),
+      this.courseRepository.findOne({ where: { id: courseId } }),
+    ]);
+
     if (!user) {
       throw new NotFoundException(`User not found: ${userId}`);
     }
 
-    const course = await this.courseRepository.findOne({
-      where: { id: courseId },
-    });
     if (!course) {
       throw new NotFoundException(`Course not found: ${courseId}`);
     }
+
+    await this.userRepository.update(userId, {
+      postCount: () => 'postCount + 1',
+    });
 
     const newCourseReview = this.courseReviewRepository.create({
       ...rest,
