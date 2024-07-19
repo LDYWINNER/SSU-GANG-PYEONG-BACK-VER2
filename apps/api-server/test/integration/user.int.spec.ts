@@ -9,13 +9,14 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserType } from '../../src/common/enum/user.enum';
 import { v4 as uuidv4 } from 'uuid';
-import { User, RefreshToken, Follow } from '../../src/entity';
+import { User, RefreshToken, Follow, Block } from '../../src/entity';
 
 describe('User 기능 통합 테스트', () => {
   let app: INestApplication;
   let userRepository: Repository<User>;
   let refreshTokenRepository: Repository<RefreshToken>;
   let followRepository: Repository<Follow>;
+  let blockRepository: Repository<Block>;
   let leaderId: string;
   let followerId: string;
   let token: string;
@@ -48,6 +49,9 @@ describe('User 기능 통합 테스트', () => {
     );
     followRepository = moduleFixture.get<Repository<Follow>>(
       getRepositoryToken(Follow),
+    );
+    blockRepository = moduleFixture.get<Repository<Block>>(
+      getRepositoryToken(Block),
     );
 
     // 테스트용 사용자 생성
@@ -196,6 +200,35 @@ describe('User 기능 통합 테스트', () => {
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(404);
+    });
+  });
+
+  describe('/user/block (POST)', () => {
+    afterEach(async () => {
+      await blockRepository.delete({});
+    });
+
+    it('block 생성 테스트', async () => {
+      const response = await request(app.getHttpServer())
+        .post(`/user/block/${followerId}`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+          fk_hater_id: leaderId,
+          fk_hated_id: followerId,
+        }),
+      );
+    });
+
+    it('유효하지 않은 토큰으로 요청을 보내는 경우 401를 반환해야 합니다', async () => {
+      const response = await request(app.getHttpServer())
+        .post(`/user/block/${followerId}`)
+        .set('Authorization', `Bearer ${invalidToken}`);
+
+      expect(response.status).toBe(401);
     });
   });
 });
