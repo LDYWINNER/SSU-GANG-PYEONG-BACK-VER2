@@ -72,7 +72,7 @@ export class User {
   })
   courseReviews?: CourseReview[];
 
-  @Column({ select: false, nullable: true, insert: false, update: false })
+  @Column({ default: 0 })
   postCount: number;
 
   @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user, {

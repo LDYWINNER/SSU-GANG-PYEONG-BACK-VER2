@@ -9,6 +9,7 @@ import {
   FollowEntity1721317720001,
   FollowEntity1721322858204,
   Enum1721366470719,
+  UserPostCount1721376941980,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -28,6 +29,7 @@ const options: DataSourceOptions & SeederOptions = {
     FollowEntity1721317720001,
     FollowEntity1721322858204,
     Enum1721366470719,
+    UserPostCount1721376941980,
   ],
   migrationsTableName: 'migrations',
 };

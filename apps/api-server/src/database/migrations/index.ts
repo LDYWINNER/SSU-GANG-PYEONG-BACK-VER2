@@ -6,6 +6,7 @@ import { LikeEntityDeleteCascade1721280155092 } from './1721280155092-like-entit
 import { FollowEntity1721317720001 } from './1721317720001-follow-entity';
 import { FollowEntity1721322858204 } from './1721322858204-follow-entity';
 import { Enum1721366470719 } from './1721366470719-enum';
+import { UserPostCount1721376941980 } from './1721376941980-user-post-count';
 
 export {
   Initialize1720855793915,
@@ -16,4 +17,5 @@ export {
   FollowEntity1721317720001,
   FollowEntity1721322858204,
   Enum1721366470719,
+  UserPostCount1721376941980,
 };
