@@ -11,6 +11,7 @@ import {
   Enum1721366470719,
   UserPostCount1721376941980,
   UserPostCount1721385720583,
+  UserBlock1721396024794,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -32,6 +33,7 @@ const options: DataSourceOptions & SeederOptions = {
     Enum1721366470719,
     UserPostCount1721376941980,
     UserPostCount1721385720583,
+    UserBlock1721396024794,
   ],
   migrationsTableName: 'migrations',
 };

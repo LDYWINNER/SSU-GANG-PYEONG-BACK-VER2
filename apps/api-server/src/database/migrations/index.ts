@@ -8,6 +8,7 @@ import { FollowEntity1721322858204 } from './1721322858204-follow-entity';
 import { Enum1721366470719 } from './1721366470719-enum';
 import { UserPostCount1721376941980 } from './1721376941980-user-post-count';
 import { UserPostCount1721385720583 } from './1721385720583-user-post-count';
+import { UserBlock1721396024794 } from './1721396024794-user-block';
 
 export {
   Initialize1720855793915,
@@ -20,4 +21,5 @@ export {
   Enum1721366470719,
   UserPostCount1721376941980,
   UserPostCount1721385720583,
+  UserBlock1721396024794,
 };
