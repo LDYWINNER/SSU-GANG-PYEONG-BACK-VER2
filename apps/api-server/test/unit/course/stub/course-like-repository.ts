@@ -24,11 +24,15 @@ export class StubCourseLikeRepository {
   }
 
   find(conditions: any): Promise<CourseLike[]> {
-    return Promise.resolve(
-      this.courseLikes.filter(
-        (cl) => cl.fk_course_id.id === conditions.where.fk_course_id.id,
-      ),
-    );
+    if (conditions.where.fk_course_id) {
+      return Promise.resolve(
+        this.courseLikes.filter(
+          (cl) => cl.fk_course_id === conditions.where.fk_course_id,
+        ),
+      );
+    } else {
+      return Promise.resolve(this.courseLikes);
+    }
   }
 
   remove(courseLike: CourseLike): Promise<CourseLike> {

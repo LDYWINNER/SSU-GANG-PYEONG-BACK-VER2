@@ -319,4 +319,107 @@ describe('유저 수강평 관련 서비스 테스트', () => {
       expect(courseReviewRepository.courseReviews[0].likes).toBe(0);
     });
   });
+
+  describe('getMyScrappedCourseReview 함수 테스트', () => {
+    it('getMyScrappedCourseReview 함수 결과값 테스트', async () => {
+      // given
+      courseReviewRepository.courseReviews.push({
+        id: '1',
+        courseId: 'course-id-1',
+        semester: '2024-spring',
+        instructor: 'Jeehong Kim',
+        myLetterGrade: 'A',
+        teamProjectPresence: false,
+        quizPresence: true,
+        testQuantity: '2',
+        testType: '2midterms-1final',
+        generosity: 'generous',
+        attendance: 'rolling-paper',
+        homeworkQuantity: 'many',
+        difficulty: 'difficult',
+        overallGrade: 3,
+        overallEvaluation: '',
+        anonymity: true,
+        likes: 0,
+      });
+      courseReviewRepository.courseReviews.push({
+        id: '2',
+        courseId: 'course-id-2',
+        semester: '2024-spring',
+        instructor: 'Jeehong Kim',
+        myLetterGrade: 'A',
+        teamProjectPresence: false,
+        quizPresence: true,
+        testQuantity: '2',
+        testType: '2midterms-1final',
+        generosity: 'generous',
+        attendance: 'rolling-paper',
+        homeworkQuantity: 'many',
+        difficulty: 'difficult',
+        overallGrade: 3,
+        overallEvaluation: '',
+        anonymity: true,
+        likes: 0,
+      });
+      courseReviewLikeRepository.courseReviewLikes.push({
+        fk_user_id: userId,
+        fk_course_review_id: '1',
+        reaction: CourseReviewReactionType.BookMark.text,
+      });
+      courseReviewLikeRepository.courseReviewLikes.push({
+        fk_user_id: userId,
+        fk_course_review_id: '2',
+        reaction: CourseReviewReactionType.BookMark.text,
+      });
+
+      // when
+      const result =
+        await courseReviewService.getMyScrappedCourseReview(userId);
+
+      // then
+      expect(result).toEqual({
+        count: 2,
+        items: [
+          expect.objectContaining({
+            id: '1',
+            courseId: 'course-id-1',
+            semester: '2024-spring',
+            instructor: 'Jeehong Kim',
+            myLetterGrade: 'A',
+            teamProjectPresence: false,
+            quizPresence: true,
+            testQuantity: '2',
+            testType: '2midterms-1final',
+            generosity: 'generous',
+            attendance: 'rolling-paper',
+            homeworkQuantity: 'many',
+            difficulty: 'difficult',
+            overallGrade: 3,
+            overallEvaluation: '',
+            anonymity: true,
+            likes: 0,
+          }),
+          expect.objectContaining({
+            id: '2',
+            courseId: 'course-id-2',
+            semester: '2024-spring',
+            instructor: 'Jeehong Kim',
+            myLetterGrade: 'A',
+            teamProjectPresence: false,
+            quizPresence: true,
+            testQuantity: '2',
+            testType: '2midterms-1final',
+            generosity: 'generous',
+            attendance: 'rolling-paper',
+            homeworkQuantity: 'many',
+            difficulty: 'difficult',
+            overallGrade: 3,
+            overallEvaluation: '',
+            anonymity: true,
+            likes: 0,
+          }),
+        ],
+      });
+    });
+  });
 });

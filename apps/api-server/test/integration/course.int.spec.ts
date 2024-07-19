@@ -161,7 +161,7 @@ describe('Course 기능 통합 테스트', () => {
   });
 
   describe('/course (GET)', () => {
-    it('/course/all get 테스트', async () => {
+    it('GET /course/all 테스트', async () => {
       const response = await request(app.getHttpServer())
         .get('/course/all')
         .set('Authorization', `Bearer ${token}`);
@@ -243,7 +243,7 @@ describe('Course 기능 통합 테스트', () => {
       expect(response.body.count).toBe(3);
     });
 
-    it('/course/:id get 테스트', async () => {
+    it('GET /course/:id 테스트', async () => {
       const response = await request(app.getHttpServer())
         .get(`/course/${courseId1}`)
         .set('Authorization', `Bearer ${token}`);
@@ -571,7 +571,7 @@ describe('Course 기능 통합 테스트', () => {
   });
 
   describe('course 좋아요 기능 통합 테스트', () => {
-    it('POST /course/reaction - course 좋아요 테스트', async () => {
+    it('POST /course/like - course 좋아요 테스트', async () => {
       const response = await request(app.getHttpServer())
         .post(`/course/like/${courseId1}`)
         .set('Authorization', `Bearer ${token}`);
@@ -594,6 +594,42 @@ describe('Course 기능 통합 테스트', () => {
       expect(response.body).toEqual({
         count: 1,
         likers: [userId],
+      });
+    });
+
+    it('GET /course/my-like  테스트', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/course/my-like')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+
+      expect(response.body).toEqual({
+        count: 1,
+        items: [
+          expect.objectContaining({
+            id: courseId1,
+            avgGrade: 4.5,
+            classNbr: 'class_nbr',
+            subj: 'CSE',
+            crs: '114',
+            courseTitle: 'Introduction to Object Oriented Programming',
+            sbc: 'TECH',
+            cmp: 'LEC',
+            sctn: '90/91',
+            credits: '3',
+            day: 'MW',
+            startTime: '10:30 AM',
+            endTime: '11:50 AM',
+            past_instructors: ['instructor1', 'instructor2', 'instructor3'],
+            recent_two_instructors: ['instructor1', 'instructor2'],
+            most_recent_instructor: 'instructor2',
+            semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            reviews: [],
+            likes: 1,
+            location: 'B101',
+          }),
+        ],
       });
     });
 
@@ -697,6 +733,51 @@ describe('Course 기능 통합 테스트', () => {
           reaction: 'FIRE',
         }),
       );
+    });
+
+    it('GET /course/review/my-scrapped - 스크랩한(book mark) course review 조회 테스트', async () => {
+      // given
+      await request(app.getHttpServer())
+        .post(`/course/review/reaction`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          courseReviewId,
+          reactionType: CourseReviewReactionType.BookMark.text,
+        });
+
+      const response = await request(app.getHttpServer())
+        .get(`/course/review/my-scrapped`)
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        count: 1,
+        items: [
+          expect.objectContaining({
+            semester: '2024-spring',
+            instructor: 'Jeehong Kim',
+            myLetterGrade: 'A',
+            teamProjectPresence: false,
+            quizPresence: true,
+            testQuantity: '2',
+            testType: '2midterms-1final',
+            generosity: 'generous',
+            attendance: 'rolling-paper',
+            homeworkQuantity: 'many',
+            difficulty: 'difficult',
+            overallGrade: 3,
+            overallEvaluation: '',
+            anonymity: true,
+            likes: 0,
+            course: expect.objectContaining({
+              id: courseId1,
+            }),
+            user: expect.objectContaining({
+              id: userId,
+            }),
+          }),
+        ],
+      });
     });
   });
 });

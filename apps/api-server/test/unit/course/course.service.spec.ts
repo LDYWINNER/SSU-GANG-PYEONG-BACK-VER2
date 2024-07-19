@@ -503,4 +503,64 @@ describe('수업 관련 서비스 테스트', () => {
       expect(courseRepository.courses[0].likes).toBe(0);
     });
   });
+
+  describe('getMyLikeCourse 함수 테스트', () => {
+    it('getMyLikeCourse 함수 테스트', async () => {
+      // given
+      await courseService.likeCourse(userId, courseId1);
+      await courseService.likeCourse(userId, courseId3);
+
+      // when
+      const result = await courseService.getMyLikeCourse(userId);
+
+      // then
+      expect(result).toEqual({
+        count: 2,
+        items: [
+          {
+            id: courseId1,
+            avgGrade: 4.5,
+            classNbr: 'class_nbr',
+            subj: 'CSE',
+            crs: '114',
+            courseTitle: 'Introduction to Object Oriented Programming',
+            sbc: 'TECH',
+            cmp: 'LEC',
+            sctn: '90/91',
+            credits: '3',
+            day: 'MW',
+            startTime: '10:30 AM',
+            endTime: '11:50 AM',
+            past_instructors: ['instructor1', 'instructor2', 'instructor3'],
+            recent_two_instructors: ['instructor1', 'instructor2'],
+            most_recent_instructor: 'instructor2',
+            semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            location: 'A302',
+            likes: 1,
+          },
+          {
+            id: courseId3,
+            avgGrade: 4.8,
+            classNbr: 'class_nbr',
+            subj: 'EST',
+            crs: '488',
+            courseTitle: 'Internship',
+            sbc: 'EXP',
+            cmp: 'LEC',
+            sctn: '90/91',
+            credits: '3',
+            day: '-',
+            startTime: '-',
+            endTime: '-',
+            past_instructors: ['instructor1'],
+            recent_two_instructors: ['instructor1'],
+            most_recent_instructor: 'instructor1',
+            semesters: ['2023_fall', '2024_spring', '2024_fall'],
+            location: 'A302',
+            likes: 1,
+          },
+        ],
+      });
+    });
+  });
 });
