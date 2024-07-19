@@ -16,6 +16,7 @@ import {
   UserInfo,
 } from '../../../common/decorators/user-info.decorator';
 import { CreateCourseReviewDto } from './dto/create-course-review.dto';
+import { ReactCourseReviewDto } from './dto/react-course-review.dto';
 
 @Controller('course/review')
 @ApiTags('Course Review')
@@ -42,17 +43,20 @@ export class ReviewController {
     }
   }
 
-  @Post('like/:id')
-  async createReviewLike(
+  @Post('reaction')
+  async createReviewReaction(
     @UserInfo() userInfo: UserAfterAuth,
-    @Param('id') id: string,
+    @Body() data: ReactCourseReviewDto,
   ) {
     try {
       const userId = userInfo.id;
-      const result = await this.reviewService.likeCourseReview(userId, id);
+      const result = await this.reviewService.createCourseReviewReaction(
+        userId,
+        data,
+      );
       if (!result) {
         throw new InternalServerErrorException(
-          `Failed to create review like for review id ${id}`,
+          `Failed to create review like for review id ${data.courseReviewId}`,
         );
       }
       return result;
@@ -61,13 +65,13 @@ export class ReviewController {
     }
   }
 
-  @Get('like/:id')
-  async countReviewLike(@Param('id') id: string) {
+  @Get('reaction/:id')
+  async getReviewReaction(@Param('id') id: string) {
     try {
-      const result = await this.reviewService.countLikes(id);
+      const result = await this.reviewService.getCourseReviewReaction(id);
       if (!result) {
         throw new InternalServerErrorException(
-          `Failed to count likes for review id ${id}`,
+          `Failed to get reactions for course review id ${id}`,
         );
       }
       return result;
@@ -76,17 +80,20 @@ export class ReviewController {
     }
   }
 
-  @Delete('like/:id')
-  async deleteReviewLike(
+  @Delete('reaction')
+  async deleteReviewReaction(
     @UserInfo() userInfo: UserAfterAuth,
-    @Param('id') id: string,
+    @Body() data: ReactCourseReviewDto,
   ) {
     try {
       const userId = userInfo.id;
-      const result = await this.reviewService.unlikeCourseReview(userId, id);
+      const result = await this.reviewService.removeCourseReviewReaction(
+        userId,
+        data,
+      );
       if (!result) {
         throw new InternalServerErrorException(
-          `Failed to delete like for review id ${id}`,
+          `Failed to delete like for course review id ${data.courseReviewId}`,
         );
       }
       return result;

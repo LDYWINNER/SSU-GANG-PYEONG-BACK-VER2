@@ -8,6 +8,7 @@ import {
 } from '../../../../src/entity';
 import { Repository } from 'typeorm';
 import { CreateCourseReviewDto } from './dto/create-course-review.dto';
+import { CourseReviewReactionType } from '../../../../src/common/enum/course-review-reaction.enum';
 
 @Injectable()
 export class ReviewService {
@@ -50,25 +51,49 @@ export class ReviewService {
     return { ...savedCourseReview };
   };
 
-  likeCourseReview = async (userId: string, courseReviewId: string) => {
-    await this.courseReviewRepository.update(courseReviewId, {
-      likes: () => 'likes + 1',
-    });
+  createCourseReviewReaction = async (
+    userId: string,
+    {
+      courseReviewId,
+      reactionType,
+    }: { courseReviewId: string; reactionType: string },
+  ) => {
+    if (reactionType === CourseReviewReactionType.Like.text) {
+      await this.courseReviewRepository.update(courseReviewId, {
+        likes: () => 'likes + 1',
+      });
+    }
 
     const courseReviewLike = this.courseReviewLikeRepository.create({
       fk_user_id: userId,
       fk_course_review_id: courseReviewId,
+      reaction: reactionType,
     });
     return await this.courseReviewLikeRepository.save(courseReviewLike);
   };
 
-  unlikeCourseReview = async (userId: string, courseReviewId: string) => {
-    await this.courseReviewRepository.update(courseReviewId, {
-      likes: () => 'likes - 1',
-    });
+  removeCourseReviewReaction = async (
+    userId: string,
+    {
+      courseReviewId,
+      reactionType,
+    }: {
+      courseReviewId: string;
+      reactionType: string;
+    },
+  ) => {
+    if (reactionType === CourseReviewReactionType.Like.text) {
+      await this.courseReviewRepository.update(courseReviewId, {
+        likes: () => 'likes - 1',
+      });
+    }
 
     const courseReviewLike = await this.courseReviewLikeRepository.findOne({
-      where: { fk_user_id: userId, fk_course_review_id: courseReviewId },
+      where: {
+        fk_user_id: userId,
+        fk_course_review_id: courseReviewId,
+        reaction: reactionType,
+      },
     });
     if (!courseReviewLike) {
       throw new NotFoundException(
@@ -81,14 +106,14 @@ export class ReviewService {
     return courseReviewLike;
   };
 
-  countLikes = async (courseReviewId: string) => {
-    const likes = await this.courseReviewLikeRepository.find({
+  getCourseReviewReaction = async (courseReviewId: string) => {
+    const reactions = await this.courseReviewLikeRepository.find({
       where: { fk_course_review_id: courseReviewId },
     });
 
     return {
-      count: likes.length,
-      likers: [...likes.map((like) => like.fk_user_id)],
+      totalCount: reactions.length,
+      items: reactions,
     };
   };
 }
