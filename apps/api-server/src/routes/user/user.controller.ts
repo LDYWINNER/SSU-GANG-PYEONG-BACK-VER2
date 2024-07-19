@@ -60,6 +60,25 @@ export class UserController {
     }
   }
 
+  @Post('block/:hatedUserId')
+  async createBlock(
+    @UserInfo() userInfo: UserAfterAuth,
+    @Param('hatedUserId') hatedUserId: string,
+  ) {
+    try {
+      const userId = userInfo.id;
+      const result = await this.userService.blockUser(userId, hatedUserId);
+      if (!result) {
+        throw new InternalServerErrorException(
+          `Failed to block for hater id: ${userId} & hated user id: ${hatedUserId}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Post('follow/:followerId')
   async createFollow(
     @UserInfo() userInfo: UserAfterAuth,

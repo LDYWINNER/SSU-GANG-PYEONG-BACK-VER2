@@ -1,10 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../../entity/user.entity';
 import { Repository } from 'typeorm';
 import { UserType } from '../../common/enum/user.enum';
 import { BoardPost } from '../../entity/board-post.entity';
-import { Follow } from '../../entity';
+import { User, Block, Follow } from '../../entity';
 
 @Injectable()
 export class UserService {
@@ -13,6 +12,8 @@ export class UserService {
     private userRepository: Repository<User>,
     @InjectRepository(Follow)
     private followRepository: Repository<Follow>,
+    @InjectRepository(Block)
+    private blockRepository: Repository<Block>,
   ) {}
 
   async findOneById(userId: string) {
@@ -123,5 +124,23 @@ export class UserService {
       count: follows.length,
       followers: follows.map((follow) => follow.fk_follower_id),
     };
+  }
+
+  async blockUser(haterId: string, hatedId: string) {
+    const hater = await this.userRepository.findOneBy({ id: haterId });
+    if (!hater) {
+      throw new NotFoundException(`User with id ${haterId} not found`);
+    }
+    const hated = await this.userRepository.findOneBy({ id: hatedId });
+    if (!hated) {
+      throw new NotFoundException(`User with id ${hatedId} not found`);
+    }
+
+    const block = this.blockRepository.create({
+      fk_hater_id: haterId,
+      fk_hated_id: hatedId,
+    });
+
+    return await this.blockRepository.save(block);
   }
 }
