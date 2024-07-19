@@ -42,6 +42,22 @@ export class UserController {
     });
   }
 
+  @Get('me')
+  async getUser(@UserInfo() userInfo: UserAfterAuth) {
+    try {
+      const id = userInfo.id;
+      const result = await this.userService.getUser(id);
+      if (!result) {
+        throw new InternalServerErrorException(
+          `Failed to get user with id ${id}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Post('follow/:followerId')
   async createFollow(
     @UserInfo() userInfo: UserAfterAuth,

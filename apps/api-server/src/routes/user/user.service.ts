@@ -42,6 +42,32 @@ export class UserService {
     return qb.getMany();
   }
 
+  async getUser(id: string) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: [
+        'tables',
+        'toDoCategories',
+        'toDoTasks',
+        'boardPosts',
+        'courseReviews',
+      ],
+    });
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    const follows = await this.followRepository.find({
+      where: { fk_leader_id: id },
+    });
+
+    return {
+      ...user,
+      followerCount: follows.length,
+      followers: follows.map((follow) => follow.fk_follower_id),
+    };
+  }
+
   async createFollow(leaderId: string, followerId: string) {
     const leader = await this.userRepository.findOneBy({ id: leaderId });
     if (!leader) {
