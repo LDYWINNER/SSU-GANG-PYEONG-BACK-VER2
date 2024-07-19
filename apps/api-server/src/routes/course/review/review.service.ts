@@ -40,7 +40,7 @@ export class ReviewService {
       throw new NotFoundException(`Course not found: ${courseId}`);
     }
 
-    user.postCount += 1;
+    user.courseReviewCount += 1;
     await this.userRepository.save(user);
 
     const newCourseReview = this.courseReviewRepository.create({

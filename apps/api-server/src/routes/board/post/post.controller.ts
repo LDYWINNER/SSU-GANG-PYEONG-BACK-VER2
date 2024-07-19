@@ -83,7 +83,7 @@ export class PostController {
         id: user.id,
         email: user.email,
         username: user.username,
-        postCount: user.postCount,
+        courseReviewCount: user.courseReviewCount,
         createdAt: user.createdAt.toISOString(),
       },
     };

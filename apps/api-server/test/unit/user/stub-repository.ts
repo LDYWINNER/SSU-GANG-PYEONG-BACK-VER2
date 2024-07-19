@@ -9,7 +9,7 @@ export class StubUserRepository {
       email: 'test_email',
       password: 'test_password',
       role: UserType.User.text,
-      postCount: 0,
+      courseReviewCount: 0,
       createdAt: new Date('2024-06-28T18:19:29.764Z'),
       updateAt: new Date('2024-06-28T18:19:29.764Z'),
     },

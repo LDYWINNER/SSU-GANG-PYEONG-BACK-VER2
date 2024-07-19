@@ -42,7 +42,7 @@ describe('수업 관련 서비스 테스트', () => {
     userRepository.users.push({
       id: 'user_id',
       role: UserType.User.text,
-      postCount: 0,
+      courseReviewCount: 0,
       createdAt: new Date('2024-06-28T18:19:29.764Z'),
       email: 'test_email',
       password: 'test_password',

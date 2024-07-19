@@ -31,15 +31,17 @@ export class UserController {
     @Query() { page, size }: PageReqDto,
   ): Promise<FindUserResDto[]> {
     const users = await this.userService.getUsers(page, size);
-    return users.map(({ id, email, username, createdAt, postCount }) => {
-      return {
-        id,
-        email,
-        username,
-        createdAt: createdAt.toISOString(),
-        postCount,
-      };
-    });
+    return users.map(
+      ({ id, email, username, createdAt, courseReviewCount }) => {
+        return {
+          id,
+          email,
+          username,
+          createdAt: createdAt.toISOString(),
+          courseReviewCount,
+        };
+      },
+    );
   }
 
   @Get('me')

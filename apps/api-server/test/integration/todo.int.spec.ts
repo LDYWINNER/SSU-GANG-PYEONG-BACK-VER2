@@ -67,7 +67,7 @@ describe('ToDo 기능 통합 테스트', () => {
       username: 'test_user',
       email: 'test_user@example.com',
       password: 'test_password',
-      postCount: 0,
+      courseReviewCount: 0,
       role: UserType.User.text,
     });
     await userRepository.save(user);

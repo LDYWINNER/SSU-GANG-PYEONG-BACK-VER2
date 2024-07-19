@@ -73,7 +73,7 @@ export class User {
   courseReviews?: CourseReview[];
 
   @Column({ default: 0 })
-  postCount: number;
+  courseReviewCount: number;
 
   @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user, {
     cascade: true,

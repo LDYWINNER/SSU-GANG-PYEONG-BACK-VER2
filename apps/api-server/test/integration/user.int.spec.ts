@@ -55,14 +55,14 @@ describe('User 기능 통합 테스트', () => {
       username: 'test_leader',
       email: 'test_leader@example.com',
       password: 'test_password',
-      postCount: 0,
+      courseReviewCount: 0,
       role: UserType.User.text,
     });
     const follower = userRepository.create({
       username: 'test_follower',
       email: 'test_follower@example.com',
       password: 'test_password',
-      postCount: 0,
+      courseReviewCount: 0,
       role: UserType.User.text,
     });
     await userRepository.save(leader);

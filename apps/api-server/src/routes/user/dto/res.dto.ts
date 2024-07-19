@@ -11,7 +11,7 @@ export class FindUserResDto {
   email: string;
 
   @ApiProperty({ required: true })
-  postCount: number;
+  courseReviewCount: number;
 
   @ApiProperty({ required: true })
   createdAt: string;

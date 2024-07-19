@@ -41,7 +41,7 @@ describe('유저 서비스 테스트', () => {
       username: 'test_name',
       createdAt: new Date('2024-06-28T18:19:29.764Z'),
       updateAt: new Date('2024-06-28T18:19:29.764Z'),
-      postCount: 0,
+      courseReviewCount: 0,
     });
     userRepository.users.push({
       id: 'test_follower_id',
@@ -51,7 +51,7 @@ describe('유저 서비스 테스트', () => {
       username: 'test_name',
       createdAt: new Date('2024-06-28T18:19:29.764Z'),
       updateAt: new Date('2024-06-28T18:19:29.764Z'),
-      postCount: 0,
+      courseReviewCount: 0,
     });
 
     userService = module.get<UserService>(UserService);
