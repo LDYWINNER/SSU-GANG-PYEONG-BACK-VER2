@@ -82,7 +82,7 @@ describe('Board 기능 통합 테스트', () => {
       email: 'test_user@example.com',
       password: 'test_password',
       postCount: 0,
-      role: UserType.User,
+      role: UserType.User.text,
     });
     await userRepository.save(user);
     userId = user.id;
@@ -124,7 +124,7 @@ describe('Board 기능 통합 테스트', () => {
         .send({
           title: 'board_title',
           description: 'board_description',
-          boardType: BoardType.Free,
+          boardType: BoardType.Free.text,
         });
 
       expect(response.status).toBe(201);
@@ -133,7 +133,7 @@ describe('Board 기능 통합 테스트', () => {
           id: expect.any(String),
           title: 'board_title',
           description: 'board_description',
-          boardType: BoardType.Free,
+          boardType: BoardType.Free.text,
           user: expect.objectContaining({
             id: userId,
             username: 'test_user',
@@ -150,7 +150,7 @@ describe('Board 기능 통합 테스트', () => {
         .send({
           title: 'board_title',
           description: 'board_description',
-          boardType: BoardType.Free,
+          boardType: BoardType.Free.text,
         });
 
       expect(response.status).toBe(401);
@@ -164,7 +164,7 @@ describe('Board 기능 통합 테스트', () => {
       const board = boardRepository.create({
         title: 'board_title',
         description: 'board_description',
-        boardType: BoardType.Free,
+        boardType: BoardType.Free.text,
         user: { id: userId },
       });
       const savedBoard = await boardRepository.save(board);
@@ -188,7 +188,7 @@ describe('Board 기능 통합 테스트', () => {
           id: boardId,
           title: newTitle,
           description: 'board_description',
-          boardType: BoardType.Free,
+          boardType: BoardType.Free.text,
           user: expect.objectContaining({
             id: userId,
           }),
@@ -209,7 +209,7 @@ describe('Board 기능 통합 테스트', () => {
           id: boardId,
           title: 'board_title',
           description: newDescription,
-          boardType: BoardType.Free,
+          boardType: BoardType.Free.text,
           user: expect.objectContaining({
             id: userId,
           }),
@@ -237,7 +237,7 @@ describe('Board 기능 통합 테스트', () => {
       const board = boardRepository.create({
         title: 'board_title',
         description: 'board_description',
-        boardType: BoardType.Free,
+        boardType: BoardType.Free.text,
         user: { id: userId },
       });
       const savedBoard = await boardRepository.save(board);
@@ -258,7 +258,7 @@ describe('Board 기능 통합 테스트', () => {
         expect.objectContaining({
           title: 'board_title',
           description: 'board_description',
-          boardType: BoardType.Free,
+          boardType: BoardType.Free.text,
         }),
       );
       const deletedBoard = await boardRepository.findOneBy({ id: boardId });
@@ -319,7 +319,7 @@ describe('Board 기능 통합 테스트', () => {
       const board = boardRepository.create({
         title: 'board_title',
         description: 'board_description',
-        boardType: BoardType.Free,
+        boardType: BoardType.Free.text,
         user: { id: userId },
       });
       const savedBoard = await boardRepository.save(board);
@@ -566,7 +566,7 @@ describe('Board 기능 통합 테스트', () => {
       const board = boardRepository.create({
         title: 'board_title',
         description: 'board_description',
-        boardType: BoardType.Free,
+        boardType: BoardType.Free.text,
         user: { id: userId },
       });
       const savedBoard = await boardRepository.save(board);

@@ -83,29 +83,32 @@ describe('FindPostsQueryHandler', () => {
   });
 
   it('검색(search) + board 필터 둘 다 있을 때 paginated posts GET 테스트', async () => {
-    const query = new FindPostsQuery(1, 10, 'test', BoardType.Free);
-    const boardEntity = { id: 'board-1', boardType: BoardType.Free } as Board;
+    const query = new FindPostsQuery(1, 10, 'test', BoardType.Free.text);
+    const boardEntity = {
+      id: 'board-1',
+      boardType: BoardType.Free.text,
+    } as Board;
     const posts = [
       {
         id: 'post-1',
         title: 'Post 1',
         contents: 'Content 1',
         user: { id: 'user-1' },
-        board: { id: 'board-1', boardType: BoardType.Free },
+        board: { id: 'board-1', boardType: BoardType.Free.text },
       },
       {
         id: 'post-2',
         title: 'Post 2',
         contents: 'Content 2',
         user: { id: 'user-2' },
-        board: { id: 'board-1', boardType: BoardType.Free },
+        board: { id: 'board-1', boardType: BoardType.Free.text },
       },
     ] as BoardPost[];
     const total = 2;
 
     when(
       mockBoardRepository.findOne(
-        deepEqual({ where: { boardType: BoardType.Free } }),
+        deepEqual({ where: { boardType: BoardType.Free.text } }),
       ),
     ).thenResolve(boardEntity);
     when(
@@ -129,7 +132,7 @@ describe('FindPostsQueryHandler', () => {
     expect(result).toEqual({ posts, total });
     verify(
       mockBoardRepository.findOne(
-        deepEqual({ where: { boardType: BoardType.Free } }),
+        deepEqual({ where: { boardType: BoardType.Free.text } }),
       ),
     ).once();
     verify(
@@ -150,7 +153,7 @@ describe('FindPostsQueryHandler', () => {
   });
 
   it('검색(search) 없고 board 필터는 ALL일 때 paginated posts GET 테스트', async () => {
-    const query = new FindPostsQuery(1, 10, undefined, BoardType.All);
+    const query = new FindPostsQuery(1, 10, undefined, BoardType.All.text);
     const posts = [new BoardPost(), new BoardPost()] as BoardPost[];
     const total = 2;
 

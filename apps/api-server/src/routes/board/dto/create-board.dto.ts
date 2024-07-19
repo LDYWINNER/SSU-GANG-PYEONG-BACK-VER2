@@ -25,7 +25,7 @@ export class CreateBoardDto {
   @ApiProperty({
     description: '게시판 유형',
     required: true,
-    example: BoardType.All,
+    example: BoardType.All.text,
   })
-  boardType: BoardType = BoardType.All;
+  boardType: string = BoardType.All.text;
 }

@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { CourseReview } from './course-review.entity';
+import { CourseReviewReactionType } from '../common/enum/course-review-reaction.enum';
+import { CourseReviewReactionTypeValues } from '../common/enum/course-review-reaction.enum';
 
 @Entity('course_review_likes')
 @Index(['fk_course_review_id', 'fk_user_id'], { unique: true })
@@ -22,6 +24,13 @@ export class CourseReviewLike {
 
   @Column('uuid')
   fk_course_review_id!: string;
+
+  @Column({
+    type: 'enum',
+    enum: CourseReviewReactionTypeValues,
+    default: CourseReviewReactionType.Like.text,
+  })
+  reaction!: string;
 
   @Index()
   @Column('timestampz')

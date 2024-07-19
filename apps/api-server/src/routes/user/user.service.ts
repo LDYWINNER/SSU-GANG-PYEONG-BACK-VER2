@@ -24,7 +24,7 @@ export class UserService {
 
   async checkUserIsAdmin(id: string) {
     const user = await this.userRepository.findOneBy({ id });
-    return user.role === UserType.Admin;
+    return user.role === UserType.Admin.text;
   }
 
   async getUsers(page: number, size: number) {

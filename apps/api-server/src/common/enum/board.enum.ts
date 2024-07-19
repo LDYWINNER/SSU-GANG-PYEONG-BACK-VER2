@@ -41,3 +41,5 @@ export class BoardType extends EnumType<BoardType>() {
     }
   }
 }
+
+export const BoardTypeValues = Object.values(BoardType).map((e) => e.text);

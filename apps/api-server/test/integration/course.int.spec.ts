@@ -64,7 +64,7 @@ describe('Course 기능 통합 테스트', () => {
       email: 'test_user@example.com',
       password: 'test_password',
       postCount: 0,
-      role: UserType.User,
+      role: UserType.User.text,
     });
     await userRepository.save(user);
     userId = user.id;

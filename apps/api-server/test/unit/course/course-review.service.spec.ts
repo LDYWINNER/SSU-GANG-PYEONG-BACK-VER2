@@ -34,7 +34,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
 
     userRepository.users.push({
       id: 'user_id',
-      role: UserType.User,
+      role: UserType.User.text,
       postCount: 0,
       createdAt: new Date('2024-06-28T18:19:29.764Z'),
       email: 'test_email',
@@ -118,7 +118,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
           id: 'user_id',
           password: 'test_password',
           postCount: 0,
-          role: UserType.User,
+          role: UserType.User.text,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },
@@ -151,7 +151,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
           id: 'user_id',
           password: 'test_password',
           postCount: 0,
-          role: UserType.User,
+          role: UserType.User.text,
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },

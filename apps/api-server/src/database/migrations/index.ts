@@ -5,6 +5,7 @@ import { CourseLocation1721130117933 } from './1721130117933-course-location';
 import { LikeEntityDeleteCascade1721280155092 } from './1721280155092-like-entity-delete-cascade';
 import { FollowEntity1721317720001 } from './1721317720001-follow-entity';
 import { FollowEntity1721322858204 } from './1721322858204-follow-entity';
+import { Enum1721366470719 } from './1721366470719-enum';
 
 export {
   Initialize1720855793915,
@@ -14,4 +15,5 @@ export {
   LikeEntityDeleteCascade1721280155092,
   FollowEntity1721317720001,
   FollowEntity1721322858204,
+  Enum1721366470719,
 };

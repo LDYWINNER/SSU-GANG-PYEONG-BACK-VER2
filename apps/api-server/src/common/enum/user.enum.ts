@@ -9,3 +9,5 @@ export class UserType extends EnumType<UserType>() {
     super();
   }
 }
+
+export const UserTypeValues = Object.values(UserType).map((e) => e.text);

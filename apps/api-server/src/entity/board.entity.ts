@@ -11,12 +11,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { BoardPost } from './board-post.entity';
-import { BoardType } from '../common/enum/board.enum';
-
-const BoardTypeTransformer = {
-  to: (boardType: BoardType): string => boardType.text,
-  from: (text: string): BoardType => BoardType.valueOf(text),
-};
+import { BoardType, BoardTypeValues } from '../common/enum/board.enum';
 
 @Entity()
 export class Board {
@@ -32,8 +27,8 @@ export class Board {
   description: string;
 
   @ApiProperty({ description: '게시판 유형' })
-  @Column({ type: 'varchar', transformer: BoardTypeTransformer })
-  boardType: BoardType = BoardType.All;
+  @Column({ type: 'enum', enum: BoardTypeValues, default: BoardType.All.text })
+  boardType: string;
 
   @ApiProperty({ description: '생성일' })
   @CreateDateColumn()

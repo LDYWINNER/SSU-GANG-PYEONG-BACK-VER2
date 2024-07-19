@@ -8,6 +8,7 @@ import {
   LikeEntityDeleteCascade1721280155092,
   FollowEntity1721317720001,
   FollowEntity1721322858204,
+  Enum1721366470719,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -26,6 +27,7 @@ const options: DataSourceOptions & SeederOptions = {
     LikeEntityDeleteCascade1721280155092,
     FollowEntity1721317720001,
     FollowEntity1721322858204,
+    Enum1721366470719,
   ],
   migrationsTableName: 'migrations',
 };

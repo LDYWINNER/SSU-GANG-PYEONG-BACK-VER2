@@ -27,7 +27,7 @@ export class FindPostsQueryHandler implements IQueryHandler<FindPostsQuery> {
       whereConditions.contents = Like(`%${search}%`);
     }
 
-    if (board && board !== BoardType.All) {
+    if (board && board !== BoardType.All.text) {
       const boardEntity = await this.boardRepository.findOne({
         where: { boardType: board },
       });
