@@ -224,6 +224,30 @@ export class CourseService {
     };
   };
 
+  getMyLikeCourse = async (userId: string) => {
+    const courseLikes = await this.courseLikeRepository.find({
+      where: { fk_user_id: userId },
+    });
+    if (!courseLikes) {
+      return { count: 0, items: [] };
+    }
+
+    const coursesPromises = courseLikes.map((courseLike) => {
+      return this.courseRepository.findOne({
+        where: { id: courseLike.fk_course_id },
+        relations: ['reviews'],
+        order: { likes: 'DESC' },
+      });
+    });
+
+    const courses = await Promise.all(coursesPromises);
+
+    return {
+      count: courses.length,
+      items: courses,
+    };
+  };
+
   formatTableCourses = async (tableId: string) => {
     // 초기 설정
     const table = await this.tableRepository.findOne({

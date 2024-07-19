@@ -108,6 +108,22 @@ export class CourseController {
     }
   }
 
+  @Get('/my-like')
+  async getMyLikes(@UserInfo() userInfo: UserAfterAuth) {
+    try {
+      const userId = userInfo.id;
+      const result = await this.courseService.getMyLikeCourse(userId);
+      if (!result) {
+        throw new InternalServerErrorException(
+          `Failed to get liked courses for user id ${userId}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Get(':id')
   @Public()
   async getById(@Param('id') id: string) {

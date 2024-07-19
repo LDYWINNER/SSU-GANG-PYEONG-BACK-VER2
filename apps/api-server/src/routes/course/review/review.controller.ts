@@ -101,4 +101,20 @@ export class ReviewController {
       throw error;
     }
   }
+
+  @Get('my-scrapped')
+  async getMyScrappedReviews(@UserInfo() userInfo: UserAfterAuth) {
+    try {
+      const userId = userInfo.id;
+      const result = await this.reviewService.getMyScrappedCourseReview(userId);
+      if (!result) {
+        throw new InternalServerErrorException(
+          `Failed to get scrapped reviews for user id ${userId}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

@@ -93,6 +93,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdhMjQ0MTkxL
 
 ###
 
+
+# 유저 my course
+GET http://localhost:3000/course/my-like
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAyMGZkYjc2LTM0NGQtNDA5Ny04ZGYwLTc3MjBiZDE1NzJkMyIsInVzZXJuYW1lIjoic2VlZGVyVXNlciIsImVtYWlsIjoiZ2lsZG9uZzRAc3Rvbnlicm9vay5lZHUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjEzOTA5OTcsImV4cCI6MTcyMTQ3NzM5N30.mpIKPcxJDlGkQWqggC_LMicPBcysbki9XO8ib4wVPng
+
+###
+
 # table 생성
 POST http://localhost:3000/table
 content-type: application/json

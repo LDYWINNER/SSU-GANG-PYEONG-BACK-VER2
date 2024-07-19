@@ -119,4 +119,31 @@ export class ReviewService {
       items: reactions,
     };
   };
+
+  async getMyScrappedCourseReview(userId: string) {
+    const courseReviewLikes = await this.courseReviewLikeRepository.find({
+      where: {
+        fk_user_id: userId,
+        reaction: CourseReviewReactionType.BookMark.text,
+      },
+    });
+
+    if (!courseReviewLikes) {
+      return { count: 0, items: [] };
+    }
+
+    const courseReviewsPromise = courseReviewLikes.map((courseReviewLike) => {
+      return this.courseReviewRepository.findOne({
+        where: { id: courseReviewLike.fk_course_review_id },
+        relations: ['course', 'user'],
+      });
+    });
+
+    const courseReviews = await Promise.all(courseReviewsPromise);
+
+    return {
+      count: courseReviews.length,
+      items: courseReviews,
+    };
+  }
 }
