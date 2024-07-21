@@ -73,7 +73,7 @@ POST http://localhost:3000/auth/login
 content-type: application/json
 
 {
-    "email": "gildong3@stonybrook.edu",
+    "email": "gildong4@stonybrook.edu",
     "password": "Hong123456!"
 }
 

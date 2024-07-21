@@ -1,0 +1,141 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+before:
+  flow:
+    - log: 'Running the Authorization before virtual users run'
+    - post:
+        url: '/auth/login'
+        json:
+          email: 'gildong4@stonybrook.edu'
+          password: 'Hong123456!'
+        capture:
+          - json: $.accessToken
+            as: token
+
+scenarios:
+  - name: Board Creation
+    flow:
+      - post:
+          url: '/board'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            title: 'board_title'
+            description: 'board_description'
+            boardType: 'FREE'
+          capture:
+            - json: '$.id'
+              as: boardId
+
+  - name: Board Update
+    flow:
+      - put:
+          url: '/board/{{ boardId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            title: 'updated_board'
+
+  - name: Board Post Creation
+    flow:
+      - post:
+          url: '/board/post'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            boardId: '{{ boardId }}'
+            title: 'post_title'
+            contents: 'post_contents'
+            anonymity: false
+          capture:
+            - json: '$.id'
+              as: boardPostId
+
+  - name: Board Post Update
+    flow:
+      - put:
+          url: '/board/post/{{ boardPostId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            title: 'updated_post_title'
+
+  - name: Board Comment Creation
+    flow:
+      - post:
+          url: '/board/comment'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            boardPostId: '{{ boardPostId }}'
+            content: 'comment_content'
+          capture:
+            - json: '$.id'
+              as: boardCommentId
+
+  - name: Board Post Like
+    flow:
+      - post:
+          url: '/board/post/like/{{ boardPostId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Board Post Like Count
+    flow:
+      - get:
+          url: '/board/post/like/{{ boardPostId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Board Post Unlike
+    flow:
+      - delete:
+          url: '/board/post/like/{{ boardPostId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Board Comment Like
+    flow:
+      - post:
+          url: '/board/comment/like/{{ boardCommentId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Board Comment Like Count
+    flow:
+      - get:
+          url: '/board/comment/like/{{ boardCommentId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Board Comment Unlike
+    flow:
+      - delete:
+          url: '/board/comment/like/{{ boardCommentId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Board Comment Deletion
+    flow:
+      - delete:
+          url: '/board/comment/{{ boardCommentId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Board Post Deletion
+    flow:
+      - delete:
+          url: '/board/post/{{ boardPostId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Board Deletion
+    flow:
+      - delete:
+          url: '/board/{{ boardId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
