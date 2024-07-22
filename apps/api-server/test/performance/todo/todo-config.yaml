@@ -1,0 +1,163 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+before:
+  flow:
+    - log: 'Running the Authorization before virtual users run'
+    - post:
+        url: '/auth/login'
+        json:
+          email: 'gildong4@stonybrook.edu'
+          password: 'Hong123456!'
+        capture:
+          - json: $.accessToken
+            as: token
+
+scenarios:
+  - name: Category Creation
+    flow:
+      - post:
+          url: '/todo/category'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            color:
+              id: 'color_id'
+              code: '#FFFFFF'
+              name: 'white'
+            icon:
+              id: 'icon_id'
+              name: 'icon_name'
+              symbol: '🌱'
+            isEditable: true
+            name: 'category_name'
+          capture:
+            - json: $.id
+              as:
+      - log: 'Captured categoryId: {{ categoryId }}'
+
+  - name: Category All GET
+    flow:
+      - get:
+          url: '/todo/category'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Category ID GET
+    flow:
+      - get:
+          url: '/todo/category/{{ categoryId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Category name Update
+    flow:
+      - put:
+          url: '/todo/category/{{ categoryId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            name: 'updated_category_name'
+
+  - name: Category color Update
+    flow:
+      - put:
+          url: '/todo/category/{{ categoryId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            color:
+              id: 'updated_color_id'
+              code: '#000000'
+              name: 'black'
+
+  - name: Task Creation
+    flow:
+      - post:
+          url: '/todo/task'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            categoryId: '{{ categoryId }}'
+            name: 'task_name'
+            isCompleted: false
+            categorySubj: 'AMS'
+            completeDate: '2024-07-07T16:45:38.913Z'
+          capture:
+            - json: $.id
+              as: taskId
+
+  - name: Task All GET
+    flow:
+      - get:
+          url: '/todo/task/all'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Task BY Category ID GET
+    flow:
+      - get:
+          url: '/todo/task/category/{{ categoryId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Task Completed GET
+    flow:
+      - get:
+          url: '/todo/task/completed'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Task Today GET
+    flow:
+      - get:
+          url: '/todo/task/today'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Task Specific day GET
+    flow:
+      - get:
+          url: '/todo/task/date/2024-07-07T16:45:38.913Z'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Task Monthly GET
+    flow:
+      - get:
+          url: '/todo/task/monthly'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Task isCompleted Toggle
+    flow:
+      - put:
+          url: '/todo/task/toggle/{{ taskId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Task name Update
+    flow:
+      - put:
+          url: '/todo/task/{{ taskId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            name: 'updated_task_name'
+
+  - name: Task Deletion
+    flow:
+      - delete:
+          url: '/todo/task/{{ taskId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Category Deletion
+    flow:
+      - delete:
+          url: '/todo/category/{{ categoryId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'

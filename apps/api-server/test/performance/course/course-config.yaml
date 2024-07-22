@@ -1,0 +1,158 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+before:
+  flow:
+    - log: 'Running the Authorization before virtual users run'
+    - post:
+        url: '/auth/login'
+        json:
+          email: 'gildong4@stonybrook.edu'
+          password: 'Hong123456!'
+        capture:
+          - json: $.accessToken
+            as: token
+
+scenarios:
+  - name: Test GET /course/all
+    flow:
+      - get:
+          url: '/course/all'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          capture:
+            json: $.items[0].id
+            as: 'courseId'
+
+  - name: Test GET /course/:id
+    flow:
+      - get:
+          url: '/course/{{ courseId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          expect:
+            - statusCode: 200
+
+  - name: Test GET /course/query with subject and keyword
+    flow:
+      - get:
+          url: '/course/query?subject=CSE&keyword=Object'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          expect:
+            - statusCode: 200
+
+  - name: Test GET /course/query with subject ALL and keyword
+    flow:
+      - get:
+          url: '/course/query?subject=ALL&keyword=Object'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          expect:
+            - statusCode: 200
+
+  - name: Test GET /course/query with subject ALL
+    flow:
+      - get:
+          url: '/course/query?subject=ALL'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          expect:
+            - statusCode: 200
+
+  - name: Test GET /course/table with subject ALL
+    flow:
+      - get:
+          url: '/course/table?subject=ALL'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          expect:
+            - statusCode: 200
+
+  - name: Test POST /course/review
+    flow:
+      - post:
+          url: '/course/review'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            courseId: '{{ courseId }}'
+            semester: '2024-spring'
+            instructor: 'Jeehong Kim'
+            myLetterGrade: 'A'
+            teamProjectPresence: false
+            quizPresence: true
+            testQuantity: '2'
+            testType: '2midterms-1final'
+            generosity: 'generous'
+            attendance: 'rolling-paper'
+            homeworkQuantity: 'many'
+            difficulty: 'difficult'
+            overallGrade: 3
+            overallEvaluation: ''
+            anonymity: true
+          expect:
+            - statusCode: 201
+          capture:
+            json: $.id
+            as: 'courseReviewId'
+
+  - name: Test POST /course/like
+    flow:
+      - post:
+          url: '/course/like/{{ courseId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          expect:
+            - statusCode: 201
+
+  - name: Test GET /course/like/:id
+    flow:
+      - get:
+          url: '/course/like/{{ courseId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          expect:
+            - statusCode: 200
+
+  - name: Test GET /course/my-like
+    flow:
+      - get:
+          url: '/course/my-like'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          expect:
+            - statusCode: 200
+
+  - name: Test DELETE /course/like
+    flow:
+      - delete:
+          url: '/course/like/{{ courseId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          expect:
+            - statusCode: 200
+
+  - name: Test POST /course/review/reaction
+    flow:
+      - post:
+          url: '/course/review/reaction'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            courseReviewId: '{{ courseReviewId }}'
+            reactionType: 'FIRE'
+          expect:
+            - statusCode: 201
+
+  - name: Test GET /course/review/reaction/:id
+    flow:
+      - get:
+          url: '/course/review/reaction/{{ courseReviewId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          expect:
+            - statusCode: 200

@@ -3,7 +3,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 const resultsDir = path.join(__dirname, 'results');
-const reportPath = path.join(__dirname, 'report.html');
 
 const resultFiles = fs
   .readdirSync(resultsDir)
@@ -14,16 +13,19 @@ if (resultFiles.length === 0) {
   process.exit(1);
 }
 
-const mergeResults = resultFiles
-  .map((file) => path.join(resultsDir, file))
-  .join(' ');
+resultFiles.forEach((file) => {
+  const filePath = path.join(resultsDir, file);
+  const reportPath = path.join(
+    resultsDir,
+    `${path.basename(file, '.json')}.html`,
+  );
 
-try {
-  execSync(`artillery report ${mergeResults} -o ${reportPath}`, {
-    stdio: 'inherit',
-  });
-} catch (error) {
-  console.error('Error generating report:', error);
-}
-
-console.log(`Report generated at ${reportPath}`);
+  try {
+    execSync(`artillery report ${filePath} -o ${reportPath}`, {
+      stdio: 'inherit',
+    });
+    console.log(`Report generated at ${reportPath}`);
+  } catch (error) {
+    console.error('Error generating report for file:', file, error);
+  }
+});

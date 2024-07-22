@@ -1,0 +1,57 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+before:
+  flow:
+    - log: 'Running the Authorization before virtual users run'
+    - post:
+        url: '/auth/login'
+        json:
+          email: 'gildong4@stonybrook.edu'
+          password: 'Hong123456!'
+        capture:
+          - json: $.accessToken
+            as: token
+          - json: $.id
+            as: userId
+
+scenarios:
+  - name: Follow Creation
+    flow:
+      - post:
+          url: '/user/follow/52e2f2ee-bc51-40d0-849b-fd71be013f59'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            fk_leader_id: userId
+            fk_follower_id: '52e2f2ee-bc51-40d0-849b-fd71be013f59'
+          capture:
+            - json: $.id
+              as: followId
+
+  - name: Follow Get
+    flow:
+      - get:
+          url: '/user/follow/{{ followId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Follow Deletion
+    flow:
+      - delete:
+          url: '/user/follow/{{ followId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Block Creation
+    flow:
+      - post:
+          url: '/user/block/52e2f2ee-bc51-40d0-849b-fd71be013f59'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            fk_hater_id: userId
+            fk_hated_id: '52e2f2ee-bc51-40d0-849b-fd71be013f59'

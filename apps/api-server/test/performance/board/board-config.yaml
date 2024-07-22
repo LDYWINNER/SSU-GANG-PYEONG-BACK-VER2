@@ -28,7 +28,7 @@ scenarios:
             description: 'board_description'
             boardType: 'FREE'
           capture:
-            - json: '$.id'
+            - json: $.id
               as: boardId
 
   - name: Board Update
@@ -52,7 +52,7 @@ scenarios:
             contents: 'post_contents'
             anonymity: false
           capture:
-            - json: '$.id'
+            - json: $.id
               as: boardPostId
 
   - name: Board Post Update
@@ -74,7 +74,7 @@ scenarios:
             boardPostId: '{{ boardPostId }}'
             content: 'comment_content'
           capture:
-            - json: '$.id'
+            - json: $.id
               as: boardCommentId
 
   - name: Board Post Like

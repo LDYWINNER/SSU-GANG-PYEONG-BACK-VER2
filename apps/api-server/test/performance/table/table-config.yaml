@@ -1,0 +1,109 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+before:
+  flow:
+    - log: 'Running the Authorization before virtual users run'
+    - post:
+        url: '/auth/login'
+        json:
+          email: 'gildong4@stonybrook.edu'
+          password: 'Hong123456!'
+        capture:
+          - json: $.accessToken
+            as: token
+
+scenarios:
+  - name: Table Creation
+    flow:
+      - post:
+          url: '/table'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            title: 'table_title'
+          capture:
+            - json: $.id
+              as: tableId
+
+  - name: Table Update
+    flow:
+      - put:
+          url: '/table/{{ tableId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            title: 'updated_table'
+
+  - name: Personal Schedule Creation
+    flow:
+      - post:
+          url: '/personal-schedule'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            tableId: '{{ tableId }}'
+            courseId: 'course_id'
+            sections:
+              section1:
+                days: [1, 3]
+                startTimes: ['10:00']
+                endTimes: ['11:00']
+                locations: ['room1']
+          capture:
+            - json: $.id
+              as: personalScheduleId
+
+  - name: Personal Schedule title(courseId) Update
+    flow:
+      - put:
+          url: '/personal-schedule/{{ personalScheduleId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            courseId: 'updated_course_id'
+
+  - name: Personal Schedule Deletion
+    flow:
+      - delete:
+          url: '/personal-schedule/{{ personalScheduleId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: School Schedule Creation
+    flow:
+      - post:
+          url: '/school-schedule'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            tableId: '{{ tableId }}'
+            courseId: '65ead96f50d4111ca6f57b00'
+            optionsTime: '2:00 PM'
+          capture:
+            - json: $.id
+              as: schoolScheduleId
+
+  - name: School Schedule Deletion
+    flow:
+      - delete:
+          url: '/school-schedule/{{ schoolScheduleId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: All School Schedule Deletion
+    flow:
+      - delete:
+          url: '/school-schedule/all/{{ tableId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+
+  - name: Table Deletion
+    flow:
+      - delete:
+          url: '/table/{{ tableId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'

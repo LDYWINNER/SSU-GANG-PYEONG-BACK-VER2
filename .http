@@ -59,8 +59,8 @@ POST http://localhost:3000/auth
 content-type: application/json
 
 {
-    "username": "seederUser",
-    "email": "gildong4@stonybrook.edu",
+    "username": "testUser",
+    "email": "gildong@stonybrook.edu",
     "password": "Hong123456!",
     "passwordConfirm": "Hong123456!"
 }
