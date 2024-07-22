@@ -36,8 +36,7 @@ scenarios:
             name: 'category_name'
           capture:
             - json: $.id
-              as:
-      - log: 'Captured categoryId: {{ categoryId }}'
+              as: categoryId
 
   - name: Category All GET
     flow:
