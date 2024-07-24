@@ -295,8 +295,8 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
       // then
       expect(res).toEqual(
         expect.objectContaining({
-          fk_user_id: userId,
-          fk_board_comment_id: commentId,
+          fk_user_id: 'user-1',
+          fk_board_comment_id: 'comment_test_id',
         }),
       );
       expect(boardCommentLikeRepository.boardCommentLikes.length).toBe(1);
@@ -313,7 +313,7 @@ describe('게시판 댓글 관련 서비스 테스트', () => {
       // then
       expect(result).toEqual({
         count: 1,
-        likers: [userId],
+        likers: ['user-1'],
       });
     });
 

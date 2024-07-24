@@ -117,7 +117,7 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
       const schoolScheduleCount =
@@ -136,7 +136,7 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
       expect(schoolScheduleRepository.schoolSchedules.length).toBe(
@@ -150,7 +150,7 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
     });
@@ -177,7 +177,7 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
       schoolScheduleRepository.schoolSchedules.push({
@@ -188,7 +188,7 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
       const schoolScheduleCount =
@@ -210,7 +210,7 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
             tableEntity: {
               id: 'test_table_id',
               title: 'table_name',
-              user: userId,
+              user: 'test_user_id',
             },
           },
           {
@@ -221,7 +221,7 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
             tableEntity: {
               id: 'test_table_id',
               title: 'table_name',
-              user: userId,
+              user: 'test_user_id',
             },
           },
         ],
@@ -237,7 +237,7 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
       expect(schoolScheduleRepository.schoolSchedules).not.toContainEqual({
@@ -248,7 +248,7 @@ describe('시간표 학교 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
     });

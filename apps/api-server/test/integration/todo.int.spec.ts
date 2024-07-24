@@ -127,7 +127,18 @@ describe('ToDo 기능 통합 테스트', () => {
         expect(response.body).toEqual(
           expect.objectContaining({
             id: expect.any(String),
-            ...createCategoryDto,
+            color: {
+              id: 'color_id',
+              code: '#FFFFFF',
+              name: 'white',
+            },
+            icon: {
+              id: 'icon_id',
+              name: 'icon_name',
+              symbol: '🌱',
+            },
+            isEditable: true,
+            name: 'category_name',
             user: expect.objectContaining({
               id: userId,
               username: 'test_user',

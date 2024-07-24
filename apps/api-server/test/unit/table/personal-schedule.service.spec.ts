@@ -73,7 +73,17 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       // then
       expect(result).toEqual({
         id: 'personal-schedule-id',
-        ...personalScheduleDto,
+        tableId: 'test_table_id',
+        courseId: 'course_id',
+        tableTitle: 'test_table',
+        sections: {
+          section1: {
+            days: [1, 3],
+            startTimes: ['10:00'],
+            endTimes: ['11:00'],
+            locations: ['room1'],
+          },
+        },
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
@@ -85,7 +95,17 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
       );
       expect(personalScheduleRepository.personalSchedules).toContainEqual({
         id: 'personal-schedule-id',
-        ...personalScheduleDto,
+        tableId: 'test_table_id',
+        courseId: 'course_id',
+        tableTitle: 'test_table',
+        sections: {
+          section1: {
+            days: [1, 3],
+            startTimes: ['10:00'],
+            endTimes: ['11:00'],
+            locations: ['room1'],
+          },
+        },
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
@@ -137,7 +157,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
       const personalScheduleCount =
@@ -175,7 +195,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
       expect(personalScheduleRepository.personalSchedules.length).toBe(
@@ -196,7 +216,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
     });
@@ -219,7 +239,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
       const personalScheduleCount =
@@ -257,7 +277,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
       expect(personalScheduleRepository.personalSchedules.length).toBe(
@@ -278,7 +298,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
     });
@@ -356,7 +376,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
       expect(personalScheduleRepository.personalSchedules.length).toBe(
@@ -377,7 +397,7 @@ describe('시간표 개인 스케줄 관련 서비스 테스트', () => {
         tableEntity: {
           id: 'test_table_id',
           title: 'table_name',
-          user: userId,
+          user: 'test_user_id',
         },
       });
     });

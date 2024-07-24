@@ -221,7 +221,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
       // then
       expect(result).toEqual(
         expect.objectContaining({
-          fk_user_id: userId,
+          fk_user_id: 'user_id',
           fk_course_review_id: '1',
           reaction: 'LIKE',
         }),
@@ -264,7 +264,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
         totalCount: 1,
         items: [
           expect.objectContaining({
-            fk_user_id: userId,
+            fk_user_id: 'user_id',
             fk_course_review_id: '1',
             reaction: 'LIKE',
           }),
@@ -310,7 +310,7 @@ describe('유저 수강평 관련 서비스 테스트', () => {
       // then
       expect(result).toEqual(
         expect.objectContaining({
-          fk_user_id: userId,
+          fk_user_id: 'user_id',
           fk_course_review_id: '1',
           reaction: CourseReviewReactionType.Like.text,
         }),
@@ -362,12 +362,12 @@ describe('유저 수강평 관련 서비스 테스트', () => {
         likes: 0,
       });
       courseReviewLikeRepository.courseReviewLikes.push({
-        fk_user_id: userId,
+        fk_user_id: 'user_id',
         fk_course_review_id: '1',
         reaction: CourseReviewReactionType.BookMark.text,
       });
       courseReviewLikeRepository.courseReviewLikes.push({
-        fk_user_id: userId,
+        fk_user_id: 'user_id',
         fk_course_review_id: '2',
         reaction: CourseReviewReactionType.BookMark.text,
       });

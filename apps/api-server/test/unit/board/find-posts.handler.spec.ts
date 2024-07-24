@@ -115,7 +115,7 @@ describe('FindPostsQueryHandler', () => {
       mockBoardPostRepository.findAndCount(
         deepEqual({
           where: {
-            board: { id: boardEntity.id },
+            board: { id: 'board-1' },
             title: Like('%test%'),
             contents: Like('%test%'),
           },
@@ -139,7 +139,7 @@ describe('FindPostsQueryHandler', () => {
       mockBoardPostRepository.findAndCount(
         deepEqual({
           where: {
-            board: { id: boardEntity.id },
+            board: { id: 'board-1' },
             title: Like('%test%'),
             contents: Like('%test%'),
           },

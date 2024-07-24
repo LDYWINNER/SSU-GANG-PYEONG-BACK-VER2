@@ -186,7 +186,7 @@ describe('Board 기능 통합 테스트', () => {
       expect(response.body).toEqual(
         expect.objectContaining({
           id: boardId,
-          title: newTitle,
+          title: 'updated_board',
           description: 'board_description',
           boardType: BoardType.Free.text,
           user: expect.objectContaining({
@@ -208,7 +208,7 @@ describe('Board 기능 통합 테스트', () => {
         expect.objectContaining({
           id: boardId,
           title: 'board_title',
-          description: newDescription,
+          description: 'updated_board_description',
           boardType: BoardType.Free.text,
           user: expect.objectContaining({
             id: userId,

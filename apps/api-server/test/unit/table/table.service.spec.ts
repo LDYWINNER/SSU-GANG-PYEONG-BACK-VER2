@@ -113,13 +113,13 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'table_name_test_id',
         title: 'new_table_name',
-        user: userId,
+        user: 'user_id',
       });
       expect(tableRepository.tables.length).toBe(tableRowCount);
       expect(tableRepository.tables).toContainEqual({
         id: 'table_name_test_id',
         title: 'new_table_name',
-        user: userId,
+        user: 'user_id',
       });
     });
 
@@ -155,7 +155,7 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
       expect(result).toEqual({
         id: 'table-id',
         title: 'table_name',
-        user: userId,
+        user: 'user_id',
       });
       expect(tableRepository.tables.length).toBe(tableRowCount - 1);
       expect(tableRepository.tables).not.toContainEqual({
@@ -163,7 +163,7 @@ describe('유저 시간표 테이블 관련 서비스 테스트', () => {
         title: 'table_name',
         schoolSubjects: [],
         personalSubjects: [],
-        user: userId,
+        user: 'user_id',
       });
     });
 

@@ -104,7 +104,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-07T16:45:38.913Z',
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -147,7 +147,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-07T16:45:38.913Z',
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -212,7 +212,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-07T15:45:38.913Z',
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -254,7 +254,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-08T16:45:38.913Z',
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -304,7 +304,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
             categorySubj: 'AMS',
             completeDate: '2024-07-07T15:45:38.913Z',
             toDoCategory: {
-              id: categoryId,
+              id: 'test_category_id',
               color: {
                 id: 'color_id',
                 code: '#FFFFFF',
@@ -346,7 +346,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
             categorySubj: 'AMS',
             completeDate: '2024-07-08T16:45:38.913Z',
             toDoCategory: {
-              id: categoryId,
+              id: 'test_category_id',
               color: {
                 id: 'color_id',
                 code: '#FFFFFF',
@@ -403,7 +403,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-07T15:45:38.913Z',
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -445,7 +445,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-08T16:45:38.913Z',
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -495,7 +495,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
             categorySubj: 'AMS',
             completeDate: '2024-07-07T15:45:38.913Z',
             toDoCategory: {
-              id: categoryId,
+              id: 'test_category_id',
               color: {
                 id: 'color_id',
                 code: '#FFFFFF',
@@ -537,7 +537,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
             categorySubj: 'AMS',
             completeDate: '2024-07-08T16:45:38.913Z',
             toDoCategory: {
-              id: categoryId,
+              id: 'test_category_id',
               color: {
                 id: 'color_id',
                 code: '#FFFFFF',
@@ -595,7 +595,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-07T15:45:38.913Z',
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -637,7 +637,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: '2024-07-08T16:45:38.913Z',
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -687,7 +687,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
             categorySubj: 'AMS',
             completeDate: '2024-07-08T16:45:38.913Z',
             toDoCategory: {
-              id: categoryId,
+              id: 'test_category_id',
               color: {
                 id: 'color_id',
                 code: '#FFFFFF',
@@ -748,7 +748,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: timeStringInvalid,
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -790,7 +790,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: timeStringValid,
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -840,7 +840,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
             categorySubj: 'AMS',
             completeDate: timeStringValid,
             toDoCategory: {
-              id: categoryId,
+              id: 'test_category_id',
               color: {
                 id: 'color_id',
                 code: '#FFFFFF',
@@ -900,7 +900,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: timeStringInvalid,
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -942,7 +942,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: timeStringValid,
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -995,7 +995,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
             categorySubj: 'AMS',
             completeDate: timeStringValid,
             toDoCategory: {
-              id: categoryId,
+              id: 'test_category_id',
               color: {
                 id: 'color_id',
                 code: '#FFFFFF',
@@ -1055,7 +1055,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: timeStringInvalid,
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -1097,7 +1097,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
         categorySubj: 'AMS',
         completeDate: timeStringValid,
         toDoCategory: {
-          id: categoryId,
+          id: 'test_category_id',
           color: {
             id: 'color_id',
             code: '#FFFFFF',
@@ -1147,7 +1147,7 @@ describe('투두 할 일 관련 서비스 테스트', () => {
             categorySubj: 'AMS',
             completeDate: timeStringValid,
             toDoCategory: {
-              id: categoryId,
+              id: 'test_category_id',
               color: {
                 id: 'color_id',
                 code: '#FFFFFF',

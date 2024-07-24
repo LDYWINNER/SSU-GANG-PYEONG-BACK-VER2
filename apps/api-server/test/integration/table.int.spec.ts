@@ -115,7 +115,7 @@ describe('Table 기능 통합 테스트', () => {
       expect(response.body).toEqual(
         expect.objectContaining({
           id: expect.any(String),
-          title: tableName,
+          title: 'new_table',
           user: expect.objectContaining({
             id: userId,
             username: 'test_user',
@@ -165,7 +165,7 @@ describe('Table 기능 통합 테스트', () => {
       expect(response.body).toEqual(
         expect.objectContaining({
           id: tableId,
-          title: newTitle,
+          title: 'updated_table',
           user: expect.objectContaining({
             id: userId,
           }),

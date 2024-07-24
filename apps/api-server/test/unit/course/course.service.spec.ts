@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseService } from './../../../src/routes/course/course.service';
 import {
@@ -51,7 +52,7 @@ describe('수업 관련 서비스 테스트', () => {
     });
 
     courseRepository.courses.push({
-      id: courseId1,
+      id: 'course_id_1',
       avgGrade: 4.5,
       classNbr: 'class_nbr',
       subj: 'CSE',
@@ -72,7 +73,7 @@ describe('수업 관련 서비스 테스트', () => {
       likes: 0,
     });
     courseRepository.courses.push({
-      id: courseId2,
+      id: 'course_id_2',
       avgGrade: 2.5,
       classNbr: 'class_nbr',
       subj: 'AMS',
@@ -93,7 +94,7 @@ describe('수업 관련 서비스 테스트', () => {
       likes: 0,
     });
     courseRepository.courses.push({
-      id: courseId3,
+      id: 'course_id_3',
       avgGrade: 4.8,
       classNbr: 'class_nbr',
       subj: 'EST',
@@ -150,7 +151,7 @@ describe('수업 관련 서비스 테스트', () => {
         count: 3,
         items: [
           {
-            id: courseId1,
+            id: 'course_id_1',
             avgGrade: 4.5,
             classNbr: 'class_nbr',
             subj: 'CSE',
@@ -171,7 +172,7 @@ describe('수업 관련 서비스 테스트', () => {
             likes: 0,
           },
           {
-            id: courseId2,
+            id: 'course_id_2',
             avgGrade: 2.5,
             classNbr: 'class_nbr',
             subj: 'AMS',
@@ -192,7 +193,7 @@ describe('수업 관련 서비스 테스트', () => {
             likes: 0,
           },
           {
-            id: courseId3,
+            id: 'course_id_3',
             avgGrade: 4.8,
             classNbr: 'class_nbr',
             subj: 'EST',
@@ -228,7 +229,7 @@ describe('수업 관련 서비스 테스트', () => {
         count: 1,
         items: [
           {
-            id: courseId1,
+            id: 'course_id_1',
             avgGrade: 4.5,
             classNbr: 'class_nbr',
             subj: 'CSE',
@@ -264,7 +265,7 @@ describe('수업 관련 서비스 테스트', () => {
         count: 1,
         items: [
           {
-            id: courseId1,
+            id: 'course_id_1',
             avgGrade: 4.5,
             classNbr: 'class_nbr',
             subj: 'CSE',
@@ -297,7 +298,7 @@ describe('수업 관련 서비스 테스트', () => {
         count: 3,
         items: [
           {
-            id: courseId1,
+            id: 'course_id_1',
             avgGrade: 4.5,
             classNbr: 'class_nbr',
             subj: 'CSE',
@@ -318,7 +319,7 @@ describe('수업 관련 서비스 테스트', () => {
             likes: 0,
           },
           {
-            id: courseId2,
+            id: 'course_id_2',
             avgGrade: 2.5,
             classNbr: 'class_nbr',
             subj: 'AMS',
@@ -339,7 +340,7 @@ describe('수업 관련 서비스 테스트', () => {
             likes: 0,
           },
           {
-            id: courseId3,
+            id: 'course_id_3',
             avgGrade: 4.8,
             classNbr: 'class_nbr',
             subj: 'EST',
@@ -369,7 +370,7 @@ describe('수업 관련 서비스 테스트', () => {
 
       // then
       expect(result).toEqual({
-        id: courseId1,
+        id: 'course_id_1',
         avgGrade: 4.5,
         classNbr: 'class_nbr',
         subj: 'CSE',
@@ -409,7 +410,7 @@ describe('수업 관련 서비스 테스트', () => {
         count: 2,
         items: [
           {
-            id: courseId1,
+            id: 'course_id_1',
             avgGrade: 4.5,
             classNbr: 'class_nbr',
             subj: 'CSE',
@@ -430,7 +431,7 @@ describe('수업 관련 서비스 테스트', () => {
             likes: 0,
           },
           {
-            id: courseId2,
+            id: 'course_id_2',
             avgGrade: 2.5,
             classNbr: 'class_nbr',
             subj: 'AMS',
@@ -518,7 +519,7 @@ describe('수업 관련 서비스 테스트', () => {
         count: 2,
         items: [
           {
-            id: courseId1,
+            id: 'course_id_1',
             avgGrade: 4.5,
             classNbr: 'class_nbr',
             subj: 'CSE',
@@ -539,7 +540,7 @@ describe('수업 관련 서비스 테스트', () => {
             likes: 1,
           },
           {
-            id: courseId3,
+            id: 'course_id_3',
             avgGrade: 4.8,
             classNbr: 'class_nbr',
             subj: 'EST',

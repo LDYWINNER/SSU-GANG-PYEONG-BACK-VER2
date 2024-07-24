@@ -46,9 +46,7 @@ describe('FindOnePostQueryHandler', () => {
       ),
     ).thenResolve(post);
 
-    when(
-      mockBoardPostRepository.update(postId, { views: post.views + 1 }),
-    ).thenResolve();
+    when(mockBoardPostRepository.update(postId, { views: 6 })).thenResolve();
 
     const query = new FindOnePostQuery(postId);
     const result = await handler.execute(query);
@@ -57,15 +55,15 @@ describe('FindOnePostQueryHandler', () => {
     verify(
       mockBoardPostRepository.findOne(
         deepEqual({
-          where: { id: postId },
+          where: { id: 'post-1' },
           relations: ['user', 'comments'],
         }),
       ),
     ).once();
     verify(
       mockBoardPostRepository.update(
-        deepEqual(postId),
-        deepEqual({ views: post.views + 1 }),
+        deepEqual('post-1'),
+        deepEqual({ views: 6 }),
       ),
     ).once();
   });
@@ -88,7 +86,7 @@ describe('FindOnePostQueryHandler', () => {
     verify(
       mockBoardPostRepository.findOne(
         deepEqual({
-          where: { id: postId },
+          where: { id: 'post-1' },
           relations: ['user', 'comments'],
         }),
       ),

@@ -75,14 +75,14 @@ describe('유저 서비스 테스트', () => {
       // then
       expect(result).toEqual({
         id: 'follow-id',
-        fk_leader_id: userId1,
-        fk_follower_id: userId2,
+        fk_leader_id: 'test_user_id_1',
+        fk_follower_id: 'test_user_id_2',
       });
       expect(followRepository.follows.length).toBe(followRowCount + 1);
       expect(followRepository.follows).toContainEqual({
         id: 'follow-id',
-        fk_leader_id: userId1,
-        fk_follower_id: userId2,
+        fk_leader_id: 'test_user_id_1',
+        fk_follower_id: 'test_user_id_2',
       });
     });
 
@@ -136,14 +136,14 @@ describe('유저 서비스 테스트', () => {
       // then
       expect(result).toEqual({
         id: 'follow-id',
-        fk_leader_id: userId1,
-        fk_follower_id: userId2,
+        fk_leader_id: 'test_user_id_1',
+        fk_follower_id: 'test_user_id_2',
       });
       expect(followRepository.follows.length).toBe(followRowCount - 1);
       expect(followRepository.follows).not.toContainEqual({
         id: 'follow-id',
-        fk_leader_id: userId1,
-        fk_follower_id: userId2,
+        fk_leader_id: 'test_user_id_1',
+        fk_follower_id: 'test_user_id_2',
       });
     });
 
@@ -170,14 +170,14 @@ describe('유저 서비스 테스트', () => {
       // then
       expect(result).toEqual({
         id: 'block-id',
-        fk_hater_id: userId1,
-        fk_hated_id: userId2,
+        fk_hater_id: 'test_user_id_1',
+        fk_hated_id: 'test_user_id_2',
       });
       expect(blockRepository.blocks.length).toBe(blockRowCount + 1);
       expect(blockRepository.blocks).toContainEqual({
         id: 'block-id',
-        fk_hater_id: userId1,
-        fk_hated_id: userId2,
+        fk_hater_id: 'test_user_id_1',
+        fk_hated_id: 'test_user_id_2',
       });
     });
 

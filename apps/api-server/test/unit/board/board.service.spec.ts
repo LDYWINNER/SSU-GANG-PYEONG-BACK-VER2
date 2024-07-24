@@ -109,8 +109,6 @@ describe('유저 게시판 관련 서비스 테스트', () => {
         title: 'board_title',
         description: 'board_description',
         boardType: BoardType.Free.text,
-        createdAt: undefined,
-        updatedAt: undefined,
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -121,6 +119,8 @@ describe('유저 게시판 관련 서비스 테스트', () => {
           updateAt: new Date('2024-06-28T18:19:29.764Z'),
           username: 'test_name',
         },
+        createdAt: new Date('2024-06-28T18:19:29.764Z'),
+        updatedAt: new Date('2024-06-28T18:19:29.764Z'),
       });
       const boardRowCount = boardRepository.boards.length;
 
@@ -135,6 +135,8 @@ describe('유저 게시판 관련 서비스 테스트', () => {
         title: 'new_board_title',
         description: 'board_description',
         boardType: BoardType.Free.text,
+        createdAt: new Date('2024-06-28T18:19:29.764Z'),
+        updatedAt: new Date('2024-06-28T18:19:29.764Z'),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -152,6 +154,8 @@ describe('유저 게시판 관련 서비스 테스트', () => {
         title: 'new_board_title',
         description: 'board_description',
         boardType: BoardType.Free.text,
+        createdAt: new Date('2024-06-28T18:19:29.764Z'),
+        updatedAt: new Date('2024-06-28T18:19:29.764Z'),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -173,8 +177,8 @@ describe('유저 게시판 관련 서비스 테스트', () => {
         title: 'board_title',
         description: 'board_description',
         boardType: BoardType.Free.text,
-        createdAt: undefined,
-        updatedAt: undefined,
+        createdAt: new Date('2024-06-28T18:19:29.764Z'),
+        updatedAt: new Date('2024-06-28T18:19:29.764Z'),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -199,6 +203,8 @@ describe('유저 게시판 관련 서비스 테스트', () => {
         title: 'board_title',
         description: 'new_board_description',
         boardType: BoardType.Free.text,
+        createdAt: new Date('2024-06-28T18:19:29.764Z'),
+        updatedAt: new Date('2024-06-28T18:19:29.764Z'),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -216,6 +222,8 @@ describe('유저 게시판 관련 서비스 테스트', () => {
         title: 'board_title',
         description: 'new_board_description',
         boardType: BoardType.Free.text,
+        createdAt: new Date('2024-06-28T18:19:29.764Z'),
+        updatedAt: new Date('2024-06-28T18:19:29.764Z'),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -252,8 +260,8 @@ describe('유저 게시판 관련 서비스 테스트', () => {
         title: 'board_title',
         description: 'board_description',
         boardType: BoardType.Free.text,
-        createdAt: undefined,
-        updatedAt: undefined,
+        createdAt: new Date('2024-06-28T18:19:29.764Z'),
+        updatedAt: new Date('2024-06-28T18:19:29.764Z'),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -276,8 +284,8 @@ describe('유저 게시판 관련 서비스 테스트', () => {
         title: 'board_title',
         description: 'board_description',
         boardType: BoardType.Free.text,
-        createdAt: undefined,
-        updatedAt: undefined,
+        createdAt: new Date('2024-06-28T18:19:29.764Z'),
+        updatedAt: new Date('2024-06-28T18:19:29.764Z'),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',
@@ -295,8 +303,8 @@ describe('유저 게시판 관련 서비스 테스트', () => {
         title: 'board_title',
         description: 'board_description',
         boardType: BoardType.Free.text,
-        createdAt: undefined,
-        updatedAt: undefined,
+        createdAt: new Date('2024-06-28T18:19:29.764Z'),
+        updatedAt: new Date('2024-06-28T18:19:29.764Z'),
         user: {
           createdAt: new Date('2024-06-28T18:19:29.764Z'),
           email: 'test_email',

@@ -79,7 +79,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
         anonymity: false,
         createdAt: undefined,
         updateAt: undefined,
-        board: boardRepository.boards[0],
+        board: {
+          id: 'board_id',
+          title: 'board_title',
+          description: 'board_description',
+          createdAt: undefined,
+          updatedAt: undefined,
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: UserType.User.text,
+            courseReviewCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+          boardType: BoardType.All.text,
+        },
         likes: 0,
       });
       boardPostRepository.boardPosts.push({
@@ -90,7 +107,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
         anonymity: false,
         createdAt: undefined,
         updateAt: undefined,
-        board: boardRepository.boards[0],
+        board: {
+          id: 'board_id',
+          title: 'board_title',
+          description: 'board_description',
+          createdAt: undefined,
+          updatedAt: undefined,
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: UserType.User.text,
+            courseReviewCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+          boardType: BoardType.All.text,
+        },
         user: {
           id: 'user-1',
           username: '',
@@ -111,7 +145,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
         anonymity: false,
         createdAt: undefined,
         updateAt: undefined,
-        board: boardRepository.boards[0],
+        board: {
+          id: 'board_id',
+          title: 'board_title',
+          description: 'board_description',
+          createdAt: undefined,
+          updatedAt: undefined,
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: UserType.User.text,
+            courseReviewCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+          boardType: BoardType.All.text,
+        },
         user: {
           id: 'user-1',
           username: '',
@@ -132,7 +183,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
         anonymity: false,
         createdAt: undefined,
         updateAt: undefined,
-        board: boardRepository.boards[0],
+        board: {
+          id: 'board_id',
+          title: 'board_title',
+          description: 'board_description',
+          createdAt: undefined,
+          updatedAt: undefined,
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: UserType.User.text,
+            courseReviewCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+          boardType: BoardType.All.text,
+        },
         user: {
           id: 'user-1',
           username: '',
@@ -153,7 +221,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
         anonymity: false,
         createdAt: undefined,
         updateAt: undefined,
-        board: boardRepository.boards[0],
+        board: {
+          id: 'board_id',
+          title: 'board_title',
+          description: 'board_description',
+          createdAt: undefined,
+          updatedAt: undefined,
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: UserType.User.text,
+            courseReviewCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+          boardType: BoardType.All.text,
+        },
         user: {
           id: 'user-1',
           username: '',
@@ -174,7 +259,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
         anonymity: false,
         createdAt: undefined,
         updateAt: undefined,
-        board: boardRepository.boards[0],
+        board: {
+          id: 'board_id',
+          title: 'board_title',
+          description: 'board_description',
+          createdAt: undefined,
+          updatedAt: undefined,
+          user: {
+            id: 'user-1',
+            username: '',
+            email: '',
+            password: '',
+            role: UserType.User.text,
+            courseReviewCount: 0,
+            createdAt: undefined,
+            updateAt: undefined,
+          },
+          boardType: BoardType.All.text,
+        },
         user: {
           id: 'user-1',
           username: '',
@@ -211,7 +313,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
           anonymity: false,
           createdAt: undefined,
           updateAt: undefined,
-          board: boardRepository.boards[0],
+          board: {
+            id: 'board_id',
+            title: 'board_title',
+            description: 'board_description',
+            createdAt: undefined,
+            updatedAt: undefined,
+            user: {
+              id: 'user-1',
+              username: '',
+              email: '',
+              password: '',
+              role: UserType.User.text,
+              courseReviewCount: 0,
+              createdAt: undefined,
+              updateAt: undefined,
+            },
+            boardType: BoardType.All.text,
+          },
           user: {
             id: 'user-1',
             username: '',
@@ -229,7 +348,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
       const result = await service.update(userId, postId, updateDto);
 
       expect(result).toBeDefined();
-      expect(result).toHaveProperty('title', updateDto.title);
+      expect(result).toHaveProperty('title', 'Updated Title');
     });
 
     it('postId에 해당하는 board post가 존재하지 않으면 에러가 납니다', async () => {
@@ -256,7 +375,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
           anonymity: false,
           createdAt: undefined,
           updateAt: undefined,
-          board: boardRepository.boards[0],
+          board: {
+            id: 'board_id',
+            title: 'board_title',
+            description: 'board_description',
+            createdAt: undefined,
+            updatedAt: undefined,
+            user: {
+              id: 'user-1',
+              username: '',
+              email: '',
+              password: '',
+              role: UserType.User.text,
+              courseReviewCount: 0,
+              createdAt: undefined,
+              updateAt: undefined,
+            },
+            boardType: BoardType.All.text,
+          },
           user: {
             id: 'user-1',
             username: '',
@@ -291,7 +427,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
           anonymity: false,
           createdAt: undefined,
           updateAt: undefined,
-          board: boardRepository.boards[0],
+          board: {
+            id: 'board_id',
+            title: 'board_title',
+            description: 'board_description',
+            createdAt: undefined,
+            updatedAt: undefined,
+            user: {
+              id: 'user-1',
+              username: '',
+              email: '',
+              password: '',
+              role: UserType.User.text,
+              courseReviewCount: 0,
+              createdAt: undefined,
+              updateAt: undefined,
+            },
+            boardType: BoardType.All.text,
+          },
           user: {
             id: 'user-1',
             username: '',
@@ -333,7 +486,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
           anonymity: false,
           createdAt: undefined,
           updateAt: undefined,
-          board: boardRepository.boards[0],
+          board: {
+            id: 'board_id',
+            title: 'board_title',
+            description: 'board_description',
+            createdAt: undefined,
+            updatedAt: undefined,
+            user: {
+              id: 'user-1',
+              username: '',
+              email: '',
+              password: '',
+              role: UserType.User.text,
+              courseReviewCount: 0,
+              createdAt: undefined,
+              updateAt: undefined,
+            },
+            boardType: BoardType.All.text,
+          },
           user: {
             id: 'user-1',
             username: '',
@@ -368,7 +538,24 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
           anonymity: false,
           createdAt: undefined,
           updateAt: undefined,
-          board: boardRepository.boards[0],
+          board: {
+            id: 'board_id',
+            title: 'board_title',
+            description: 'board_description',
+            createdAt: undefined,
+            updatedAt: undefined,
+            user: {
+              id: 'user-1',
+              username: '',
+              email: '',
+              password: '',
+              role: UserType.User.text,
+              courseReviewCount: 0,
+              createdAt: undefined,
+              updateAt: undefined,
+            },
+            boardType: BoardType.All.text,
+          },
           user: {
             id: 'user-1',
             username: '',
@@ -391,8 +578,8 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
       // then
       expect(res).toEqual(
         expect.objectContaining({
-          fk_user_id: userId,
-          fk_board_post_id: postId,
+          fk_user_id: 'user-1',
+          fk_board_post_id: '1',
         }),
       );
       expect(boardPostLikeRepository.boardPostLikes.length).toBe(1);
@@ -409,7 +596,7 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
       // then
       expect(result).toEqual({
         count: 1,
-        likers: [userId],
+        likers: ['user-1'],
       });
     });
 
@@ -423,8 +610,8 @@ describe('cqrs 구조 제외한 나머지 board post 서비스 테스트', () =>
       // then
       expect(res).toEqual(
         expect.objectContaining({
-          fk_user_id: userId,
-          fk_board_post_id: postId,
+          fk_user_id: 'user-1',
+          fk_board_post_id: '1',
         }),
       );
       expect(boardPostLikeRepository.boardPostLikes.length).toBe(0);
