@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   ManyToOne,
+  Index,
 } from 'typeorm';
 import { User } from './user.entity';
 import { IsNotEmpty } from 'class-validator';
@@ -37,6 +38,7 @@ export class ToDoTask {
     example: '2024-07-07T16:45:38.913Z',
   })
   @IsNotEmpty()
+  @Index()
   @Column()
   completeDate: string;
 
