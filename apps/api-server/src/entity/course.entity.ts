@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { CourseReview } from './course-review.entity';
 
 @Entity()
 export class Course {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('varchar')
   id: string;
 
   @ApiProperty({ description: '유저들의 수업 평가에 따른 평균 점수' })

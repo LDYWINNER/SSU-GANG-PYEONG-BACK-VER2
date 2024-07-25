@@ -9,6 +9,8 @@ import { Enum1721366470719 } from './1721366470719-enum';
 import { UserPostCount1721376941980 } from './1721376941980-user-post-count';
 import { UserPostCount1721385720583 } from './1721385720583-user-post-count';
 import { UserBlock1721396024794 } from './1721396024794-user-block';
+import { CourseStringId1721906043381 } from './1721906043381-course-string-id';
+import { CourseVarcharId1721906405484 } from './1721906405484-course-varchar-id';
 
 export {
   Initialize1720855793915,
@@ -22,4 +24,6 @@ export {
   UserPostCount1721376941980,
   UserPostCount1721385720583,
   UserBlock1721396024794,
+  CourseStringId1721906043381,
+  CourseVarcharId1721906405484,
 };

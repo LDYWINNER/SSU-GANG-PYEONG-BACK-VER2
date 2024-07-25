@@ -12,6 +12,8 @@ import {
   UserPostCount1721376941980,
   UserPostCount1721385720583,
   UserBlock1721396024794,
+  CourseStringId1721906043381,
+  CourseVarcharId1721906405484,
 } from './migrations';
 
 const options: DataSourceOptions & SeederOptions = {
@@ -34,6 +36,8 @@ const options: DataSourceOptions & SeederOptions = {
     UserPostCount1721376941980,
     UserPostCount1721385720583,
     UserBlock1721396024794,
+    CourseStringId1721906043381,
+    CourseVarcharId1721906405484,
   ],
   migrationsTableName: 'migrations',
 };
