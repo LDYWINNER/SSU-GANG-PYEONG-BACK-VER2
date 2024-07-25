@@ -11,6 +11,7 @@ import { UserPostCount1721385720583 } from './1721385720583-user-post-count';
 import { UserBlock1721396024794 } from './1721396024794-user-block';
 import { CourseStringId1721906043381 } from './1721906043381-course-string-id';
 import { CourseVarcharId1721906405484 } from './1721906405484-course-varchar-id';
+import { CourseIndexTuning1721922428711 } from './1721922428711-course-index-tuning';
 
 export {
   Initialize1720855793915,
@@ -26,4 +27,5 @@ export {
   UserBlock1721396024794,
   CourseStringId1721906043381,
   CourseVarcharId1721906405484,
+  CourseIndexTuning1721922428711,
 };

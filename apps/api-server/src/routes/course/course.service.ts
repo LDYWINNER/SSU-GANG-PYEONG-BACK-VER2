@@ -2,6 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course, CourseLike, Table } from '../../entity';
 import { Brackets, Repository } from 'typeorm';
+import {
+  addKeywordSearch,
+  latestSemester,
+  subjectMapping,
+  upperCourseCondition,
+} from '../../common/utils/course-filter';
+import { QueryCourseDto } from './dto/query-course.dto';
 
 @Injectable()
 export class CourseService {
@@ -37,81 +44,32 @@ export class CourseService {
     return course;
   };
 
-  getTableCourses = async ({
-    subject,
-    keyword,
-  }: {
-    subject?: string;
-    keyword?: string;
-  }) => {
-    const semesterCondition = ['2024_spring'];
-    const upperCourseCondition = [
-      '475',
-      '476',
-      '487',
-      '488',
-      '499',
-      '522',
-      '523',
-      '524',
-      '587',
-      '593',
-      '596',
-      '599',
-      '696',
-      '697',
-      '698',
-      '699',
-      '700',
-    ];
-
+  getTableCourses = async ({ subject, keyword }: QueryCourseDto) => {
     const queryBuilder = this.courseRepository
       .createQueryBuilder('course')
       .leftJoinAndSelect('course.reviews', 'review')
-      .where('course.semesters && ARRAY[:...semesters]', {
-        semesters: semesterCondition,
+      .where('course.semesters ILIKE :latestSemester', {
+        latestSemester,
       })
-      .andWhere('course.crs NOT IN (:...upperCourses)', {
+      .andWhere('NOT (course.crs = ANY(:upperCourses))', {
         upperCourses: upperCourseCondition,
       });
 
-    if (subject !== 'ALL') {
-      switch (subject) {
-        case 'ACC/BUS':
-          queryBuilder.andWhere('course.subj IN (:...subjects)', {
-            subjects: ['ACC', 'BUS'],
-          });
-          break;
-        case 'EST/EMP':
-          queryBuilder.andWhere('course.subj IN (:...subjects)', {
-            subjects: ['EST', 'EMP'],
-          });
-          break;
-        case 'SHCourse':
-          queryBuilder.andWhere('course.subj NOT IN (:...subjects)', {
-            subjects: ['AMS', 'ACC', 'BUS', 'CSE', 'ESE', 'EST', 'EMP', 'MEC'],
-          });
-          break;
-        default:
-          queryBuilder.andWhere('course.subj = :subject', { subject });
-          break;
+    if (subject && subject !== 'ALL') {
+      if (subject in subjectMapping) {
+        const subjects = subjectMapping[subject];
+        const operator = subject === 'SHCourse' ? 'NOT IN' : 'IN';
+        queryBuilder.andWhere(`course.subj ${operator} (:...subjects)`, {
+          subjects,
+        });
+      } else {
+        queryBuilder.andWhere('course.subj = :subject', { subject });
       }
     }
 
     if (keyword) {
       queryBuilder.andWhere(
-        new Brackets((qb) => {
-          qb.where('course.crs ILIKE :keyword', { keyword: `%${keyword}%` })
-            .orWhere('course.courseTitle ILIKE :keyword', {
-              keyword: `%${keyword}%`,
-            })
-            .orWhere(
-              'course.id IN (SELECT id FROM course, UNNEST(course.recent_two_instructors) AS instructor WHERE instructor ILIKE :keyword)',
-              {
-                keyword: `%${keyword}%`,
-              },
-            );
-        }),
+        new Brackets((qb) => addKeywordSearch(qb, keyword)),
       );
     }
 
@@ -125,13 +83,7 @@ export class CourseService {
     return { items, count };
   };
 
-  getQueryCourses = async ({
-    subject,
-    keyword,
-  }: {
-    subject?: string;
-    keyword?: string;
-  }) => {
+  getQueryCourses = async ({ subject, keyword }: QueryCourseDto) => {
     const queryBuilder = this.courseRepository.createQueryBuilder('course');
 
     if (subject !== 'ALL') {

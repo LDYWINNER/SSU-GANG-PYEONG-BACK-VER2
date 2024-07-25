@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, Index, OneToMany, PrimaryColumn } from 'typeorm';
 import { CourseReview } from './course-review.entity';
 
 @Entity()
@@ -16,10 +16,12 @@ export class Course {
   classNbr: string;
 
   @ApiProperty({ description: '수업 카테고리', example: 'AMS' })
+  @Index()
   @Column()
   subj: string;
 
   @ApiProperty({ description: '수업 번호', example: '151' })
+  @Index()
   @Column()
   crs: string;
 
@@ -90,10 +92,11 @@ export class Course {
 
   @ApiProperty({
     description: '수업이 열렸던 학기 기록',
-    example: '["2024_spring", ""2024_fall"]',
+    example: '2024_spring, 2024_fall',
   })
-  @Column('text', { array: true })
-  semesters: string[];
+  @Index()
+  @Column()
+  semesters: string;
 
   @Column({ default: 0 })
   likes: number;
