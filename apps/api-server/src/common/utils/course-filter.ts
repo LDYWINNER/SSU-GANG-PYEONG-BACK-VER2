@@ -1,6 +1,6 @@
-export const semesters = ['2024_spring'];
+export const semesters = ['2024_fall'];
 
-export const latestSemester = '2024_spring';
+export const latestSemester = '2024_fall';
 
 export const upperCourseCondition = [
   '475',

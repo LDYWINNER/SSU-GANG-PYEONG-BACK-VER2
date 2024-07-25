@@ -49,7 +49,7 @@ export class CourseService {
       .createQueryBuilder('course')
       .leftJoinAndSelect('course.reviews', 'review')
       .where('course.semesters ILIKE :latestSemester', {
-        latestSemester,
+        latestSemester: `%${latestSemester}%`,
       })
       .andWhere('NOT (course.crs = ANY(:upperCourses))', {
         upperCourses: upperCourseCondition,
@@ -86,43 +86,21 @@ export class CourseService {
   getQueryCourses = async ({ subject, keyword }: QueryCourseDto) => {
     const queryBuilder = this.courseRepository.createQueryBuilder('course');
 
-    if (subject !== 'ALL') {
-      switch (subject) {
-        case 'ACC/BUS':
-          queryBuilder.andWhere('course.subj IN (:...subjects)', {
-            subjects: ['ACC', 'BUS'],
-          });
-          break;
-        case 'EST/EMP':
-          queryBuilder.andWhere('course.subj IN (:...subjects)', {
-            subjects: ['EST', 'EMP'],
-          });
-          break;
-        case 'SHCourse':
-          queryBuilder.andWhere('course.subj NOT IN (:...subjects)', {
-            subjects: ['AMS', 'ACC', 'BUS', 'CSE', 'ESE', 'EST', 'EMP', 'MEC'],
-          });
-          break;
-        default:
-          queryBuilder.andWhere('course.subj = :subject', { subject });
-          break;
+    if (subject && subject !== 'ALL') {
+      if (subject in subjectMapping) {
+        const subjects = subjectMapping[subject];
+        const operator = subject === 'SHCourse' ? 'NOT IN' : 'IN';
+        queryBuilder.andWhere(`course.subj ${operator} (:...subjects)`, {
+          subjects,
+        });
+      } else {
+        queryBuilder.andWhere('course.subj = :subject', { subject });
       }
     }
 
     if (keyword) {
       queryBuilder.andWhere(
-        new Brackets((qb) => {
-          qb.where('course.crs ILIKE :keyword', { keyword: `%${keyword}%` })
-            .orWhere('course.courseTitle ILIKE :keyword', {
-              keyword: `%${keyword}%`,
-            })
-            .orWhere(
-              'course.id IN (SELECT id FROM course, UNNEST(course.recent_two_instructors) AS instructor WHERE instructor ILIKE :keyword)',
-              {
-                keyword: `%${keyword}%`,
-              },
-            );
-        }),
+        new Brackets((qb) => addKeywordSearch(qb, keyword)),
       );
     }
 
