@@ -37,5 +37,7 @@ ENV SWAGGER_USER ${SWAGGER_USER}
 ARG SWAGGER_PASSWORD
 ENV SWAGGER_PASSWORD ${SWAGGER_PASSWORD}
 
-CMD npm run typeorm migration:run && \
-npm run start:prod
+# CMD npm run typeorm migration:run && \
+# npm run start:prod
+RUN npm run typeorm migration:run
+RUN npm run start:prod
