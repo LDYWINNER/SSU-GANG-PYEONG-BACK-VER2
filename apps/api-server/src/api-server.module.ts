@@ -18,6 +18,7 @@ import postgresConfig from './config/postgres.config';
 import jwtConfig from './config/jwt.config';
 import sentryConfig from './config/sentry.config';
 import emailConfig from './config/email.config';
+import redisConfig from './config/redis.config';
 import {
   User,
   Table,
@@ -34,17 +35,25 @@ import {
 } from '../src/entity';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
-import { RedisClientOptions } from 'redis';
 import { CacheKeyService } from './routes/cache-key/cache-key.service';
 
 @Module({
   imports: [
-    CacheModule.register<RedisClientOptions>({
-      store: redisStore,
-      socket: {
-        host: process.env.REDIS_HOST ?? 'localhost',
-        port: parseInt(process.env.REDIS_PORT ?? '6379'),
-      },
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [postgresConfig, jwtConfig, sentryConfig, emailConfig, redisConfig],
+    }),
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.get('redis.host'),
+        port: configService.get('redis.port'),
+        ttl: 60 * 60, // 1시간
+        max: 100,
+        closeClient: true,
+      }),
+      inject: [ConfigService],
     }),
     ThrottlerModule.forRoot([
       {
@@ -52,10 +61,6 @@ import { CacheKeyService } from './routes/cache-key/cache-key.service';
         limit: 10,
       },
     ]),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [postgresConfig, jwtConfig, sentryConfig, emailConfig],
-    }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
