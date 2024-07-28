@@ -66,6 +66,3 @@ jobs:
         run: |
           docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
           docker run --add-host=host.docker.internal:host-gateway -d -p 80:3000 --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
-      - name: Run database migrations
-        run: |
-          npm run typeorm migration:run
