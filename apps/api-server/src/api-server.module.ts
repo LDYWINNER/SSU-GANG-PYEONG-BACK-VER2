@@ -32,9 +32,20 @@ import {
   Course,
   CourseReview,
 } from '../src/entity';
+import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
+import { RedisClientOptions } from 'redis';
+import { CacheKeyService } from './routes/cache-key/cache-key.service';
 
 @Module({
   imports: [
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      socket: {
+        host: process.env.REDIS_HOST ?? 'localhost',
+        port: parseInt(process.env.REDIS_PORT ?? '6379'),
+      },
+    }),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
@@ -93,7 +104,7 @@ import {
     TableModule,
   ],
   controllers: [ApiServerController],
-  providers: [ApiServerService],
+  providers: [ApiServerService, CacheKeyService],
 })
 export class ApiServerModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

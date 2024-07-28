@@ -2,6 +2,7 @@ version: '3.1'
 
 volumes:
   postgres_data:
+  redis_data:
 
 services:
   postgres:
@@ -18,4 +19,13 @@ services:
       - postgres_data:/var/lib/postgresql/data
       # - ./postgresql.conf:/var/lib/postgresql/data/postgresql.conf
       # - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+    restart: always
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
     restart: always
