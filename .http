@@ -4,48 +4,6 @@ GET http://localhost:3000/health
 
 ###
 
-# 게시글 하나 가져오기
-GET http://localhost:3000/board/9e280d6a-08fe-42e8-b551-cd91a153d6cf
-
-###
-
-# 게시글 생성
-POST http://localhost:3000/board
-content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRmNmE4MGE0LTg3MDYtNDAxZC04MGY5LTBjY2RmOWMwMTJmYyIsInVzZXJuYW1lIjoic2VlZGVyVXNlciIsImVtYWlsIjoiZ2lsZG9uZ0BzdG9ueWJyb29rLmVkdSIsInRva2VuVHlwZSI6ImFjY2VzcyIsImlhdCI6MTcxODYwMzM5MiwiZXhwIjoxNzE4Njg5NzkyfQ.g2Yc9yGEzh3PDfn8wM6qymT6vPFNjpBvV-DeVuFrw1s
-
-{
-    "title": "새로운 게시글",
-    "contents": "새로운 게시글",
-    "views": "0",
-    "category": "자유게시판",
-    "anonymity": "false"
-}
-
-###
-
-# 게시글 수정
-PUT http://localhost:3000/board/1
-content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzZWVkZXJVc2VyMyIsIm5hbWUiOiJnaWxkb25nIiwiaWF0IjoxNzEyNzkwMzg2LCJleHAiOjE3MTM5OTk5ODZ9.RkEQeTxhITDgwxNoTU2unKPW3YiK_gXaO0pUM0JF664
-
-{
-    "contents": "New world"
-}
-
-###
-
-# 게시글 삭제
-
-DELETE http://localhost:3000/board/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzZWVkZXJVc2VyMyIsIm5hbWUiOiJnaWxkb25nIiwiaWF0IjoxNzEyNzkwMzg2LCJleHAiOjE3MTM5OTk5ODZ9.RkEQeTxhITDgwxNoTU2unKPW3YiK_gXaO0pUM0JF664
-
-###
-GET http://localhost:3000
-
-
-###
-
 # 유저 리스트 가져오기
 
 GET http://localhost:3000/user
@@ -200,7 +158,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZGEzOWQ2L
 # course table all
 GET http://localhost:3000/course/table?subject=ALL
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM1MWJkMDQ4LTg5ZTMtNDRlZi1hMzI3LWU1ZGZmYWJiOTEyYyIsInVzZXJuYW1lIjoidGVzdFVzZXIiLCJlbWFpbCI6ImdpbGRvbmdAc3Rvbnlicm9vay5lZHUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjE4OTExNDAsImV4cCI6MTcyMTk3NzU0MH0.0MID8nDjMBzv2VlvgrqQ0mp1X79NFzAoP1yQlVQ8e4k
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRhMjMzY2RhLWEyMTEtNDg1ZC04NWQxLTliMjJhZGYxMTA4OSIsInVzZXJuYW1lIjoidGVzdFVzZXIiLCJlbWFpbCI6ImdpbGRvbmdAc3Rvbnlicm9vay5lZHUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjIyNjk2MTcsImV4cCI6MTcyMjM1NjAxN30.EM2B4iszgJOrLdpi1yd3Ns5bBH6VUG6nAt5UhcOfL1Q
+
+###
+# course query all
+GET http://localhost:3000/course/query?subject=ALL
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRhMjMzY2RhLWEyMTEtNDg1ZC04NWQxLTliMjJhZGYxMTA4OSIsInVzZXJuYW1lIjoidGVzdFVzZXIiLCJlbWFpbCI6ImdpbGRvbmdAc3Rvbnlicm9vay5lZHUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjIyNjk2MTcsImV4cCI6MTcyMjM1NjAxN30.EM2B4iszgJOrLdpi1yd3Ns5bBH6VUG6nAt5UhcOfL1Q
+
+###
+# course query with keyword
+GET http://localhost:3000/course/query?subject=CSE&keyword=Object
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImExZWYyNGI1LTFmNWItNGY4Yi1hMzRiLWY2ZWVkMWEyZmE5YyIsInVzZXJuYW1lIjoidGVzdFVzZXIiLCJlbWFpbCI6ImdpbGRvbmdAc3Rvbnlicm9vay5lZHUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjIyNzQ2MTksImV4cCI6MTcyMjM2MTAxOX0.xglcP36u7GyDn45wYfYgc8VO-tme7sFpMkfJT66P7Wo
+
 
 ###
 # to do task today

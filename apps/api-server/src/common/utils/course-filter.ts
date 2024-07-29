@@ -1,3 +1,6 @@
+import { pipe } from 'fxjs';
+import { Brackets } from 'typeorm';
+
 export const semesters = ['2024_fall'];
 
 export const latestSemester = '2024_fall';
@@ -28,8 +31,28 @@ export const subjectMapping = {
   SHCourse: ['AMS', 'ACC', 'BUS', 'CSE', 'ESE', 'EST', 'EMP', 'MEC'],
 };
 
-export const addKeywordSearch = (qb, keyword) => {
+export const applySubjectFilter = (subject, qb) =>
+  subject && subject !== 'ALL'
+    ? pipe(
+        () => (subject in subjectMapping ? subjectMapping[subject] : [subject]),
+        (subjects) => {
+          const operator = subject === 'SHCourse' ? 'NOT IN' : 'IN';
+          return qb.andWhere(`course.subj ${operator} (:...subjects)`, {
+            subjects,
+          });
+        },
+      )(qb)
+    : qb;
+
+export const applyKeywordFilter = (keyword, qb) =>
+  keyword
+    ? qb.andWhere(new Brackets((qb) => addKeywordSearch(keyword, qb)))
+    : qb;
+
+export const addKeywordSearch = (keyword, qb) => {
   const likeKeyword = `%${keyword}%`;
+
+  console.log('keyword', keyword, qb);
 
   return qb
     .where('course.crs ILIKE :keyword', { keyword: likeKeyword })
@@ -37,4 +60,10 @@ export const addKeywordSearch = (qb, keyword) => {
     .orWhere(':keyword ILIKE ANY(course.recent_two_instructors)', {
       keyword: likeKeyword,
     });
+};
+
+export const applyOrdering = (subject, qb) => {
+  if (subject === 'SHCourse') return qb.orderBy('course.subj');
+  if (subject !== 'ACC/BUS') return qb.orderBy('course.crs');
+  return qb;
 };

@@ -1,14 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course, CourseLike, Table } from '../../entity';
-import { Brackets, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import {
-  addKeywordSearch,
+  applyKeywordFilter,
+  applyOrdering,
+  applySubjectFilter,
   latestSemester,
-  subjectMapping,
   upperCourseCondition,
 } from '../../common/utils/course-filter';
 import { QueryCourseDto } from './dto/query-course.dto';
+import { pipe, curry } from 'fxjs';
 
 @Injectable()
 export class CourseService {
@@ -55,62 +57,30 @@ export class CourseService {
         upperCourses: upperCourseCondition,
       });
 
-    if (subject && subject !== 'ALL') {
-      if (subject in subjectMapping) {
-        const subjects = subjectMapping[subject];
-        const operator = subject === 'SHCourse' ? 'NOT IN' : 'IN';
-        queryBuilder.andWhere(`course.subj ${operator} (:...subjects)`, {
-          subjects,
-        });
-      } else {
-        queryBuilder.andWhere('course.subj = :subject', { subject });
-      }
-    }
+    const applyFilters = pipe(
+      curry(applySubjectFilter)(subject),
+      curry(applyKeywordFilter)(keyword),
+      curry(applyOrdering)(subject),
+    );
 
-    if (keyword) {
-      queryBuilder.andWhere(
-        new Brackets((qb) => addKeywordSearch(qb, keyword)),
-      );
-    }
+    const finalQueryBuilder = applyFilters(queryBuilder);
 
-    if (subject === 'SHCourse') {
-      queryBuilder.orderBy('course.subj');
-    } else if (subject !== 'ACC/BUS') {
-      queryBuilder.orderBy('course.crs');
-    }
-
-    const [items, count] = await queryBuilder.getManyAndCount();
+    const [items, count] = await finalQueryBuilder.getManyAndCount();
     return { items, count };
   };
 
   getQueryCourses = async ({ subject, keyword }: QueryCourseDto) => {
     const queryBuilder = this.courseRepository.createQueryBuilder('course');
 
-    if (subject && subject !== 'ALL') {
-      if (subject in subjectMapping) {
-        const subjects = subjectMapping[subject];
-        const operator = subject === 'SHCourse' ? 'NOT IN' : 'IN';
-        queryBuilder.andWhere(`course.subj ${operator} (:...subjects)`, {
-          subjects,
-        });
-      } else {
-        queryBuilder.andWhere('course.subj = :subject', { subject });
-      }
-    }
+    const applyFilters = pipe(
+      curry(applySubjectFilter)(subject),
+      curry(applyKeywordFilter)(keyword),
+      curry(applyOrdering)(subject),
+    );
 
-    if (keyword) {
-      queryBuilder.andWhere(
-        new Brackets((qb) => addKeywordSearch(qb, keyword)),
-      );
-    }
+    const finalQueryBuilder = applyFilters(queryBuilder);
 
-    if (subject === 'SHCourse') {
-      queryBuilder.orderBy('course.subj');
-    } else if (subject !== 'ACC/BUS') {
-      queryBuilder.orderBy('course.crs');
-    }
-
-    const [items, count] = await queryBuilder.getManyAndCount();
+    const [items, count] = await finalQueryBuilder.getManyAndCount();
     return { items, count };
   };
 

@@ -30,7 +30,6 @@ export class CourseController {
     @Query('keyword') keyword?: string,
   ) {
     try {
-      console.log(subject, keyword);
       const courses = await this.courseService.getQueryCourses({
         subject,
         keyword,
