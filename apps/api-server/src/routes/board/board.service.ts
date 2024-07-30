@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Board, User } from '../../entity';
 import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class BoardService {
@@ -12,6 +13,7 @@ export class BoardService {
     private boardRepository: Repository<Board>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   getAllBoards = async (userId: string) => {
@@ -33,17 +35,28 @@ export class BoardService {
   };
 
   getBoardById = async (id: string) => {
-    const board = await this.boardRepository.findOne({
-      where: { id },
-    });
-    if (!board) {
-      throw new NotFoundException(`Board with id ${id} not found`);
+    const cacheKey = `board-${id}`;
+    const cachedBoard = await this.cacheManager.get(cacheKey);
+
+    if (cachedBoard) {
+      return cachedBoard;
     }
 
-    return this.boardRepository.findOne({
-      where: { id },
-      relations: ['posts', 'user'],
-    });
+    try {
+      const board = await this.boardRepository.findOne({
+        where: { id },
+        relations: ['posts', 'user'],
+      });
+      if (!board) {
+        throw new NotFoundException(`Board with id ${id} not found`);
+      }
+
+      await this.cacheManager.set(cacheKey, board, 60 * 60 * 5);
+
+      return board;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   createBoard = async (userId: string, createBoardDto: CreateBoardDto) => {

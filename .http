@@ -109,6 +109,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlYjU2NTIwL
 
 ###
 # board get by id
+GET http://localhost:3000/board/d52d8c7a-12ba-4d2d-937d-f3bfbad226bf
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlYjU2NTIwLTNkNmUtNGJlNi1hZjI4LTQ5NWE2MDdiOTU0NCIsInVzZXJuYW1lIjoidGVzdFVzZXIiLCJlbWFpbCI6ImdpbGRvbmdAc3Rvbnlicm9vay5lZHUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjIzMjU0MjUsImV4cCI6MTcyMjQxMTgyNX0.hRSLxcSt8gKmFIikcZ7zW3LerblAUyW0wKssNat63z8
+ 
+
+###
+# board post get by id
 GET http://localhost:3000/board/post/462bdc95-e59b-48a5-93cf-b2f2a90f9a71
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlYjU2NTIwLTNkNmUtNGJlNi1hZjI4LTQ5NWE2MDdiOTU0NCIsInVzZXJuYW1lIjoidGVzdFVzZXIiLCJlbWFpbCI6ImdpbGRvbmdAc3Rvbnlicm9vay5lZHUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjIzMjU0MjUsImV4cCI6MTcyMjQxMTgyNX0.hRSLxcSt8gKmFIikcZ7zW3LerblAUyW0wKssNat63z8

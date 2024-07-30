@@ -44,12 +44,13 @@ import { CacheKeyService } from './routes/cache-key/cache-key.service';
       load: [postgresConfig, jwtConfig, sentryConfig, emailConfig, redisConfig],
     }),
     CacheModule.registerAsync({
+      isGlobal: true,
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         store: redisStore,
         host: configService.get('redis.host'),
         port: configService.get('redis.port'),
-        ttl: 60 * 60, // 1시간
+        ttl: 60 * 60,
         max: 100,
         closeClient: true,
       }),

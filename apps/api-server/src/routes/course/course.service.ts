@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course, CourseLike, SchoolSchedule, Table } from '../../entity';
 import { Repository } from 'typeorm';
@@ -11,6 +11,7 @@ import {
 } from '../../common/utils/course-filter';
 import { QueryCourseDto } from './dto/query-course.dto';
 import { pipe, curry, go, map } from 'fxjs';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 @Injectable()
 export class CourseService {
@@ -21,17 +22,38 @@ export class CourseService {
     private readonly courseLikeRepository: Repository<CourseLike>,
     @InjectRepository(Table)
     private readonly tableRepository: Repository<Table>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   getAllCourses = async () => {
-    const courses = await this.courseRepository.find({
-      relations: ['reviews'],
-    });
+    const cacheKey = 'all-courses';
+    const cachedResult = await this.cacheManager.get(cacheKey);
 
-    return {
-      count: courses.length,
-      items: courses,
-    };
+    if (cachedResult) {
+      return cachedResult as { count: number; items: Course[] };
+    }
+
+    try {
+      const courses = await this.courseRepository.find({
+        relations: ['reviews'],
+      });
+      if (!courses) {
+        throw new NotFoundException('All Courses not found');
+      }
+
+      await this.cacheManager.set(
+        cacheKey,
+        { items: courses, count: courses.length },
+        60 * 60 * 5,
+      );
+
+      return {
+        count: courses.length,
+        items: courses,
+      };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   getSingleCourse = async (courseId: string) => {
@@ -47,41 +69,69 @@ export class CourseService {
   };
 
   getTableCourses = async ({ subject, keyword }: QueryCourseDto) => {
-    const queryBuilder = this.courseRepository
-      .createQueryBuilder('course')
-      .leftJoinAndSelect('course.reviews', 'review')
-      .where('course.semesters ILIKE :latestSemester', {
-        latestSemester: `%${latestSemester}%`,
-      })
-      .andWhere('NOT (course.crs = ANY(:upperCourses))', {
-        upperCourses: upperCourseCondition,
-      });
+    const cacheKey = `table-courses-${subject}-${keyword}`;
+    const cachedResult = await this.cacheManager.get(cacheKey);
 
-    const applyFilters = pipe(
-      curry(applySubjectFilter)(subject),
-      curry(applyKeywordFilter)(keyword),
-      curry(applyOrdering)(subject),
-    );
+    if (cachedResult) {
+      return cachedResult as { count: number; items: Course[] };
+    }
 
-    const finalQueryBuilder = applyFilters(queryBuilder);
+    try {
+      const queryBuilder = this.courseRepository
+        .createQueryBuilder('course')
+        .leftJoinAndSelect('course.reviews', 'review')
+        .where('course.semesters ILIKE :latestSemester', {
+          latestSemester: `%${latestSemester}%`,
+        })
+        .andWhere('NOT (course.crs = ANY(:upperCourses))', {
+          upperCourses: upperCourseCondition,
+        });
 
-    const [items, count] = await finalQueryBuilder.getManyAndCount();
-    return { items, count };
+      const applyFilters = pipe(
+        curry(applySubjectFilter)(subject),
+        curry(applyKeywordFilter)(keyword),
+        curry(applyOrdering)(subject),
+      );
+
+      const finalQueryBuilder = applyFilters(queryBuilder);
+
+      const [items, count] = await finalQueryBuilder.getManyAndCount();
+
+      await this.cacheManager.set(cacheKey, { items, count }, 60 * 60 * 5);
+
+      return { items, count };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   getQueryCourses = async ({ subject, keyword }: QueryCourseDto) => {
-    const queryBuilder = this.courseRepository.createQueryBuilder('course');
+    const cacheKey = `query-courses-${subject}-${keyword}`;
+    const cachedResult = await this.cacheManager.get(cacheKey);
 
-    const applyFilters = pipe(
-      curry(applySubjectFilter)(subject),
-      curry(applyKeywordFilter)(keyword),
-      curry(applyOrdering)(subject),
-    );
+    if (cachedResult) {
+      return cachedResult as { count: number; items: Course[] };
+    }
 
-    const finalQueryBuilder = applyFilters(queryBuilder);
+    try {
+      const queryBuilder = this.courseRepository.createQueryBuilder('course');
 
-    const [items, count] = await finalQueryBuilder.getManyAndCount();
-    return { items, count };
+      const applyFilters = pipe(
+        curry(applySubjectFilter)(subject),
+        curry(applyKeywordFilter)(keyword),
+        curry(applyOrdering)(subject),
+      );
+
+      const finalQueryBuilder = applyFilters(queryBuilder);
+
+      const [items, count] = await finalQueryBuilder.getManyAndCount();
+
+      await this.cacheManager.set(cacheKey, { items, count }, 60 * 60 * 5);
+
+      return { items, count };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   likeCourse = async (userId: string, courseId: string) => {

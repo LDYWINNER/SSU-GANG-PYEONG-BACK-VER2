@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateToDoTaskDto } from './dto/create-todo-task.dto';
 import { Time } from '../../../common/time/time';
 import { UpdateToDoTaskDto } from './dto/update-todo-task.dto';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class TaskService {
@@ -16,6 +17,7 @@ export class TaskService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @Inject('Time') private readonly time: Time,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   getAllTasks = async (userId: string) => {
@@ -26,19 +28,36 @@ export class TaskService {
       throw new NotFoundException('User not found');
     }
 
-    const tasks = await this.taskRepository.find({
-      where: {
-        user: {
-          id: userId,
-        },
-      },
-      relations: ['toDoCategory', 'user'],
-    });
+    const cacheKey = `tasks-${userId}`;
+    const cachedResult = await this.cacheManager.get(cacheKey);
 
-    return {
-      count: tasks.length,
-      items: tasks,
-    };
+    if (cachedResult) {
+      return cachedResult as { count: number; items: ToDoTask[] };
+    }
+
+    try {
+      const tasks = await this.taskRepository.find({
+        where: {
+          user: {
+            id: userId,
+          },
+        },
+        relations: ['toDoCategory', 'user'],
+      });
+
+      await this.cacheManager.set(
+        cacheKey,
+        { items: tasks, count: tasks.length },
+        60 * 60 * 5,
+      );
+
+      return {
+        count: tasks.length,
+        items: tasks,
+      };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   getTasksByCategory = async (userId: string, categoryId: string) => {
@@ -103,23 +122,40 @@ export class TaskService {
       throw new NotFoundException('User not found');
     }
 
-    const now = this.time.now();
-    const todayString = now.toLocalDate().toString();
+    const cacheKey = `tasks-today-${userId}`;
+    const cachedResult = await this.cacheManager.get(cacheKey);
 
-    const tasks = await this.taskRepository
-      .createQueryBuilder('task')
-      .leftJoinAndSelect('task.toDoCategory', 'toDoCategory')
-      .leftJoinAndSelect('task.user', 'user')
-      .where('task.userId = :userId', { userId })
-      .andWhere('task.completeDate LIKE :todayString', {
-        todayString: `${todayString}%`,
-      })
-      .getMany();
+    if (cachedResult) {
+      return cachedResult as { count: number; items: ToDoTask[] };
+    }
 
-    return {
-      count: tasks.length,
-      items: tasks,
-    };
+    try {
+      const now = this.time.now();
+      const todayString = now.toLocalDate().toString();
+
+      const tasks = await this.taskRepository
+        .createQueryBuilder('task')
+        .leftJoinAndSelect('task.toDoCategory', 'toDoCategory')
+        .leftJoinAndSelect('task.user', 'user')
+        .where('task.userId = :userId', { userId })
+        .andWhere('task.completeDate LIKE :todayString', {
+          todayString: `${todayString}%`,
+        })
+        .getMany();
+
+      await this.cacheManager.set(
+        cacheKey,
+        { items: tasks, count: tasks.length },
+        60 * 60 * 5,
+      );
+
+      return {
+        count: tasks.length,
+        items: tasks,
+      };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   getTasksSpecificDay = async (userId: string, dateTime: string) => {
@@ -156,25 +192,42 @@ export class TaskService {
       throw new NotFoundException('User not found');
     }
 
-    const now = this.time.now();
-    const year = now.year();
-    const month = now.monthValue();
-    const yearMonth = `${year}-${month.toString().padStart(2, '0')}`;
+    const cacheKey = `tasks-monthly-${userId}`;
+    const cachedResult = await this.cacheManager.get(cacheKey);
 
-    const tasks = await this.taskRepository
-      .createQueryBuilder('task')
-      .leftJoinAndSelect('task.toDoCategory', 'toDoCategory')
-      .leftJoinAndSelect('task.user', 'user')
-      .where('task.userId = :userId', { userId })
-      .andWhere('task.completeDate LIKE :yearMonth', {
-        yearMonth: `${yearMonth}%`,
-      })
-      .getMany();
+    if (cachedResult) {
+      return cachedResult as { count: number; items: ToDoTask[] };
+    }
 
-    return {
-      count: tasks.length,
-      items: tasks,
-    };
+    try {
+      const now = this.time.now();
+      const year = now.year();
+      const month = now.monthValue();
+      const yearMonth = `${year}-${month.toString().padStart(2, '0')}`;
+
+      const tasks = await this.taskRepository
+        .createQueryBuilder('task')
+        .leftJoinAndSelect('task.toDoCategory', 'toDoCategory')
+        .leftJoinAndSelect('task.user', 'user')
+        .where('task.userId = :userId', { userId })
+        .andWhere('task.completeDate LIKE :yearMonth', {
+          yearMonth: `${yearMonth}%`,
+        })
+        .getMany();
+
+      await this.cacheManager.set(
+        cacheKey,
+        { items: tasks, count: tasks.length },
+        60 * 60 * 5,
+      );
+
+      return {
+        count: tasks.length,
+        items: tasks,
+      };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   createTask = async (
