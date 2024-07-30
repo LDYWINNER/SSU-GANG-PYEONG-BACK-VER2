@@ -18,6 +18,7 @@ import {
   BoardCommentLike,
 } from '../../entity';
 import { CommentService } from './comment/comment.service';
+import { FindOnePostQueryHandler } from './post/handler/find-one-post.handler';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { CommentService } from './comment/comment.service';
     CreatePostHandler,
     PostCreatedHandler,
     FindPostsQueryHandler,
+    FindOnePostQueryHandler,
     PostService,
     CommentService,
   ],

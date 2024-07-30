@@ -52,8 +52,8 @@ export class PostController {
   async findAll(
     @Query() { page, size }: PageReqDto,
   ): Promise<FindPostResDto[]> {
-    const findBoardsQuery = new FindPostsQuery(page, size);
-    const boards = await this.queryBus.execute(findBoardsQuery);
+    const findPostsQuery = new FindPostsQuery(page, size);
+    const boards = await this.queryBus.execute(findPostsQuery);
     return boards.map(({ id, contents, user }) => {
       return {
         id,
@@ -74,8 +74,8 @@ export class PostController {
   @ApiGetResponse(FindPostResDto)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<FindPostResDto> {
-    const findOneBoardQuery = new FindOnePostQuery(id);
-    const { contents, user } = await this.queryBus.execute(findOneBoardQuery);
+    const findOnePostQuery = new FindOnePostQuery(id);
+    const { contents, user } = await this.queryBus.execute(findOnePostQuery);
     return {
       id,
       contents: contents,

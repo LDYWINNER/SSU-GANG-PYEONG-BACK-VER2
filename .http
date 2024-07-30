@@ -31,7 +31,7 @@ POST http://localhost:3000/auth/login
 content-type: application/json
 
 {
-    "email": "gildong4@stonybrook.edu",
+    "email": "gildong@stonybrook.edu",
     "password": "Hong123456!"
 }
 
@@ -100,7 +100,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJkMWVlNGE2L
 # board 생성
 POST http://localhost:3000/board
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ODhkODI4LThkZTktNGQ2NS1hZGMyLTZjOTE1NzlhMWFkMyIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIxMjgwOTY2LCJleHAiOjE3MjEzNjczNjZ9.IPC7VU8gp2MBZGRPOMcNcEDMTsJJhJh0LrRTH28tA6E
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlYjU2NTIwLTNkNmUtNGJlNi1hZjI4LTQ5NWE2MDdiOTU0NCIsInVzZXJuYW1lIjoidGVzdFVzZXIiLCJlbWFpbCI6ImdpbGRvbmdAc3Rvbnlicm9vay5lZHUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjIzMjU0MjUsImV4cCI6MTcyMjQxMTgyNX0.hRSLxcSt8gKmFIikcZ7zW3LerblAUyW0wKssNat63z8
 
 {
     "title": "board_title",
@@ -108,22 +108,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ODhkODI4L
 }
 
 ###
-# board get all
-GET http://localhost:3000/board
+# board get by id
+GET http://localhost:3000/board/post/462bdc95-e59b-48a5-93cf-b2f2a90f9a71
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI5OTY2NDgyLTllZjYtNGU3ZS1iMWIxLTcxMjM3YjQ4MzQ5YiIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIwODU2MTA0LCJleHAiOjE3MjA5NDI1MDR9.f4OfNpnD4MQwIUlP3cskZTSKSgf4cWSKFDvF9k1gR6E
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlYjU2NTIwLTNkNmUtNGJlNi1hZjI4LTQ5NWE2MDdiOTU0NCIsInVzZXJuYW1lIjoidGVzdFVzZXIiLCJlbWFpbCI6ImdpbGRvbmdAc3Rvbnlicm9vay5lZHUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjIzMjU0MjUsImV4cCI6MTcyMjQxMTgyNX0.hRSLxcSt8gKmFIikcZ7zW3LerblAUyW0wKssNat63z8
  
 ###
 # board post 생성
 POST http://localhost:3000/board/post
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ODhkODI4LThkZTktNGQ2NS1hZGMyLTZjOTE1NzlhMWFkMyIsInVzZXJuYW1lIjoic2VlZGVyVXNlcjIiLCJlbWFpbCI6ImdpbGRvbmczQHN0b255YnJvb2suZWR1IiwidG9rZW5UeXBlIjoiYWNjZXNzIiwiaWF0IjoxNzIxMjgwOTY2LCJleHAiOjE3MjEzNjczNjZ9.IPC7VU8gp2MBZGRPOMcNcEDMTsJJhJh0LrRTH28tA6E
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlYjU2NTIwLTNkNmUtNGJlNi1hZjI4LTQ5NWE2MDdiOTU0NCIsInVzZXJuYW1lIjoidGVzdFVzZXIiLCJlbWFpbCI6ImdpbGRvbmdAc3Rvbnlicm9vay5lZHUiLCJ0b2tlblR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MjIzMjU0MjUsImV4cCI6MTcyMjQxMTgyNX0.hRSLxcSt8gKmFIikcZ7zW3LerblAUyW0wKssNat63z8
 
 {
     "title": "post_title",
     "contents": "post_contents",
     "anonymity": false,
-    "boardId": "fc9e848a-8fc7-44b6-9071-43596785ac35"
+    "boardId": "165329c4-d24e-4955-8714-8284790cf38d"
 }
 
 ###
