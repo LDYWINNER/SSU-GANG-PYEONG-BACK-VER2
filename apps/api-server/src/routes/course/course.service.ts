@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course, CourseLike, Table } from '../../entity';
+import { Course, CourseLike, SchoolSchedule, Table } from '../../entity';
 import { Repository } from 'typeorm';
 import {
   applyKeywordFilter,
@@ -10,7 +10,7 @@ import {
   upperCourseCondition,
 } from '../../common/utils/course-filter';
 import { QueryCourseDto } from './dto/query-course.dto';
-import { pipe, curry } from 'fxjs';
+import { pipe, curry, go, map } from 'fxjs';
 
 @Injectable()
 export class CourseService {
@@ -159,231 +159,221 @@ export class CourseService {
       throw new NotFoundException(`Table not found with id: ${tableId}`);
     }
 
-    // 데이터 가공
-    const courses = table.schoolSubjects.map(async (schoolSubject) => {
+    const findCourse = async (courseId: string) => {
       const course = await this.courseRepository.findOne({
-        where: { id: schoolSubject.courseId },
+        where: { id: courseId },
       });
       if (!course) {
-        throw new NotFoundException(
-          `Course not found with id: ${schoolSubject.courseId}`,
-        );
+        throw new NotFoundException(`Course not found with id: ${courseId}`);
       }
+      return course;
+    };
 
-      if (course.subj === 'CHI' && course.crs === '111') {
-        return CourseService.formatComplicatedCourse(
+    const formatCourse = curry(
+      (schoolSubject: SchoolSchedule, course: Course) =>
+        go(
           course,
-          schoolSubject.complicatedCourseOption,
-        );
-      } else if (schoolSubject.twoOptionsDay !== undefined) {
-        return CourseService.formatTwoOptionsDayCourse(
-          course,
-          schoolSubject.twoOptionsDay,
-        );
-      } else if (schoolSubject.optionsTime !== undefined) {
-        return CourseService.formatOptionsTimeCourse(
-          course,
-          schoolSubject.optionsTime,
-        );
-      } else {
-        return course;
-      }
-    });
+          CourseService.applyComplicatedCourseFormat(schoolSubject),
+          CourseService.applyTwoOptionsDayFormat(schoolSubject),
+          CourseService.applyOptionsTimeFormat(schoolSubject),
+        ),
+    );
 
-    return courses;
+    const processCourses = pipe(
+      map(async (schoolSubject: SchoolSchedule) => {
+        const course = await findCourse(schoolSubject.courseId);
+        return formatCourse(schoolSubject)(course);
+      }),
+      (promises) => Promise.all(promises),
+    );
+
+    return processCourses(table.schoolSubjects);
   };
 
-  private static formatComplicatedCourse(
-    course: Course,
-    courseInfo: any,
-  ): Course {
-    const complicatedCourseOption =
-      courseInfo.complicatedCourseOption as string;
-    const selectedOptions = complicatedCourseOption.split('  ');
+  private static applyComplicatedCourseFormat = curry(
+    (schoolSubject: SchoolSchedule, course: Course) => {
+      if (
+        course.subj === 'CHI' &&
+        course.crs === '111' &&
+        schoolSubject.complicatedCourseOption
+      ) {
+        const [day, startTime, , endTime] =
+          schoolSubject.complicatedCourseOption.split('  ');
+        return {
+          ...course,
+          day: CourseService.updateStringList(course.day, day),
+          startTime: CourseService.updateStringList(
+            course.startTime,
+            startTime,
+          ),
+          endTime: CourseService.updateStringList(course.endTime, endTime),
+        };
+      }
+      return course;
+    },
+  );
 
-    course.day = this.updateStringList(course.day, selectedOptions[0]);
-    course.startTime = this.updateStringList(
-      course.startTime,
-      selectedOptions[1],
-    );
-    course.endTime = this.updateStringList(course.endTime, selectedOptions[3]);
+  private static applyTwoOptionsDayFormat = curry(
+    (schoolSubject: SchoolSchedule, course: Course) => {
+      if (schoolSubject.twoOptionsDay) {
+        const selectedDay = schoolSubject.twoOptionsDay;
+        return pipe(
+          CourseService.updateDay(selectedDay),
+          CourseService.updateLocationTimeInstructorForTwoOptionsDay(
+            selectedDay,
+          ),
+        )(course);
+      }
+      return course;
+    },
+  );
 
-    return course;
-  }
+  private static applyOptionsTimeFormat = curry(
+    (schoolSubject: SchoolSchedule, course: Course) => {
+      if (schoolSubject.optionsTime) {
+        const selectedTime = schoolSubject.optionsTime;
+        return CourseService.updateTimeForOptionsTime(selectedTime)(course);
+      }
+      return course;
+    },
+  );
 
-  private static formatTwoOptionsDayCourse(
-    course: Course,
-    courseInfo: any,
-  ): Course {
-    const selectedDay = courseInfo.twoOptionsDay as string;
-    const tempDays = course.day.split(', ');
-    const tempLocation = course.location.split(', ');
-    const tempStartTime = course.startTime.split(', ');
-    const tempEndTime = course.endTime.split(', ');
+  private static updateStringList = (list: string, newItem: string): string =>
+    pipe(
+      (l: string) => l.split(', '),
+      (arr: string[]) => [...arr.slice(0, -1), newItem],
+      (arr: string[]) => arr.join(', '),
+    )(list);
 
-    tempDays.pop();
-    tempDays.push(selectedDay);
-    course.day = tempDays.join(', ');
+  private static updateDay =
+    (selectedDay: string) =>
+    (course: Course): Course => ({
+      ...course,
+      day: pipe(
+        (d: string) => d.split(', '),
+        (arr: string[]) => [...arr.slice(0, -1), selectedDay],
+        (arr: string[]) => arr.join(', '),
+      )(course.day),
+    });
 
-    const [lastTwoDaysArray, recDays] = this.extractDaysAndRecDays(tempDays);
-    this.updateLocationTimeInstructor(
-      course,
-      tempLocation,
-      tempStartTime,
-      tempEndTime,
-      selectedDay,
-      lastTwoDaysArray,
-      recDays,
-    );
-
-    return course;
-  }
-
-  private static formatOptionsTimeCourse(
-    course: Course,
-    courseInfo: any,
-  ): Course {
-    const selectedTime = courseInfo.optionsTime as string;
-    const tempStartTime = course.startTime.split(', ');
-    const tempEndTime = course.endTime.split(', ');
-
-    tempStartTime.pop();
-    tempEndTime.pop();
-
-    const startTimeArray = tempStartTime.pop()!.split('/');
-    const endTimeArray = tempEndTime.pop()!.split('/');
-
-    const matchedIndex = startTimeArray.findIndex(
-      (time) => time === selectedTime,
-    );
-    const newStartTime = startTimeArray[matchedIndex];
-    const newEndTime = endTimeArray[matchedIndex];
-
-    tempStartTime.push(newStartTime);
-    tempEndTime.push(newEndTime);
-
-    course.startTime = tempStartTime.join(', ');
-    course.endTime = tempEndTime.join(', ');
-
-    return course;
-  }
-
-  private static updateStringList(list: string, newItem: string): string {
-    const tempList = list.split(', ');
-    tempList.pop();
-    tempList.push(newItem);
-    return tempList.join(', ');
-  }
-
-  private static extractDaysAndRecDays(tempDays: string[]): [string[], string] {
-    const lastTwoDays = tempDays.pop()!;
-    const lastTwoDaysArray = lastTwoDays.split('/');
-    let recDays = '';
-    if (lastTwoDaysArray[1].includes('(')) {
-      recDays = lastTwoDaysArray[1].split('(')[1];
-    }
-    return [lastTwoDaysArray, recDays];
-  }
-
-  private static updateLocationTimeInstructor(
-    course: Course,
-    tempLocation: string[],
-    tempStartTime: string[],
-    tempEndTime: string[],
-    selectedDay: string,
-    lastTwoDaysArray: string[],
-    recDays: string,
-  ) {
-    const lastLocation = tempLocation.at(-1);
-    const lastStartTimes = tempStartTime.at(-1);
-    const lastInstructors = course.past_instructors.at(-1);
-
-    if (lastLocation?.includes('/')) {
-      this.updateLocation(course, tempLocation, selectedDay, lastTwoDaysArray);
-    }
-
-    if (lastStartTimes?.includes('/')) {
-      this.updateTime(
-        course,
-        tempStartTime,
-        tempEndTime,
-        selectedDay,
-        lastTwoDaysArray,
-        recDays,
+  private static updateLocationTimeInstructorForTwoOptionsDay =
+    (selectedDay: string) =>
+    (course: Course): Course => {
+      const [lastTwoDaysArray, recDays] = CourseService.extractDaysAndRecDays(
+        course.day,
       );
-    }
 
-    if (lastInstructors?.includes('/')) {
-      this.updateInstructor(course, selectedDay, lastTwoDaysArray);
-    }
-  }
+      return pipe(
+        CourseService.updateLocation(selectedDay, lastTwoDaysArray),
+        CourseService.updateTimeForTwoOptionsDay(
+          selectedDay,
+          lastTwoDaysArray,
+          recDays,
+        ),
+        CourseService.updateInstructor(selectedDay, lastTwoDaysArray),
+      )(course);
+    };
 
-  private static updateLocation(
-    course: Course,
-    tempLocation: string[],
-    selectedDay: string,
-    lastTwoDaysArray: string[],
-  ) {
-    const lastTwoLocations = tempLocation.pop()!;
-    const lastTwoLocationsArray = lastTwoLocations.split('/');
-    const newLocation =
-      selectedDay === lastTwoDaysArray[0]
-        ? lastTwoLocationsArray[0]
-        : lastTwoLocationsArray[1];
-    tempLocation.push(newLocation);
-    course.location = tempLocation.join(', ');
-  }
+  private static extractDaysAndRecDays = (day: string): [string[], string] => {
+    const days = day.split(', ');
+    const lastTwoDays = days[days.length - 1];
+    const lastTwoDaysArray = lastTwoDays.split('/');
+    const recDays = lastTwoDaysArray[1]?.includes('(')
+      ? lastTwoDaysArray[1].split('(')[1]
+      : '';
+    return [lastTwoDaysArray, recDays];
+  };
 
-  private static updateTime(
-    course: Course,
-    tempStartTime: string[],
-    tempEndTime: string[],
-    selectedDay: string,
-    lastTwoDaysArray: string[],
-    recDays: string,
-  ) {
-    let lastTwoStartTimes = tempStartTime.pop()!;
-    let lastTwoEndTimes = tempEndTime.pop()!;
+  private static updateLocation = curry(
+    (
+      selectedDay: string,
+      lastTwoDaysArray: string[],
+      course: Course,
+    ): Course => {
+      const locations = course.location.split(', ');
+      const lastTwoLocations = locations[locations.length - 1].split('/');
+      const newLocation =
+        selectedDay === lastTwoDaysArray[0]
+          ? lastTwoLocations[0]
+          : lastTwoLocations[1];
 
-    if (recDays !== '') {
-      lastTwoStartTimes = lastTwoStartTimes.split('(')[0];
-      lastTwoEndTimes = lastTwoEndTimes.split('(')[0];
-    }
+      return {
+        ...course,
+        location: [...locations.slice(0, -1), newLocation].join(', '),
+      };
+    },
+  );
 
-    const lastTwoStartTimesArray = lastTwoStartTimes.split('/');
-    const lastTwoEndTimesArray = lastTwoEndTimes.split('/');
-    const newStartTime =
-      selectedDay === lastTwoDaysArray[0]
-        ? lastTwoStartTimesArray[0]
-        : lastTwoStartTimesArray[1];
-    const newEndTime =
-      selectedDay === lastTwoDaysArray[0]
-        ? lastTwoEndTimesArray[0]
-        : lastTwoEndTimesArray[1];
+  private static updateTimeForTwoOptionsDay = curry(
+    (
+      selectedDay: string,
+      lastTwoDaysArray: string[],
+      recDays: string,
+      course: Course,
+    ): Course => {
+      const updateTimeHelper = (timeString: string) => {
+        const times = timeString.split(', ');
+        let lastTwoTimes = times[times.length - 1];
 
-    if (recDays !== '') {
-      tempStartTime.push(newStartTime + '(' + recDays);
-      tempEndTime.push(newEndTime + '(' + recDays);
-    } else {
-      tempStartTime.push(newStartTime);
-      tempEndTime.push(newEndTime);
-    }
+        if (recDays) {
+          lastTwoTimes = lastTwoTimes.split('(')[0];
+        }
 
-    course.startTime = tempStartTime.join(', ');
-    course.endTime = tempEndTime.join(', ');
-  }
+        const lastTwoTimesArray = lastTwoTimes.split('/');
+        const newTime =
+          selectedDay === lastTwoDaysArray[0]
+            ? lastTwoTimesArray[0]
+            : lastTwoTimesArray[1];
 
-  private static updateInstructor(
-    course: Course,
-    selectedDay: string,
-    lastTwoDaysArray: string[],
-  ) {
-    const lastTwoInstructors = course.past_instructors.pop()!;
-    const lastTwoInstructorsArray = lastTwoInstructors.split('/');
-    const newInstructor =
-      selectedDay === lastTwoDaysArray[0]
-        ? lastTwoInstructorsArray[0]
-        : lastTwoInstructorsArray[1];
-    course.past_instructors.push(newInstructor);
-  }
+        return [
+          ...times.slice(0, -1),
+          recDays ? `${newTime}(${recDays}` : newTime,
+        ].join(', ');
+      };
+
+      return {
+        ...course,
+        startTime: updateTimeHelper(course.startTime),
+        endTime: updateTimeHelper(course.endTime),
+      };
+    },
+  );
+
+  private static updateInstructor = curry(
+    (
+      selectedDay: string,
+      lastTwoDaysArray: string[],
+      course: Course,
+    ): Course => {
+      const instructors = course.past_instructors;
+      const lastTwoInstructors = instructors[instructors.length - 1].split('/');
+      const newInstructor =
+        selectedDay === lastTwoDaysArray[0]
+          ? lastTwoInstructors[0]
+          : lastTwoInstructors[1];
+
+      return {
+        ...course,
+        past_instructors: [...instructors.slice(0, -1), newInstructor],
+      };
+    },
+  );
+
+  private static updateTimeForOptionsTime =
+    (selectedTime: string) =>
+    (course: Course): Course => {
+      const updateTimeHelper = (timeString: string) => {
+        const times = timeString.split(', ');
+        const lastTimes = times[times.length - 1].split('/');
+        const newTime =
+          lastTimes.find((time) => time === selectedTime) || lastTimes[0];
+        return [...times.slice(0, -1), newTime].join(', ');
+      };
+
+      return {
+        ...course,
+        startTime: updateTimeHelper(course.startTime),
+        endTime: updateTimeHelper(course.endTime),
+      };
+    };
 }
