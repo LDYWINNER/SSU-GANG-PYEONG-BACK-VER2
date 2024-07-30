@@ -9,6 +9,7 @@ import { StubCategoryRepository } from './stub/category-repository';
 import { StubTime } from '../../utils/stub-time';
 import { ZonedDateTime } from '@js-joda/core';
 import { UserType } from '../../../src/common/enum/user.enum';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('투두 할 일 관련 서비스 테스트', () => {
   let taskService: TaskService;
@@ -74,6 +75,13 @@ describe('투두 할 일 관련 서비스 테스트', () => {
           useValue: new StubTime(
             ZonedDateTime.parse('2024-07-07T00:00:00Z[UTC]'),
           ),
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+          },
         },
       ],
     }).compile();

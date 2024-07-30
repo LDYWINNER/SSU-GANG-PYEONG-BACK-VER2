@@ -7,6 +7,7 @@ import { NotFoundException } from '@nestjs/common';
 import { StubUserRepository } from '../user/stub-repository';
 import { BoardType } from '../../../src/common/enum/board.enum';
 import { UserType } from '../../../src/common/enum/user.enum';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('유저 게시판 관련 서비스 테스트', () => {
   let boardService: BoardService;
@@ -29,6 +30,13 @@ describe('유저 게시판 관련 서비스 테스트', () => {
         {
           provide: userRepositoryToken,
           useValue: userRepository,
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+          },
         },
       ],
     }).compile();

@@ -7,6 +7,7 @@ import { Like, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { mock, instance, when, verify, deepEqual } from 'ts-mockito';
 import { BoardType } from '../../../src/common/enum/board.enum';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('FindPostsQueryHandler', () => {
   let handler: FindPostsQueryHandler;
@@ -27,6 +28,13 @@ describe('FindPostsQueryHandler', () => {
         {
           provide: getRepositoryToken(Board),
           useValue: instance(mockBoardRepository),
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+          },
         },
       ],
     }).compile();

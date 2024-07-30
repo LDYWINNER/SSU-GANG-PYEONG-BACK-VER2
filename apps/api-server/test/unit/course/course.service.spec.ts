@@ -16,6 +16,7 @@ import { StubTableRepository } from '../table/stub/table-repository';
 import { StubUserRepository } from '../user/stub-repository';
 import { UserType } from '../../../src/common/enum/user.enum';
 import { StubCourseLikeRepository } from './stub/course-like-repository';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('수업 관련 서비스 테스트', () => {
   let courseService: CourseService;
@@ -134,6 +135,13 @@ describe('수업 관련 서비스 테스트', () => {
         {
           provide: userRepositoryToken,
           useValue: userRepository,
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+          },
         },
       ],
     }).compile();
