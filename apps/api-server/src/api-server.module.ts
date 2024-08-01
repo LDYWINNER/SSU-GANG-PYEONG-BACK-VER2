@@ -35,7 +35,6 @@ import {
 } from '../src/entity';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
-import { CacheKeyService } from './routes/cache-key/cache-key.service';
 
 @Module({
   imports: [
@@ -50,9 +49,6 @@ import { CacheKeyService } from './routes/cache-key/cache-key.service';
         store: redisStore,
         host: configService.get('redis.host'),
         port: configService.get('redis.port'),
-        ttl: 60 * 60,
-        max: 100,
-        closeClient: true,
       }),
       inject: [ConfigService],
     }),
@@ -110,7 +106,7 @@ import { CacheKeyService } from './routes/cache-key/cache-key.service';
     TableModule,
   ],
   controllers: [ApiServerController],
-  providers: [ApiServerService, CacheKeyService],
+  providers: [ApiServerService],
 })
 export class ApiServerModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
