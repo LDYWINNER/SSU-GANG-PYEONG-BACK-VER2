@@ -10,13 +10,16 @@ import {
 import { SchoolScheduleService } from './school-schedule.service';
 import { CreateSchoolScheduleDto } from './dto/create-school-schedule.dto';
 import { ThrottlerBehindProxyGuard } from '../../../common/guard/throttler-behind-proxy.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('school-schedule')
+@ApiTags('School Schedule')
 @UseGuards(ThrottlerBehindProxyGuard)
 export class SchoolScheduleController {
   constructor(private readonly schoolScheduleService: SchoolScheduleService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
   async create(@Body() createSchoolScheduleDto: CreateSchoolScheduleDto) {
     try {
       const result = this.schoolScheduleService.createSchoolSchedule(
@@ -34,6 +37,7 @@ export class SchoolScheduleController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
   async delete(@Param('id') id: string) {
     try {
       const deletedSchoolSchedule =
@@ -50,6 +54,7 @@ export class SchoolScheduleController {
   }
 
   @Delete('/all/:id')
+  @ApiBearerAuth('access-token')
   async deleteAll(@Param('id') id: string) {
     try {
       const result =

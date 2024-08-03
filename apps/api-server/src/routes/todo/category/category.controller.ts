@@ -10,7 +10,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ThrottlerBehindProxyGuard } from '../../../common/guard/throttler-behind-proxy.guard';
 import {
   UserAfterAuth,
@@ -26,6 +26,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
+  @ApiBearerAuth('access-token')
   async getAllCategories(@UserInfo() userInfo: UserAfterAuth) {
     try {
       const userId = userInfo.id;
@@ -41,6 +42,7 @@ export class CategoryController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('access-token')
   async getCategoryById(@Param('id') id: string) {
     try {
       const category = await this.categoryService.getCategoryById(id);
@@ -57,6 +59,7 @@ export class CategoryController {
   }
 
   @Post()
+  @ApiBearerAuth('access-token')
   async createCategory(
     @UserInfo() userInfo: UserAfterAuth,
     @Body() createToDoCategoryDto: CreateToDoCategoryDto,
@@ -78,6 +81,7 @@ export class CategoryController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
   async deleteCategory(@Param('id') id: string) {
     try {
       const result = await this.categoryService.deleteCategory(id);
@@ -94,6 +98,7 @@ export class CategoryController {
   }
 
   @Put(':id')
+  @ApiBearerAuth('access-token')
   async updateCategory(
     @Param('id') id: string,
     @Body() updateToDoCategoryDto: UpdateToDoCategoryDto,

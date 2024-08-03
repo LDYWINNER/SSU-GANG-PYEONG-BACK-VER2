@@ -24,7 +24,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ThrottlerBehindProxyGuard } from '../common/guard/throttler-behind-proxy.guard';
 
-@ApiExtraModels(SignupResDto, RefreshResDto)
+@ApiExtraModels(SignupResDto, SigninResDto, RefreshResDto)
 @UseGuards(ThrottlerBehindProxyGuard)
 @Controller('auth')
 @ApiTags('Auth')

@@ -20,9 +20,15 @@ async function bootstrap() {
     .setTitle('SSU-GANG-PYEONG-BACKEND-VER.2.0')
     .setDescription('API description for SSU-GANG-PYEONG-BACKEND-VER.2.0')
     .setVersion('1.0')
-    .addTag('Board')
-    .addTag('User')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'Token',
+        in: 'header',
+      },
+      'access-token',
+    )
     .build();
   const customOptions: SwaggerCustomOptions = {
     swaggerOptions: {
@@ -36,7 +42,10 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       // class-transformer 적용
+      whitelist: true,
+      forbidNonWhitelisted: true,
       transform: true,
+      disableErrorMessages: true,
     }),
   );
 

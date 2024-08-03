@@ -8,7 +8,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ThrottlerBehindProxyGuard } from '../../common/guard/throttler-behind-proxy.guard';
 import { CourseService } from './course.service';
 import { Public } from '../../common/decorators/public.decorator';
@@ -108,6 +108,7 @@ export class CourseController {
   }
 
   @Get('/my-like')
+  @ApiBearerAuth('access-token')
   async getMyLikes(@UserInfo() userInfo: UserAfterAuth) {
     try {
       const userId = userInfo.id;
@@ -136,6 +137,7 @@ export class CourseController {
   }
 
   @Post('like/:id')
+  @ApiBearerAuth('access-token')
   async createCourseLike(
     @UserInfo() userInfo: UserAfterAuth,
     @Param('id') id: string,
@@ -155,6 +157,7 @@ export class CourseController {
   }
 
   @Get('like/:id')
+  @ApiBearerAuth('access-token')
   async countCourseLike(@Param('id') id: string) {
     try {
       const result = await this.courseService.countLikes(id);
@@ -170,6 +173,7 @@ export class CourseController {
   }
 
   @Delete('like/:id')
+  @ApiBearerAuth('access-token')
   async deleteCourseLike(
     @UserInfo() userInfo: UserAfterAuth,
     @Param('id') id: string,

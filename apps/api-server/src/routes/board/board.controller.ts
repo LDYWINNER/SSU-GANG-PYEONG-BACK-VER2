@@ -10,7 +10,7 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ThrottlerBehindProxyGuard } from '../../common/guard/throttler-behind-proxy.guard';
 import { BoardService } from './board.service';
 import {
@@ -27,6 +27,7 @@ export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @Get()
+  @ApiBearerAuth('access-token')
   async getAllBoards(@UserInfo() userInfo: UserAfterAuth) {
     try {
       const userId = userInfo.id;
@@ -43,6 +44,7 @@ export class BoardController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('access-token')
   async getBoardById(@Param('id') id: string) {
     try {
       const board = await this.boardService.getBoardById(id);
@@ -59,6 +61,7 @@ export class BoardController {
   }
 
   @Post()
+  @ApiBearerAuth('access-token')
   async createBoard(
     @UserInfo() userInfo: UserAfterAuth,
     @Body() data: CreateBoardDto,
@@ -76,6 +79,7 @@ export class BoardController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
   async deleteBoard(@Param('id') id: string) {
     try {
       const result = await this.boardService.deleteBoard(id);
@@ -91,6 +95,7 @@ export class BoardController {
   }
 
   @Put(':id')
+  @ApiBearerAuth('access-token')
   async updateBoard(
     @Param('id') id: string,
     @Body(new ValidationPipe()) data: UpdateBoardDto,

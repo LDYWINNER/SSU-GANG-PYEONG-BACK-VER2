@@ -12,8 +12,10 @@ import { PersonalScheduleService } from './personal-schedule.service';
 import { CreatePersonalScheduleDto } from './dto/create-personal-schedule.dto';
 import { ThrottlerBehindProxyGuard } from '../../../common/guard/throttler-behind-proxy.guard';
 import { UpdatePersonalScheduleDto } from './dto/update-personal-schedule.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('personal-schedule')
+@ApiTags('Personal Schedule')
 @UseGuards(ThrottlerBehindProxyGuard)
 export class PersonalScheduleController {
   constructor(
@@ -21,6 +23,7 @@ export class PersonalScheduleController {
   ) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
   async create(@Body() createPersonalScheduleDto: CreatePersonalScheduleDto) {
     try {
       const result = this.personalScheduleService.createPersonalSchedule(
@@ -38,6 +41,7 @@ export class PersonalScheduleController {
   }
 
   @Put(':id')
+  @ApiBearerAuth('access-token')
   async update(
     @Param('id') id: string,
     @Body() updatePersonalScheduleDto: UpdatePersonalScheduleDto,
@@ -60,6 +64,7 @@ export class PersonalScheduleController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
   async delete(@Param('id') id: string) {
     try {
       const deletedPersonalSchedule =

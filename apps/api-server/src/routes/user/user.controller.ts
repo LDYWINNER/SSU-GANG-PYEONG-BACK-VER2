@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApiGetItemsResponse } from '../../common/decorators/swagger.decorator';
 import { FindUserResDto } from './dto/res.dto';
 import { Roles } from '../../common/decorators/role.decorator';
@@ -27,6 +27,7 @@ export class UserController {
   @ApiGetItemsResponse(FindUserResDto)
   @Roles(UserType.Admin)
   @Get()
+  @ApiBearerAuth('access-token')
   async getUsers(
     @Query() { page, size }: PageReqDto,
   ): Promise<FindUserResDto[]> {
@@ -45,6 +46,7 @@ export class UserController {
   }
 
   @Get('me')
+  @ApiBearerAuth('access-token')
   async getUser(@UserInfo() userInfo: UserAfterAuth) {
     try {
       const id = userInfo.id;
@@ -61,6 +63,7 @@ export class UserController {
   }
 
   @Post('block/:hatedUserId')
+  @ApiBearerAuth('access-token')
   async createBlock(
     @UserInfo() userInfo: UserAfterAuth,
     @Param('hatedUserId') hatedUserId: string,
@@ -80,6 +83,7 @@ export class UserController {
   }
 
   @Post('follow/:followerId')
+  @ApiBearerAuth('access-token')
   async createFollow(
     @UserInfo() userInfo: UserAfterAuth,
     @Param('followerId') followerId: string,
@@ -99,6 +103,7 @@ export class UserController {
   }
 
   @Get('follow/:id')
+  @ApiBearerAuth('access-token')
   async getFollower(@Param('id') id: string) {
     try {
       const result = await this.userService.getFollower(id);
@@ -114,6 +119,7 @@ export class UserController {
   }
 
   @Delete('follow/:followerId')
+  @ApiBearerAuth('access-token')
   async deleteFollow(
     @UserInfo() userInfo: UserAfterAuth,
     @Param('followerId') followerId: string,

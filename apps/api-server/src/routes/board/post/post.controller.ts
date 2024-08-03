@@ -35,7 +35,7 @@ import { FindPostsQuery } from './query/find-posts.query';
 import { FindOnePostQuery } from './query/find-one-post.query';
 
 @Controller('board/post')
-@ApiTags('Post')
+@ApiTags('Board Post')
 @ApiExtraModels(CreatePostDto, PageReqDto, PageResDto, FindPostResDto)
 @UseGuards(ThrottlerBehindProxyGuard)
 export class PostController {
@@ -89,7 +89,7 @@ export class PostController {
     };
   }
 
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post()
   async create(
@@ -110,7 +110,7 @@ export class PostController {
     return result;
   }
 
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   @Put(':id')
   update(
     @UserInfo() userInfo: UserAfterAuth,
@@ -120,13 +120,14 @@ export class PostController {
     return this.postService.update(userInfo.id, id, data);
   }
 
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   @Delete(':id')
   remove(@UserInfo() userInfo: UserAfterAuth, @Param('id') id: string) {
     return this.postService.delete(userInfo.id, id);
   }
 
   @Post('like/:id')
+  @ApiBearerAuth('access-token')
   async createPostLike(
     @UserInfo() userInfo: UserAfterAuth,
     @Param('id') id: string,
@@ -146,6 +147,7 @@ export class PostController {
   }
 
   @Get('like/:id')
+  @ApiBearerAuth('access-token')
   async countPostLike(@Param('id') id: string) {
     try {
       const result = await this.postService.countLikes(id);
@@ -161,6 +163,7 @@ export class PostController {
   }
 
   @Delete('like/:id')
+  @ApiBearerAuth('access-token')
   async deletePostLike(
     @UserInfo() userInfo: UserAfterAuth,
     @Param('id') id: string,

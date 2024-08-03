@@ -8,7 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ThrottlerBehindProxyGuard } from '../../../common/guard/throttler-behind-proxy.guard';
 import { CommentService } from './comment.service';
 import {
@@ -18,12 +18,13 @@ import {
 import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Controller('board/comment')
-@ApiTags('Comment')
+@ApiTags('Board Comment')
 @UseGuards(ThrottlerBehindProxyGuard)
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
   async createComment(
     @UserInfo() userInfo: UserAfterAuth,
     @Body() data: CreateCommentDto,
@@ -41,6 +42,7 @@ export class CommentController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
   async deleteComment(@Param('id') id: string) {
     try {
       const result = await this.commentService.deleteComment(id);
@@ -54,6 +56,7 @@ export class CommentController {
   }
 
   @Post('like/:id')
+  @ApiBearerAuth('access-token')
   async createCommentLike(
     @UserInfo() userInfo: UserAfterAuth,
     @Param('id') id: string,
@@ -73,6 +76,7 @@ export class CommentController {
   }
 
   @Get('like/:id')
+  @ApiBearerAuth('access-token')
   async countCommentLike(@Param('id') id: string) {
     try {
       const result = await this.commentService.countLikes(id);
@@ -88,6 +92,7 @@ export class CommentController {
   }
 
   @Delete('like/:id')
+  @ApiBearerAuth('access-token')
   async deleteCommentLike(
     @UserInfo() userInfo: UserAfterAuth,
     @Param('id') id: string,

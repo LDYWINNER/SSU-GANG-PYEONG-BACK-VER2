@@ -13,6 +13,11 @@ export class LoginUserDto {
 
   @IsNotEmpty()
   @IsString()
+  @ApiProperty({
+    description: '비밀번호',
+    required: true,
+    example: 'Password1234*',
+  })
   @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{10,30}$/)
   password: string;
 }

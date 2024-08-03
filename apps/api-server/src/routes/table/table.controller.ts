@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ThrottlerBehindProxyGuard } from '../../common/guard/throttler-behind-proxy.guard';
-import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { UpdateTableDto } from './dto/update-table.dto';
 import { TableService } from './table.service';
 import {
@@ -26,6 +26,7 @@ export class TableController {
   constructor(private readonly tableService: TableService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
   async createTable(
     @UserInfo() userInfo: UserAfterAuth,
     @Body() data: CreateTableDto,
@@ -43,6 +44,7 @@ export class TableController {
   }
 
   @Put(':id')
+  @ApiBearerAuth('access-token')
   async updateTable(@Param('id') id: string, @Body() data: UpdateTableDto) {
     try {
       const result = await this.tableService.updateTable(id, data);
@@ -56,6 +58,7 @@ export class TableController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('access-token')
   async deleteTable(@Param('id') id: string) {
     try {
       const result = await this.tableService.deleteTable(id);

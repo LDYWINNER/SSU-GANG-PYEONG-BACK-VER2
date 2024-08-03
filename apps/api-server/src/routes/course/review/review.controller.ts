@@ -8,7 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ThrottlerBehindProxyGuard } from '../../../common/guard/throttler-behind-proxy.guard';
 import { ReviewService } from './review.service';
 import {
@@ -25,6 +25,7 @@ export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
   async createCourseReview(
     @UserInfo() userInfo: UserAfterAuth,
     @Body() data: CreateCourseReviewDto,
@@ -44,6 +45,7 @@ export class ReviewController {
   }
 
   @Post('reaction')
+  @ApiBearerAuth('access-token')
   async createReviewReaction(
     @UserInfo() userInfo: UserAfterAuth,
     @Body() data: ReactCourseReviewDto,
@@ -66,6 +68,7 @@ export class ReviewController {
   }
 
   @Get('reaction/:id')
+  @ApiBearerAuth('access-token')
   async getReviewReaction(@Param('id') id: string) {
     try {
       const result = await this.reviewService.getCourseReviewReaction(id);
@@ -81,6 +84,7 @@ export class ReviewController {
   }
 
   @Delete('reaction')
+  @ApiBearerAuth('access-token')
   async deleteReviewReaction(
     @UserInfo() userInfo: UserAfterAuth,
     @Body() data: ReactCourseReviewDto,
@@ -103,6 +107,7 @@ export class ReviewController {
   }
 
   @Get('my-scrapped')
+  @ApiBearerAuth('access-token')
   async getMyScrappedReviews(@UserInfo() userInfo: UserAfterAuth) {
     try {
       const userId = userInfo.id;
