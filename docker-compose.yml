@@ -4,6 +4,10 @@ volumes:
   postgres_data:
   redis_data:
 
+networks:
+  app-network:
+    driver: bridge
+
 services:
   postgres:
     image: postgres:14.7
@@ -20,14 +24,35 @@ services:
       # - ./postgresql.conf:/var/lib/postgresql/data/postgresql.conf
       # - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
     restart: always
+    networks:
+      - app-network
 
   redis:
     image: redis:latest
     container_name: redis
     ports:
-      - '6380:6379'
+      - '6379:6379'
     volumes:
       - redis_data:/data
       - ./redis.conf:/usr/local/etc/redis/redis.conf
     command: ['redis-server', '/usr/local/etc/redis/redis.conf']
+    restart: always
+    networks:
+      - app-network
+
+  app:
+    image: ghcr.io/ldywinner/ssu-gang-pyeong-ver2:latest
+    container_name: app
+    ports:
+      - '80:3000'
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    networks:
+      - app-network
     restart: always

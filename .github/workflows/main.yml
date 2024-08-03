@@ -53,7 +53,6 @@ jobs:
             "SWAGGER_USER=${{ secrets.SWAGGER_USER }}"
             "SWAGGER_PASSWORD=${{ secrets.SWAGGER_PASSWORD }}"
             "REDIS_HOST=${{ secrets.REDIS_HOST }}"
-            "REDIS_PORT=${{ secrets.REDIS_PORT }}"
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
@@ -70,7 +69,8 @@ jobs:
           registry: ghcr.io
           username: ldywinner
           password: ${{ secrets.GHCR_TOKEN }}
-      - name: Docker run
+      - name: Deploy with Docker Compose
         run: |
-          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
-          docker run --add-host=host.docker.internal:host-gateway -d -p 80:3000 --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
+          docker-compose down
+          docker-compose pull
+          docker-compose up -d
