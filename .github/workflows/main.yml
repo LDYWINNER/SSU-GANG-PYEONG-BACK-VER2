@@ -8,6 +8,7 @@ env:
   DOCKER_IMAGE: ghcr.io/ldywinner/ssu-gang-pyeong-ver2
   VERSION: ${{ github.sha }}
   NAME: cicd_test
+  NETWORK: app-network
 
 jobs:
   build:
@@ -69,8 +70,7 @@ jobs:
           registry: ghcr.io
           username: ldywinner
           password: ${{ secrets.GHCR_TOKEN }}
-      - name: Deploy with Docker Compose
+      - name: Docker run
         run: |
-          docker-compose down
-          docker-compose pull
-          docker-compose up -d
+          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          docker run --add-host=host.docker.internal:host-gateway -d -p 80:3000 --name ${{ env.NAME }} --restart always --network ${{ env.NETWORK }} ${{ env.DOCKER_IMAGE }}:latest

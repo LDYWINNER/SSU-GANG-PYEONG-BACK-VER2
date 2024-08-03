@@ -39,20 +39,3 @@ services:
     restart: always
     networks:
       - app-network
-
-  app:
-    image: ghcr.io/ldywinner/ssu-gang-pyeong-ver2:latest
-    container_name: app
-    ports:
-      - '80:3000'
-    depends_on:
-      - postgres
-      - redis
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-    networks:
-      - app-network
-    restart: always
