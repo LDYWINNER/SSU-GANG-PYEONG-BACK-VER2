@@ -39,3 +39,12 @@ services:
     restart: always
     networks:
       - app-network
+
+  nestjs:
+    image: ghcr.io/ldywinner/ssu-gang-pyeong-ver2:latest
+    container_name: nestjs
+    ports:
+      - '3000:3000'
+    restart: always
+    networks:
+      - app-network
