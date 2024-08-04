@@ -12,7 +12,7 @@
 - 슬라이딩 세션 및 리프레쉬 토큰 활용
 - nestjs auth guard를 활용한 Authorization
 
-### 데이터베이스
+### 데이터베이스 [(db diagram)](https://dbdiagram.io/d/ssugangpyeong-ver2-66ae63d18b4bb5230e22b24b)
 
 - 기존 데이터베이스에서 rdbms로 마이그레이션을 진행하며 데이터 정규화도 함께 진행함(유저 시간표 데이터)
 - typeorm migration 활용한 db 관리
