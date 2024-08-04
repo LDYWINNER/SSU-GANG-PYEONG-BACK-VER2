@@ -3,9 +3,8 @@
 ### BASE
 
 - nestjs 프로젝트(mono repo multi module)
-- board module(CQRS 아키텍처 적용: Simple CQRS architecture)
+- 게시글 기능 CQRS 아키텍처 적용: Simple CQRS architecture
 - Test Driven Development 적용
-  - 최대한 사람의 언어를 사용하고 내부 구현을 검증하기 보다 최종 결과를 검증하는 테스트 코드를 작성하려고 노력함
 
 ### 인증 & 인가
 
@@ -22,7 +21,7 @@
 ### 인프라
 
 - Github Actions를 활용한 CI/CD
-- sentry와 slack을 활용한 error notification
+- sentry와 datadog을 활용한 error notification
 - nestjs terminus 헬스체크를 활용한 서버 관리
 - nestjs schedule을 활용한 cron job 처리
 
@@ -33,7 +32,6 @@
 ### 리팩토링
 
 - 투두 기능: Date 객체를 사용하던 코드에서 js-joda 패키지를 활용한 리팩토링을 진행함
-- enum:
 
 ## 기능(domain)
 
