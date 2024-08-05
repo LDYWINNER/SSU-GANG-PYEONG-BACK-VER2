@@ -15,7 +15,7 @@
 
 - 기존 데이터베이스에서 rdbms로 마이그레이션을 진행하며 데이터 정규화도 함께 진행함(유저 시간표 데이터)
 - typeorm migration 활용한 db 관리
-- tyeporm query runner를 활용한 db transaction
+- tyeporm query runner를 활용한 db transaction 활용
 - nestjs throttler를 활용한 rate limiter
 
 ### 인프라
