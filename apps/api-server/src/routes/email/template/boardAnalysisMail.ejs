@@ -1,0 +1,32 @@
+<html>
+<head>
+    <style>
+        table {
+            border: 1px solid black;
+            width: 60%;
+            margin: auto;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>id</th>
+            <th>title</th>
+            <th>view count</th>
+        </tr>
+        <% boardPosts.forEach(function(post) { %>
+            <tr>
+                <td><%= post.id %></td>
+                <td><%= post.title %></td>
+                <td><%= post.views %></td>
+            </tr>
+        <% }); %>
+    </table>
+</body>
+</html>

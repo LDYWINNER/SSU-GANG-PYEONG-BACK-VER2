@@ -35,6 +35,8 @@ import {
 } from '../src/entity';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 
 @Module({
   imports: [
@@ -49,6 +51,31 @@ import { redisStore } from 'cache-manager-redis-yet';
         store: redisStore,
         host: configService.get('redis.host'),
         port: configService.get('redis.port'),
+      }),
+      inject: [ConfigService],
+    }),
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        transport: {
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false,
+          auth: {
+            user: configService.get('email.user'),
+            pass: configService.get('email.pass'),
+          },
+        },
+        defaults: {
+          from: `"SSUGANGPYEONG" <${configService.get('email.user')}>`,
+        },
+        template: {
+          dir: process.cwd() + '/template/',
+          adapter: new EjsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
       }),
       inject: [ConfigService],
     }),
