@@ -20,7 +20,7 @@
 
 ### 인프라
 
-- Github Actions를 활용한 CI/CD
+- Github Actions를 활용한 배포 자동화
 - sentry와 datadog을 활용한 error notification
 - nestjs terminus 헬스체크를 활용한 서버 관리
 - nestjs schedule을 활용한 cron job 처리
