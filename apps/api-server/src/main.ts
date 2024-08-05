@@ -41,11 +41,12 @@ async function bootstrap() {
   // ValidationPipe를 전역으로 설정
   app.useGlobalPipes(
     new ValidationPipe({
-      // class-transformer 적용
+      // 허용되지 않은 속성 있는 경우 요청 거부
       whitelist: true,
       forbidNonWhitelisted: true,
+      // class-transformer 적용
       transform: true,
-      disableErrorMessages: true,
+      // disableErrorMessages: true,
     }),
   );
 
@@ -54,6 +55,8 @@ async function bootstrap() {
     new SentryInterceptor(),
     new TransformInterceptor(),
   );
+
+  app.enableCors();
 
   await app.listen(3000);
   console.info(`listening on port ${port}`);
